@@ -40,6 +40,13 @@ export const profileSchema = z.object({
 	bio: z.string().max(160, "Bio must be at most 160 characters"),
 	avatarUrl: z.string().url("Must be a valid URL").or(z.literal("")),
 	theme: z.enum(["minimal", "dark", "colorful", "professional"]),
+	jobTitle: z.string().max(50, "Job title must be at most 50 characters").optional(),
+	company: z.string().max(50, "Company must be at most 50 characters").optional(),
+	phone: z.string().max(30, "Phone must be at most 30 characters").optional(),
+	whatsapp: z.string().max(30, "WhatsApp must be at most 30 characters").optional(),
+	leadFormActive: z.boolean().optional(),
+	leadFormTitle: z.string().max(60, "Title must be at most 60 characters").optional(),
+	webhookUrl: z.string().url("Must be a valid URL").or(z.literal("")).optional(),
 });
 
 export const linkItemSchema = z
@@ -57,11 +64,16 @@ export const linkItemSchema = z
 		{ message: "Links require title and URL; headers require title" },
 	);
 
-export const reorderSchema = z.object({
+export const bulkUpdateSchema = z.object({
 	items: z.array(
 		z.object({
 			id: z.string().uuid(),
 			sortOrder: z.number().int().nonnegative(),
+			title: z.string().optional(),
+			url: z.string().optional(),
+			isActive: z.boolean().optional(),
+			startDate: z.string().datetime({ offset: true }).optional().nullable(),
+			endDate: z.string().datetime({ offset: true }).optional().nullable(),
 		}),
 	),
 });

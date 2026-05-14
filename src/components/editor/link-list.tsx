@@ -22,9 +22,10 @@ interface LinkListProps {
 	links: LinkItem[];
 	onReorder: (links: LinkItem[]) => void;
 	onDelete: (id: string) => void;
+	onUpdate: (id: string, updates: Partial<LinkItem>) => void;
 }
 
-export function LinkList({ links, onReorder, onDelete }: LinkListProps) {
+export function LinkList({ links, onReorder, onDelete, onUpdate }: LinkListProps) {
 	const sensors = useSensors(
 		useSensor(PointerSensor),
 		useSensor(KeyboardSensor, {
@@ -67,7 +68,11 @@ export function LinkList({ links, onReorder, onDelete }: LinkListProps) {
 							type={link.type as "link" | "header" | "divider"}
 							title={link.title}
 							url={link.url}
+							isActive={link.isActive}
+							startDate={link.startDate}
+							endDate={link.endDate}
 							onDelete={onDelete}
+							onUpdate={onUpdate}
 						/>
 					))}
 				</div>

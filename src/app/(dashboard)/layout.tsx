@@ -1,17 +1,17 @@
 "use client";
 
-import { BarChart3, Edit, LogOut } from "lucide-react";
+import { BarChart3, CreditCard, Edit, LogOut, Quote, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth/client";
+import { signOut, useSession } from "next-auth/react";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
-	const { data: session } = authClient.useSession();
+	const { data: session } = useSession();
 
 	const handleSignOut = async () => {
-		await authClient.signOut();
+		await signOut({ redirect: false });
 		router.push("/login");
 	};
 
@@ -22,6 +22,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 					<div className="flex items-center gap-6">
 						<Link href="/editor" className="text-lg font-semibold">
 							LinkBio
+						</Link>
+						<Link href="/profiles">
+							<Button variant="ghost" size="sm">
+								<CreditCard className="mr-2 h-4 w-4" />
+								Biblioteca
+							</Button>
 						</Link>
 						<div className="flex items-center gap-1">
 							<Link href="/editor">
@@ -36,6 +42,42 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 									Analytics
 								</Button>
 							</Link>
+							<Link href="/leads">
+								<Button variant="ghost" size="sm">
+									<Users className="mr-2 h-4 w-4" />
+									Leads
+								</Button>
+							</Link>
+							<Link href="/testimonials">
+								<Button variant="ghost" size="sm">
+									<Quote className="mr-2 h-4 w-4" />
+									Prova Social
+								</Button>
+							</Link>
+							<Link href="/cards">
+								<Button variant="ghost" size="sm">
+									<CreditCard className="mr-2 h-4 w-4" />
+									Cartões NFC
+								</Button>
+							</Link>
+							
+							{session?.user?.role === "SUPERVISOR" && (
+								<Link href="/team">
+									<Button variant="ghost" size="sm" className="text-violet-600 font-medium">
+										<Users className="mr-2 h-4 w-4" />
+										Minha Equipe
+									</Button>
+								</Link>
+							)}
+							
+							{session?.user?.role === "ADMIN" && (
+								<Link href="/organization">
+									<Button variant="ghost" size="sm" className="text-blue-600 font-medium">
+										<Users className="mr-2 h-4 w-4" />
+										Gestão Empresa
+									</Button>
+								</Link>
+							)}
 						</div>
 					</div>
 					<div className="flex items-center gap-4">

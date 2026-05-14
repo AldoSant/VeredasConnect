@@ -5,7 +5,7 @@ import type { ThemeProps } from "@/types";
 
 type PreviewPanelProps = Omit<ThemeProps, "isPreview">;
 
-export function PreviewPanel({ displayName, bio, avatarUrl, links }: PreviewPanelProps) {
+export function PreviewPanel({ slug, displayName, bio, avatarUrl, jobTitle, company, phone, whatsapp, links }: PreviewPanelProps) {
 	return (
 		<div className="flex flex-col items-center">
 			{/* Phone frame */}
@@ -16,9 +16,14 @@ export function PreviewPanel({ displayName, bio, avatarUrl, links }: PreviewPane
 				{/* Screen */}
 				<div className="h-[667px] overflow-y-auto rounded-[2rem] bg-white">
 					<MinimalTheme
+						slug={slug}
 						displayName={displayName}
 						bio={bio}
 						avatarUrl={avatarUrl}
+						jobTitle={jobTitle}
+						company={company}
+						phone={phone}
+						whatsapp={whatsapp}
 						links={links}
 						isPreview
 					/>

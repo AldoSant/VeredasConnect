@@ -28,9 +28,24 @@ export interface EditorState {
 
 // Theme component props
 export interface ThemeProps {
+	slug: string;
 	displayName: string;
 	bio: string;
 	avatarUrl: string;
+	jobTitle?: string;
+	company?: string;
+	phone?: string;
+	whatsapp?: string;
+	leadFormActive?: boolean;
+	leadFormTitle?: string;
+	testimonials?: Array<{
+		id: string;
+		authorName: string;
+		authorTitle: string;
+		authorAvatar: string;
+		content: string;
+		rating: number;
+	}>;
 	links: Array<{
 		id: string;
 		type: "link" | "header" | "divider";

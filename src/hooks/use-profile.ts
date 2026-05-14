@@ -12,7 +12,7 @@ interface UseProfileReturn {
 	refetch: () => Promise<void>;
 }
 
-export function useProfile(): UseProfileReturn {
+export function useProfile(profileId?: string): UseProfileReturn {
 	const router = useRouter();
 	const [profile, setProfile] = useState<Profile | null>(null);
 	const [links, setLinks] = useState<LinkItem[]>([]);
@@ -24,7 +24,8 @@ export function useProfile(): UseProfileReturn {
 		setError(null);
 
 		try {
-			const res = await fetch("/api/profile");
+			const url = profileId ? `/api/profile?id=${profileId}` : "/api/profile";
+			const res = await fetch(url);
 			if (!res.ok) {
 				if (res.status === 401) {
 					router.push("/login");
@@ -41,7 +42,7 @@ export function useProfile(): UseProfileReturn {
 		} finally {
 			setIsLoading(false);
 		}
-	}, []);
+	}, [profileId, router]);
 
 	useEffect(() => {
 		fetchProfile();

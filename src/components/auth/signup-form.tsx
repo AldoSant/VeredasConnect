@@ -2,12 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { authClient } from "@/lib/auth/client";
+import { signIn } from "next-auth/react";
 import { slugSchema } from "@/lib/validations";
 import { SlugInput } from "./slug-input";
+
+const inputClass =
+	"w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-all focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 backdrop-blur-sm";
+
+const labelClass = "block text-xs font-medium text-white/60 mb-1.5 tracking-wide";
+
+const fieldError = (msg: string) => (
+	<p className="mt-1.5 text-xs text-red-400">{msg}</p>
+);
 
 interface FormErrors {
 	name?: string;
@@ -50,15 +56,15 @@ export function SignupForm() {
 		setErrors({});
 
 		try {
-			// 1. Create Neon Auth user
-			const { error } = await authClient.signUp.email({
+			// 1. Create User via NextAuth credentials (auto-register)
+			const res = await signIn("credentials", {
 				email,
 				password,
-				name,
+				redirect: false,
 			});
 
-			if (error) {
-				setErrors({ general: error.message || "Failed to create account" });
+			if (res?.error) {
+				setErrors({ general: "Failed to create account" });
 				setLoading(false);
 				return;
 			}
@@ -79,6 +85,7 @@ export function SignupForm() {
 
 			// 3. Redirect to editor
 			router.push("/editor");
+			router.refresh();
 		} catch {
 			setErrors({ general: "Something went wrong. Please try again." });
 			setLoading(false);
@@ -87,51 +94,66 @@ export function SignupForm() {
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
-			<div className="space-y-2">
-				<Label htmlFor="name">Name</Label>
-				<Input
-					id="name"
-					placeholder="Your name"
+			<div>
+				<label htmlFor="signup-name" className={labelClass}>Your Name</label>
+				<input
+					id="signup-name"
+					type="text"
+					placeholder="Ana Silva"
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 					aria-label="Name"
+					autoComplete="name"
+					className={inputClass}
 				/>
-				{errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
+				{errors.name && fieldError(errors.name)}
 			</div>
 
-			<div className="space-y-2">
-				<Label htmlFor="email">Email</Label>
-				<Input
-					id="email"
+			<div>
+				<label htmlFor="signup-email" className={labelClass}>Email</label>
+				<input
+					id="signup-email"
 					type="email"
 					placeholder="you@example.com"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					aria-label="Email"
+					autoComplete="email"
+					className={inputClass}
 				/>
-				{errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+				{errors.email && fieldError(errors.email)}
 			</div>
 
-			<div className="space-y-2">
-				<Label htmlFor="password">Password</Label>
-				<Input
-					id="password"
+			<div>
+				<label htmlFor="signup-password" className={labelClass}>Password</label>
+				<input
+					id="signup-password"
 					type="password"
 					placeholder="At least 8 characters"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					aria-label="Password"
+					autoComplete="new-password"
+					className={inputClass}
 				/>
-				{errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
+				{errors.password && fieldError(errors.password)}
 			</div>
 
 			<SlugInput value={slug} onChange={setSlug} error={errors.slug} />
 
-			{errors.general && <p className="text-sm text-destructive text-center">{errors.general}</p>}
+			{errors.general && (
+				<p className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-center text-sm text-red-400">
+					{errors.general}
+				</p>
+			)}
 
-			<Button type="submit" className="w-full" disabled={loading}>
-				{loading ? "Creating Account..." : "Create Account"}
-			</Button>
+			<button
+				type="submit"
+				disabled={loading}
+				className="w-full rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-950 transition-all hover:bg-white/90 active:scale-[0.98] disabled:opacity-60"
+			>
+				{loading ? "Creating Account…" : "Create Account"}
+			</button>
 		</form>
 	);
 }

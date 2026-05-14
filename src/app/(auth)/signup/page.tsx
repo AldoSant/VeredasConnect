@@ -1,31 +1,39 @@
 import Link from "next/link";
 import { GoogleButton } from "@/components/auth/google-button";
 import { SignupForm } from "@/components/auth/signup-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 
 export default function SignupPage() {
 	return (
-		<Card>
-			<CardHeader className="text-center">
-				<CardTitle className="text-2xl">Create your account</CardTitle>
-				<CardDescription>Get your personal link-in-bio page</CardDescription>
-			</CardHeader>
-			<CardContent className="space-y-4">
-				<GoogleButton />
-				<div className="flex items-center gap-4">
-					<Separator className="flex-1" />
-					<span className="text-sm text-muted-foreground">or</span>
-					<Separator className="flex-1" />
-				</div>
-				<SignupForm />
-				<p className="text-center text-sm text-muted-foreground">
-					Already have an account?{" "}
-					<Link href="/login" className="text-primary underline-offset-4 hover:underline">
-						Sign in
-					</Link>
-				</p>
-			</CardContent>
-		</Card>
+		<div className="space-y-6">
+			{/* Header */}
+			<div className="space-y-1 text-center">
+				<h1 className="text-2xl font-bold tracking-tight text-white">Claim your link</h1>
+				<p className="text-sm text-white/50">Create your premium link-in-bio page in seconds</p>
+			</div>
+
+			{/* Google Button */}
+			<GoogleButton />
+
+			{/* Divider */}
+			<div className="flex items-center gap-3">
+				<div className="h-px flex-1 bg-white/10" />
+				<span className="text-xs font-medium text-white/40 uppercase tracking-widest">or</span>
+				<div className="h-px flex-1 bg-white/10" />
+			</div>
+
+			{/* Signup form */}
+			<SignupForm />
+
+			{/* Footer */}
+			<p className="text-center text-sm text-white/40">
+				Already have an account?{" "}
+				<Link
+					href="/login"
+					className="font-semibold text-violet-400 transition-colors hover:text-violet-300"
+				>
+					Sign in
+				</Link>
+			</p>
+		</div>
 	);
 }

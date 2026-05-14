@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export function middleware(request: NextRequest) {
-	// Check for Neon Auth session cookie
-	// The cookie name varies: __Secure-neon-auth.session_token on HTTPS,
-	// neon-auth.session_token on HTTP localhost
-	const allCookies = request.cookies.getAll();
-	const sessionCookie = allCookies.find(c => c.name.includes("neon-auth.session_token"));
+export async function middleware(request: NextRequest) {
+	const token = await getToken({
+		req: request,
+		secret: process.env.NEXTAUTH_SECRET,
+	});
 
-	if (!sessionCookie?.value) {
+	if (!token) {
 		const loginUrl = new URL("/login", request.url);
 		loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
 		return NextResponse.redirect(loginUrl);

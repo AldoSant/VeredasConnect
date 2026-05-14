@@ -69,26 +69,33 @@ export function SlugInput({ value, onChange, error: externalError }: SlugInputPr
 	const displayError = externalError || validationError;
 
 	return (
-		<div className="space-y-2">
-			<Label htmlFor="slug">Username</Label>
+		<div>
+			<label htmlFor="slug" className="block text-xs font-medium text-white/60 mb-1.5 tracking-wide">
+				Username
+			</label>
 			<div className="relative">
-				<Input
+				<input
 					id="slug"
+					type="text"
 					placeholder="your-username"
 					value={value}
 					onChange={(e) => onChange(e.target.value.toLowerCase())}
 					aria-label="Username"
+					autoComplete="off"
+					className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-10 text-sm text-white placeholder:text-white/30 outline-none transition-all focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 backdrop-blur-sm"
 				/>
 				<div className="absolute right-3 top-1/2 -translate-y-1/2">
-					{checking && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
-					{!checking && available === true && <CheckCircle2 className="h-4 w-4 text-green-500" />}
-					{!checking && available === false && <XCircle className="h-4 w-4 text-destructive" />}
+					{checking && <Loader2 className="h-4 w-4 animate-spin text-white/30" />}
+					{!checking && available === true && <CheckCircle2 className="h-4 w-4 text-emerald-400" />}
+					{!checking && available === false && <XCircle className="h-4 w-4 text-red-400" />}
 				</div>
 			</div>
-			{displayError && <p className="text-sm text-destructive">{displayError}</p>}
-			{value && (
-				<p className="text-sm text-muted-foreground">
-					Your page: {typeof window !== "undefined" ? window.location.origin : ""}/{value}
+			{displayError && (
+				<p className="mt-1.5 text-xs text-red-400">{displayError}</p>
+			)}
+			{value && !displayError && available === true && (
+				<p className="mt-1.5 text-xs text-white/30">
+					Your page: <span className="text-violet-400">{typeof window !== "undefined" ? window.location.origin : ""}/{value}</span>
 				</p>
 			)}
 		</div>
