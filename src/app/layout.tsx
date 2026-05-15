@@ -22,7 +22,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={`${outfit.variable} font-sans antialiased bg-gray-50 dark:bg-gray-950`}>
-				<SessionProvider basePath="/connect/api/auth">{children}</SessionProvider>
+				<SessionProvider basePath="/api/auth">{children}</SessionProvider>
 				<Toaster />
 			</body>
 		</html>
