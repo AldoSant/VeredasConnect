@@ -8,6 +8,7 @@ import { users } from "@/lib/db/schema";
 import crypto from "node:crypto";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+	basePath: "/connect/api/auth",
 	adapter: DrizzleAdapter(db) as any,
 	providers: [
 		Google({
