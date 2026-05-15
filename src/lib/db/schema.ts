@@ -1,5 +1,29 @@
 import { relations, sql } from "drizzle-orm";
 import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import crypto from "node:crypto";
+
+// Organization (Empresa)
+export const organizations = sqliteTable("organizations", {
+	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+	name: text("name").notNull(),
+	logoUrl: text("logo_url").notNull().default(""),
+	ownerId: text("owner_id").notNull().references(() => users.id),
+	createdAt: integer("created_at").$defaultFn(() => Date.now()).notNull(),
+	updatedAt: integer("updated_at").$defaultFn(() => Date.now()).notNull(),
+});
+
+// Teams (Equipes)
+export const teams = sqliteTable("teams", {
+	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+	organizationId: text("organization_id")
+		.notNull()
+		.references(() => organizations.id, { onDelete: "cascade" }),
+	name: text("name").notNull(),
+	supervisorId: text("supervisor_id").references(() => users.id),
+	createdAt: integer("created_at").$defaultFn(() => Date.now()).notNull(),
+}, (table) => ({
+	orgIdx: index("team_org_idx").on(table.organizationId),
+}));
 
 // Auth.js tables
 export const users = sqliteTable("user", {
@@ -43,28 +67,6 @@ export const verificationTokens = sqliteTable("verificationToken", {
 	expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
 });
 
-// Organization (Empresa)
-export const organizations = sqliteTable("organizations", {
-	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
-	name: text("name").notNull(),
-	logoUrl: text("logo_url").notNull().default(""),
-	ownerId: text("owner_id").notNull().references(() => users.id),
-	createdAt: integer("created_at").$defaultFn(() => Date.now()).notNull(),
-	updatedAt: integer("updated_at").$defaultFn(() => Date.now()).notNull(),
-});
-
-// Teams (Equipes)
-export const teams = sqliteTable("teams", {
-	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
-	organizationId: text("organization_id")
-		.notNull()
-		.references(() => organizations.id, { onDelete: "cascade" }),
-	name: text("name").notNull(),
-	supervisorId: text("supervisor_id").references(() => users.id),
-	createdAt: integer("created_at").$defaultFn(() => Date.now()).notNull(),
-}, (table) => ({
-	orgIdx: index("team_org_idx").on(table.organizationId),
-}));
 
 // Profiles (App Specific)
 export const profiles = sqliteTable("profiles", {
