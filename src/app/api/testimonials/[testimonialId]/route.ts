@@ -19,7 +19,7 @@ async function getTestimonialAndVerify(testimonialId: string, userId: string) {
 		where: eq(testimonials.id, testimonialId),
 		with: { profile: true },
 	});
-	if (!t || t.profile?.userId !== userId) return null;
+	if (!t || (t.profile as any)?.userId !== userId) return null;
 	return t;
 }
 

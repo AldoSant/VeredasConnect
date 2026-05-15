@@ -32,7 +32,7 @@ export async function DELETE(
 		}
 
 		// Validation of Hierarchy Access
-		const isOwner = link.profile.userId === scope.id;
+		const isOwner = (link.profile as any).userId === scope.id;
 		const isAdminOfOrg = scope.role === "ADMIN" && scope.organizationId === link.profile.organizationId;
 		const isSupervisorOfTeam = scope.role === "SUPERVISOR" && scope.teamId === link.profile.teamId;
 

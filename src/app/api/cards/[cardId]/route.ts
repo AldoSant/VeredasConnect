@@ -40,7 +40,7 @@ export async function PUT(
 			...( result.data.label !== undefined && { label: result.data.label }),
 			...( result.data.profileId !== undefined && { profileId: result.data.profileId }),
 			...( result.data.isActive !== undefined && { isActive: result.data.isActive }),
-			updatedAt: new Date(),
+			updatedAt: Date.now() as any,
 		})
 		.where(eq(nfcCards.id, cardId))
 		.returning();
