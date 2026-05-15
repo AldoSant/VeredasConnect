@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 				<div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 border border-white/20 backdrop-blur-md transition-colors group-hover:bg-white/15">
 					<LinkIcon className="h-4 w-4 text-white" />
 				</div>
-				<span className="text-lg font-bold tracking-tight text-white">LinkBio</span>
+				<span className="text-lg font-bold tracking-tight text-white">Veredas Connect</span>
 			</Link>
 
 			{/* Auth card */}

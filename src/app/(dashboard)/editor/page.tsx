@@ -311,7 +311,7 @@ function EditorContent() {
 						className="space-y-4"
 					>
 						<div className="relative">
-							<span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-medium">linkbio.app/</span>
+							<span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-medium text-xs">veredasinc.com.br/connect/</span>
 							<input 
 								name="slug"
 								type="text"

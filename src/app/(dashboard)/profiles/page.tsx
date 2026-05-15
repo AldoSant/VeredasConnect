@@ -121,7 +121,7 @@ export default function ProfilesPage() {
 							<div className="space-y-2">
 								<Label htmlFor="slug">Nome de usuário (slug)</Label>
 								<div className="flex items-center gap-2">
-									<span className="text-muted-foreground">linkbio.com/</span>
+									<span className="text-muted-foreground">veredasinc.com.br/connect/</span>
 									<Input
 										id="slug"
 										placeholder="seu-nome"
@@ -166,7 +166,7 @@ export default function ProfilesPage() {
 								</div>
 							</div>
 							<CardTitle className="mt-4 break-all">{profile.displayName || `@${profile.slug}`}</CardTitle>
-							<p className="text-sm text-muted-foreground">linkbio.com/{profile.slug}</p>
+							<p className="text-sm text-muted-foreground">veredasinc.com.br/connect/{profile.slug}</p>
 						</CardHeader>
 						<CardContent className="py-4">
 							<div className="space-y-1 text-sm">

@@ -65,7 +65,7 @@ export function ShareDialog({ username }: ShareDialogProps) {
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
-					<DialogTitle>Share your LinkBio</DialogTitle>
+					<DialogTitle>Share your Veredas Connect</DialogTitle>
 					<DialogDescription>
 						Anyone with this link or QR code can access your profile.
 					</DialogDescription>

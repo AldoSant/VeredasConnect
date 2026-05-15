@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 				<div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
 					<div className="flex items-center gap-6">
 						<Link href="/editor" className="text-lg font-semibold">
-							LinkBio
+							Veredas Connect
 						</Link>
 						<Link href="/profiles">
 							<Button variant="ghost" size="sm">
