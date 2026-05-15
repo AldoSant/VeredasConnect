@@ -44,7 +44,7 @@ export async function GET() {
 
 		// Detalhes dos Membros
 		const membersPerformance = await Promise.all(
-			team.members.map(async (member) => {
+			team.members.map(async (member: any) => {
 				const [mProfiles] = await db
 					.select({ value: count() })
 					.from(profiles)

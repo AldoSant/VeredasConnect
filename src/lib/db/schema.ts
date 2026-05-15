@@ -3,30 +3,30 @@ import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
 import crypto from "node:crypto";
 
 // Organization (Empresa)
-export const organizations = sqliteTable("organizations", {
+export const organizations: any = sqliteTable("organizations", {
 	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
 	name: text("name").notNull(),
 	logoUrl: text("logo_url").notNull().default(""),
-	ownerId: text("owner_id").notNull().references(() => users.id),
+	ownerId: text("owner_id").notNull().references(() => (users as any).id),
 	createdAt: integer("created_at").$defaultFn(() => Date.now()).notNull(),
 	updatedAt: integer("updated_at").$defaultFn(() => Date.now()).notNull(),
 });
 
 // Teams (Equipes)
-export const teams = sqliteTable("teams", {
+export const teams: any = sqliteTable("teams", {
 	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
 	organizationId: text("organization_id")
 		.notNull()
-		.references(() => organizations.id, { onDelete: "cascade" }),
+		.references(() => (organizations as any).id, { onDelete: "cascade" }),
 	name: text("name").notNull(),
-	supervisorId: text("supervisor_id").references(() => users.id),
+	supervisorId: text("supervisor_id").references(() => (users as any).id),
 	createdAt: integer("created_at").$defaultFn(() => Date.now()).notNull(),
 }, (table) => ({
 	orgIdx: index("team_org_idx").on(table.organizationId),
 }));
 
 // Auth.js tables
-export const users = sqliteTable("user", {
+export const users: any = sqliteTable("user", {
 	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
 	name: text("name"),
 	email: text("email").unique(),
@@ -34,8 +34,8 @@ export const users = sqliteTable("user", {
 	image: text("image"),
 	// Hierarchical fields
 	role: text("role").notNull().default("MEMBER"), // 'ADMIN' | 'SUPERVISOR' | 'MEMBER'
-	organizationId: text("organization_id").references(() => organizations.id),
-	teamId: text("team_id").references(() => teams.id),
+	organizationId: text("organization_id").references(() => (organizations as any).id),
+	teamId: text("team_id").references(() => (teams as any).id),
 }, (table) => ({
 	orgIdx: index("user_org_idx").on(table.organizationId),
 	teamIdx: index("user_team_idx").on(table.teamId),
