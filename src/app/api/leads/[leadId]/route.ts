@@ -25,7 +25,7 @@ export async function GET(
 		with: { profile: true },
 	});
 
-	if (!lead || lead.profile?.userId !== user.id) {
+	if (!lead || (lead.profile as any)?.userId !== user.id) {
 		return NextResponse.json({ error: "Not found" }, { status: 404 });
 	}
 
@@ -46,7 +46,7 @@ export async function PATCH(
 		with: { profile: true },
 	});
 
-	if (!lead || lead.profile?.userId !== user.id) {
+	if (!lead || (lead.profile as any)?.userId !== user.id) {
 		return NextResponse.json({ error: "Not found" }, { status: 404 });
 	}
 
@@ -83,7 +83,7 @@ export async function DELETE(
 		with: { profile: true },
 	});
 
-	if (!lead || lead.profile?.userId !== user.id) {
+	if (!lead || (lead.profile as any)?.userId !== user.id) {
 		return NextResponse.json({ error: "Not found" }, { status: 404 });
 	}
 
