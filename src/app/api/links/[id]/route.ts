@@ -32,9 +32,10 @@ export async function DELETE(
 		}
 
 		// Validation of Hierarchy Access
-		const isOwner = (link.profile as any).userId === scope.id;
-		const isAdminOfOrg = scope.role === "ADMIN" && scope.organizationId === link.profile.organizationId;
-		const isSupervisorOfTeam = scope.role === "SUPERVISOR" && scope.teamId === link.profile.teamId;
+		const profile = link.profile as any;
+		const isOwner = profile.userId === scope.id;
+		const isAdminOfOrg = scope.role === "ADMIN" && scope.organizationId === profile.organizationId;
+		const isSupervisorOfTeam = scope.role === "SUPERVISOR" && scope.teamId === profile.teamId;
 
 		if (!isOwner && !isAdminOfOrg && !isSupervisorOfTeam) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
