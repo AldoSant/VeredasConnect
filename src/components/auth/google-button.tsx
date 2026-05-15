@@ -9,7 +9,7 @@ export function GoogleButton() {
 	const handleGoogleSignIn = async () => {
 		setLoading(true);
 		try {
-			await signIn("google", { callbackUrl: "/editor" });
+			await signIn("google", { callbackUrl: "/connect/editor" });
 		} catch {
 			setLoading(false);
 		}

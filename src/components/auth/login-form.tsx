@@ -12,7 +12,7 @@ const labelClass = "block text-xs font-medium text-white/60 mb-1.5 tracking-wide
 export function LoginForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams?.get("callbackUrl") || "/editor";
+	const callbackUrl = searchParams?.get("callbackUrl") || "/connect/editor";
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");

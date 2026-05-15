@@ -84,7 +84,7 @@ export function SignupForm() {
 			}
 
 			// 3. Redirect to editor
-			router.push("/editor");
+			router.push("/connect/editor");
 			router.refresh();
 		} catch {
 			setErrors({ general: "Something went wrong. Please try again." });
