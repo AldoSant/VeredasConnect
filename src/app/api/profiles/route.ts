@@ -1,6 +1,6 @@
 import { desc, eq, and } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { getSessionScope } from "@/lib/auth/rbac";
+import { getSessionScope, getHierarchyFilter } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 
