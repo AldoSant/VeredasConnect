@@ -257,9 +257,9 @@ function EditorContent() {
 			initializedRef.current = false;
 			await refetch();
 			setIsDirty(false);
-			toast.success("Changes saved successfully!");
+			toast.success("Mudanças salvas com sucesso!");
 		} catch {
-			toast.error("Failed to save changes. Please try again.");
+			toast.error("Falha ao salvar alterações. Por favor, tente novamente.");
 		} finally {
 			setIsSaving(false);
 		}
@@ -323,13 +323,13 @@ function EditorContent() {
 							<span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-medium text-xs">
 								veredasinc.com.br/connect/
 							</span>
-							<input
-								name="slug"
-								type="text"
-								placeholder="seu-nome"
-								required
-								className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-[100px] pr-4 text-white font-bold focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
-							/>
+				<input
+					name="slug"
+					type="text"
+					placeholder="exemplo-usuario"
+					required
+					className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-[100px] pr-4 text-white font-bold focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+				/>
 						</div>
 						<Button
 							type="submit"
@@ -408,7 +408,7 @@ function EditorContent() {
 			<Separator />
 
 			<div className="space-y-4">
-				<h2 className="text-lg font-semibold">Links</h2>
+				<h2 className="text-lg font-semibold">Conexões</h2>
 				<LinkList
 					links={links}
 					onReorder={handleReorder}
@@ -426,10 +426,10 @@ function EditorContent() {
 				{isSaving ? (
 					<>
 						<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-						Saving...
+						Salvando...
 					</>
 				) : (
-					"Save"
+					"Salvar"
 				)}
 			</Button>
 		</div>
@@ -487,10 +487,10 @@ function EditorContent() {
 				<Tabs defaultValue="edit" className="w-full">
 					<TabsList className="w-full">
 						<TabsTrigger value="edit" className="flex-1">
-							Edit
+							Editar
 						</TabsTrigger>
 						<TabsTrigger value="preview" className="flex-1">
-							Preview
+							Pré-visualização
 						</TabsTrigger>
 					</TabsList>
 					<TabsContent value="edit">{editorPanel}</TabsContent>
