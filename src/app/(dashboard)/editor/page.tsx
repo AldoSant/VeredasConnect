@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { OnboardingChecklist } from "@/components/dashboard/onboarding-checklist";
 import { AddLinkButton } from "@/components/editor/add-link-button";
 import { EditorToolbar, type LayoutMode } from "@/components/editor/editor-toolbar";
 import { LinkList } from "@/components/editor/link-list";
@@ -361,6 +362,18 @@ function EditorContent() {
 
 	const editorPanel = (
 		<div className="flex flex-col gap-6 p-6">
+			<OnboardingChecklist
+				profile={{
+					displayName,
+					bio,
+					avatarUrl,
+					phone,
+					whatsapp,
+					leadFormActive,
+				}}
+				links={activeLinks}
+			/>
+
 			<ProfileForm
 				displayName={displayName}
 				bio={bio}
@@ -426,10 +439,10 @@ function EditorContent() {
 				{isSaving ? (
 					<>
 						<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-						Saving...
+						Salvando...
 					</>
 				) : (
-					"Save"
+					"Salvar"
 				)}
 			</Button>
 		</div>
