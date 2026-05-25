@@ -1,6 +1,6 @@
-import { desc, eq, and } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { getSessionScope, getHierarchyFilter } from "@/lib/auth/rbac";
+import { getHierarchyFilter, getSessionScope } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 
@@ -14,15 +14,15 @@ export async function GET() {
 			orderBy: [desc(profiles.createdAt)],
 		});
 
-		return NextResponse.json({ 
+		return NextResponse.json({
 			profiles: userProfiles,
 			scope: {
 				role: scope.role,
 				organizationId: scope.organizationId,
-				teamId: scope.teamId
-			}
+				teamId: scope.teamId,
+			},
 		});
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }

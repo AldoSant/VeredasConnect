@@ -3,8 +3,8 @@
 import { BarChart3, CreditCard, Edit, LogOut, Quote, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
@@ -60,7 +60,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 									Cartões NFC
 								</Button>
 							</Link>
-							
+
 							{session?.user?.role === "SUPERVISOR" && (
 								<Link href="/team">
 									<Button variant="ghost" size="sm" className="text-violet-600 font-medium">
@@ -69,7 +69,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 									</Button>
 								</Link>
 							)}
-							
+
 							{session?.user?.role === "ADMIN" && (
 								<Link href="/organization">
 									<Button variant="ghost" size="sm" className="text-blue-600 font-medium">

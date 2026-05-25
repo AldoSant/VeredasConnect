@@ -1,8 +1,8 @@
-import { asc, eq, and, or } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 import { getSessionScope } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
-import { linkItems, profiles, users } from "@/lib/db/schema";
+import { linkItems, profiles } from "@/lib/db/schema";
 import { apiRateLimiter } from "@/lib/rate-limit";
 import { profileSchema, slugSchema } from "@/lib/validations";
 
@@ -18,9 +18,7 @@ export async function GET(request: NextRequest) {
 		const profileId = request.nextUrl.searchParams.get("id");
 
 		const profile = await db.query.profiles.findFirst({
-			where: profileId 
-				? eq(profiles.id, profileId) 
-				: eq(profiles.userId, scope.id),
+			where: profileId ? eq(profiles.id, profileId) : eq(profiles.userId, scope.id),
 		});
 
 		if (!profile) {
@@ -42,7 +40,7 @@ export async function GET(request: NextRequest) {
 		});
 
 		return NextResponse.json({ profile, links });
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }
@@ -58,7 +56,7 @@ export async function POST(request: NextRequest) {
 		const scope = await getSessionScope();
 		const body = await request.json();
 		const slugResult = slugSchema.safeParse(body.slug);
-		
+
 		if (!slugResult.success) {
 			return NextResponse.json({ error: slugResult.error.issues[0]?.message }, { status: 400 });
 		}
@@ -83,7 +81,7 @@ export async function POST(request: NextRequest) {
 			.returning();
 
 		return NextResponse.json({ profile }, { status: 201 });
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }
@@ -99,16 +97,14 @@ export async function PUT(request: NextRequest) {
 		const scope = await getSessionScope();
 		const body = await request.json();
 		const result = profileSchema.safeParse(body);
-		
+
 		if (!result.success) {
 			return NextResponse.json({ error: result.error.issues[0]?.message }, { status: 400 });
 		}
 
 		// Fetch existing profile to check permission
 		const existingProfile = await db.query.profiles.findFirst({
-			where: body.id 
-				? eq(profiles.id, body.id) 
-				: eq(profiles.userId, scope.id)
+			where: body.id ? eq(profiles.id, body.id) : eq(profiles.userId, scope.id),
 		});
 
 		if (!existingProfile) {
@@ -117,8 +113,10 @@ export async function PUT(request: NextRequest) {
 
 		// Check hierarchy permission
 		const isOwner = existingProfile.userId === scope.id;
-		const isAdminOfOrg = scope.role === "ADMIN" && scope.organizationId === existingProfile.organizationId;
-		const isSupervisorOfTeam = scope.role === "SUPERVISOR" && scope.teamId === existingProfile.teamId;
+		const isAdminOfOrg =
+			scope.role === "ADMIN" && scope.organizationId === existingProfile.organizationId;
+		const isSupervisorOfTeam =
+			scope.role === "SUPERVISOR" && scope.teamId === existingProfile.teamId;
 
 		if (!isOwner && !isAdminOfOrg && !isSupervisorOfTeam) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
@@ -138,13 +136,13 @@ export async function PUT(request: NextRequest) {
 				leadFormActive: result.data.leadFormActive ?? false,
 				leadFormTitle: result.data.leadFormTitle || "Inscreva-se ou deixe sua mensagem",
 				webhookUrl: result.data.webhookUrl || "",
-				updatedAt: Date.now() as any,
+				updatedAt: Date.now(),
 			})
 			.where(eq(profiles.id, existingProfile.id))
 			.returning();
 
 		return NextResponse.json({ profile: updated });
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }

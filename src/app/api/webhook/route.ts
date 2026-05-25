@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { getAuthUser } from "@/lib/auth/get-user";
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
-import { z } from "zod";
 
 const webhookSchema = z.object({
 	webhookUrl: z.string().url("Must be a valid URL").or(z.literal("")),
@@ -18,12 +18,12 @@ export async function GET() {
 		where: eq(profiles.userId, user.id),
 	});
 
-	return NextResponse.json({ webhookUrl: (profile as any)?.webhookUrl ?? "" });
+	return NextResponse.json({ webhookUrl: profile?.webhookUrl ?? "" });
 }
 
 // PUT: update webhook URL
 export async function PUT(request: NextRequest) {
-	const { user, error } = await getAuthUser();
+	const { error } = await getAuthUser();
 	if (error) return error;
 
 	const body = await request.json();
@@ -32,5 +32,8 @@ export async function PUT(request: NextRequest) {
 		return NextResponse.json({ error: result.error.issues[0]?.message }, { status: 400 });
 	}
 
-	return NextResponse.json({ success: true, message: "Webhook saved (requires schema field to persist). No-op placeholder." });
+	return NextResponse.json({
+		success: true,
+		message: "Webhook saved (requires schema field to persist). No-op placeholder.",
+	});
 }

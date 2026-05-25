@@ -2,8 +2,7 @@
 
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { apiPath } from "@/lib/paths";
 import { slugSchema } from "@/lib/validations";
 
 interface SlugInputProps {
@@ -31,7 +30,7 @@ export function SlugInput({ value, onChange, error: externalError }: SlugInputPr
 		setChecking(true);
 
 		try {
-			const res = await fetch(`/api/slug/check?slug=${encodeURIComponent(slug)}`);
+			const res = await fetch(apiPath(`/api/slug/check?slug=${encodeURIComponent(slug)}`));
 			const data = await res.json();
 			setAvailable(data.available);
 			if (!data.available && data.error) {
@@ -70,7 +69,10 @@ export function SlugInput({ value, onChange, error: externalError }: SlugInputPr
 
 	return (
 		<div>
-			<label htmlFor="slug" className="block text-xs font-medium text-white/60 mb-1.5 tracking-wide">
+			<label
+				htmlFor="slug"
+				className="block text-xs font-medium text-white/60 mb-1.5 tracking-wide"
+			>
 				Username
 			</label>
 			<div className="relative">
@@ -90,12 +92,13 @@ export function SlugInput({ value, onChange, error: externalError }: SlugInputPr
 					{!checking && available === false && <XCircle className="h-4 w-4 text-red-400" />}
 				</div>
 			</div>
-			{displayError && (
-				<p className="mt-1.5 text-xs text-red-400">{displayError}</p>
-			)}
+			{displayError && <p className="mt-1.5 text-xs text-red-400">{displayError}</p>}
 			{value && !displayError && available === true && (
 				<p className="mt-1.5 text-xs text-white/30">
-					Your page: <span className="text-violet-400">{typeof window !== "undefined" ? window.location.origin : ""}/{value}</span>
+					Your page:{" "}
+					<span className="text-violet-400">
+						{typeof window !== "undefined" ? window.location.origin : ""}/{value}
+					</span>
 				</p>
 			)}
 		</div>

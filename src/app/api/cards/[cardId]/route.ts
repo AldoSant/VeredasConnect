@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { getAuthUser } from "@/lib/auth/get-user";
 import { db } from "@/lib/db";
 import { nfcCards } from "@/lib/db/schema";
-import { z } from "zod";
 
 const updateCardSchema = z.object({
 	label: z.string().min(1).max(50).optional(),
@@ -14,7 +14,7 @@ const updateCardSchema = z.object({
 // PUT: update card (relink profile, rename, pause)
 export async function PUT(
 	request: NextRequest,
-	{ params }: { params: Promise<{ cardId: string }> }
+	{ params }: { params: Promise<{ cardId: string }> },
 ) {
 	const { user, error } = await getAuthUser();
 	if (error) return error;
@@ -37,10 +37,10 @@ export async function PUT(
 	const [updated] = await db
 		.update(nfcCards)
 		.set({
-			...( result.data.label !== undefined && { label: result.data.label }),
-			...( result.data.profileId !== undefined && { profileId: result.data.profileId }),
-			...( result.data.isActive !== undefined && { isActive: result.data.isActive }),
-			updatedAt: Date.now() as any,
+			...(result.data.label !== undefined && { label: result.data.label }),
+			...(result.data.profileId !== undefined && { profileId: result.data.profileId }),
+			...(result.data.isActive !== undefined && { isActive: result.data.isActive }),
+			updatedAt: new Date(),
 		})
 		.where(eq(nfcCards.id, cardId))
 		.returning();
@@ -50,8 +50,8 @@ export async function PUT(
 
 // DELETE: remove a card
 export async function DELETE(
-	request: NextRequest,
-	{ params }: { params: Promise<{ cardId: string }> }
+	_request: NextRequest,
+	{ params }: { params: Promise<{ cardId: string }> },
 ) {
 	const { user, error } = await getAuthUser();
 	if (error) return error;

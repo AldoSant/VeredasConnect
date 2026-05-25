@@ -11,7 +11,7 @@ import { nfcCards, profiles } from "@/lib/db/schema";
  */
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: Promise<{ cardId: string }> }
+	{ params }: { params: Promise<{ cardId: string }> },
 ) {
 	const { cardId } = await params;
 

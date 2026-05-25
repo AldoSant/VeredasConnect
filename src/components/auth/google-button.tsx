@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { appPath } from "@/lib/paths";
 
 export function GoogleButton() {
 	const [loading, setLoading] = useState(false);
@@ -9,7 +10,7 @@ export function GoogleButton() {
 	const handleGoogleSignIn = async () => {
 		setLoading(true);
 		try {
-			await signIn("google", { callbackUrl: "/connect/editor" });
+			await signIn("google", { callbackUrl: appPath("/editor") });
 		} catch {
 			setLoading(false);
 		}

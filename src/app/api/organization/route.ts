@@ -2,7 +2,7 @@ import { count, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getSessionScope } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
-import { organizations, teams, users, profiles, leads } from "@/lib/db/schema";
+import { leads, organizations, profiles, users } from "@/lib/db/schema";
 
 export async function GET() {
 	try {
@@ -22,7 +22,7 @@ export async function GET() {
 			where: eq(organizations.id, orgId),
 			with: {
 				teams: true,
-			}
+			},
 		});
 
 		if (!org) return NextResponse.json({ error: "Org not found" }, { status: 404 });
@@ -33,8 +33,14 @@ export async function GET() {
 		});
 
 		// 3. Global Stats
-		const [totalLeads] = await db.select({ value: count() }).from(leads).where(eq(leads.organizationId, orgId));
-		const [totalProfiles] = await db.select({ value: count() }).from(profiles).where(eq(profiles.organizationId, orgId));
+		const [totalLeads] = await db
+			.select({ value: count() })
+			.from(leads)
+			.where(eq(leads.organizationId, orgId));
+		const [totalProfiles] = await db
+			.select({ value: count() })
+			.from(profiles)
+			.where(eq(profiles.organizationId, orgId));
 
 		return NextResponse.json({
 			organization: {
@@ -48,15 +54,15 @@ export async function GET() {
 				totalProfiles: totalProfiles.value,
 			},
 			teams: org.teams,
-			users: orgUsers.map(u => ({
+			users: orgUsers.map((u) => ({
 				id: u.id,
 				name: u.name,
 				email: u.email,
 				role: u.role,
-				teamId: u.teamId
-			}))
+				teamId: u.teamId,
+			})),
 		});
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }

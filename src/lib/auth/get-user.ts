@@ -1,5 +1,5 @@
-import { auth } from "@/auth";
 import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 
 /**
  * Call this in API route handlers to get the authenticated user.

@@ -1,9 +1,9 @@
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { getAuthUser } from "@/lib/auth/get-user";
 import { db } from "@/lib/db";
-import { testimonials, profiles } from "@/lib/db/schema";
-import { z } from "zod";
+import { profiles, testimonials } from "@/lib/db/schema";
 
 const updateTestimonialSchema = z.object({
 	authorName: z.string().min(2).max(80).optional(),
@@ -15,17 +15,22 @@ const updateTestimonialSchema = z.object({
 });
 
 async function getTestimonialAndVerify(testimonialId: string, userId: string) {
-	const t = await db.query.testimonials.findFirst({
+	const testimonial = await db.query.testimonials.findFirst({
 		where: eq(testimonials.id, testimonialId),
-		with: { profile: true },
 	});
-	if (!t || (t.profile as any)?.userId !== userId) return null;
-	return t;
+	if (!testimonial) return null;
+
+	const profile = await db.query.profiles.findFirst({
+		where: eq(profiles.id, testimonial.profileId),
+	});
+	if (!profile || profile.userId !== userId) return null;
+
+	return testimonial;
 }
 
 export async function PATCH(
 	request: NextRequest,
-	{ params }: { params: Promise<{ testimonialId: string }> }
+	{ params }: { params: Promise<{ testimonialId: string }> },
 ) {
 	const { user, error } = await getAuthUser();
 	if (error) return error;
@@ -43,15 +48,15 @@ export async function PATCH(
 	const [updated] = await db
 		.update(testimonials)
 		.set({ ...result.data })
-		.where(eq(testimonials.id, testimonialId))
+		.where(eq(testimonials.id, t.id))
 		.returning();
 
 	return NextResponse.json({ testimonial: updated });
 }
 
 export async function DELETE(
-	request: NextRequest,
-	{ params }: { params: Promise<{ testimonialId: string }> }
+	_request: NextRequest,
+	{ params }: { params: Promise<{ testimonialId: string }> },
 ) {
 	const { user, error } = await getAuthUser();
 	if (error) return error;
@@ -60,6 +65,6 @@ export async function DELETE(
 	const t = await getTestimonialAndVerify(testimonialId, user.id);
 	if (!t) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-	await db.delete(testimonials).where(eq(testimonials.id, testimonialId));
+	await db.delete(testimonials).where(eq(testimonials.id, t.id));
 	return NextResponse.json({ success: true });
 }

@@ -1,24 +1,31 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AddLinkButton } from "@/components/editor/add-link-button";
 import { EditorToolbar, type LayoutMode } from "@/components/editor/editor-toolbar";
 import { LinkList } from "@/components/editor/link-list";
 import { ProfileForm } from "@/components/editor/profile-form";
-import { PreviewPanel } from "@/components/preview/preview-panel";
 import { ShareDialog } from "@/components/editor/share-dialog";
+import { PreviewPanel } from "@/components/preview/preview-panel";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useProfile } from "@/hooks/use-profile";
+import { apiPath } from "@/lib/paths";
 import type { LinkItem } from "@/types";
 
 export default function EditorPage() {
 	return (
-		<Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+		<Suspense
+			fallback={
+				<div className="flex h-screen items-center justify-center">
+					<Loader2 className="h-8 w-8 animate-spin" />
+				</div>
+			}
+		>
 			<EditorContent />
 		</Suspense>
 	);
@@ -57,13 +64,13 @@ function EditorContent() {
 			setBio(profile.bio);
 			setAvatarUrl(profile.avatarUrl);
 			// Fallback defaults in case they're undefined in older profiles
-			setJobTitle((profile as any).jobTitle || "");
-			setCompany((profile as any).company || "");
-			setPhone((profile as any).phone || "");
-			setWhatsapp((profile as any).whatsapp || "");
-			setLeadFormActive((profile as any).leadFormActive ?? false);
-			setLeadFormTitle((profile as any).leadFormTitle || "Deixe sua mensagem");
-			setWebhookUrl((profile as any).webhookUrl || "");
+			setJobTitle(profile.jobTitle || "");
+			setCompany(profile.company || "");
+			setPhone(profile.phone || "");
+			setWhatsapp(profile.whatsapp || "");
+			setLeadFormActive(profile.leadFormActive ?? false);
+			setLeadFormTitle(profile.leadFormTitle || "Deixe sua mensagem");
+			setWebhookUrl(profile.webhookUrl || "");
 			setLinks(serverLinks);
 			initializedRef.current = true;
 		}
@@ -174,7 +181,7 @@ function EditorContent() {
 
 		try {
 			// 1. Update profile
-			const profileRes = await fetch("/api/profile", {
+			const profileRes = await fetch(apiPath("/api/profile"), {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
@@ -196,13 +203,13 @@ function EditorContent() {
 
 			// 2. Delete removed items
 			for (const id of deletedIdsRef.current) {
-				await fetch(`/api/links/${id}`, { method: "DELETE" });
+				await fetch(apiPath(`/api/links/${id}`), { method: "DELETE" });
 			}
 
 			// 3. Add new items
 			const newIdMap = new Map<string, string>();
 			for (const item of addedLinksRef.current) {
-				const res = await fetch("/api/links", {
+				const res = await fetch(apiPath("/api/links"), {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
@@ -232,12 +239,12 @@ function EditorContent() {
 				}));
 
 			if (updateItems.length > 0) {
-				await fetch("/api/links/bulk-update", {
+				await fetch(apiPath("/api/links/bulk-update"), {
 					method: "PUT",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ 
+					body: JSON.stringify({
 						profileId: profile.id, // Explicitly pass profileId
-						items: updateItems 
+						items: updateItems,
 					}),
 				});
 			}
@@ -280,18 +287,20 @@ function EditorContent() {
 				<div className="w-full max-w-md space-y-8 text-center">
 					<div className="space-y-2">
 						<h1 className="text-4xl font-bold tracking-tighter text-white">Quase lá!</h1>
-						<p className="text-white/50 text-lg">Escolha o seu nome de usuário para criar sua página.</p>
+						<p className="text-white/50 text-lg">
+							Escolha o seu nome de usuário para criar sua página.
+						</p>
 					</div>
-					
-					<form 
+
+					<form
 						onSubmit={async (e) => {
 							e.preventDefault();
 							const formData = new FormData(e.currentTarget);
 							const slug = formData.get("slug") as string;
-							
+
 							setIsSaving(true);
 							try {
-								const res = await fetch("/api/profile", {
+								const res = await fetch(apiPath("/api/profile"), {
 									method: "POST",
 									headers: { "Content-Type": "application/json" },
 									body: JSON.stringify({ slug, displayName: slug }),
@@ -302,8 +311,8 @@ function EditorContent() {
 								}
 								toast.success("Perfil criado com sucesso!");
 								refetch();
-							} catch (err: any) {
-								toast.error(err.message);
+							} catch (err) {
+								toast.error(err instanceof Error ? err.message : "Erro ao criar perfil");
 							} finally {
 								setIsSaving(false);
 							}
@@ -311,8 +320,10 @@ function EditorContent() {
 						className="space-y-4"
 					>
 						<div className="relative">
-							<span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-medium text-xs">veredasinc.com.br/connect/</span>
-							<input 
+							<span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-medium text-xs">
+								veredasinc.com.br/connect/
+							</span>
+							<input
 								name="slug"
 								type="text"
 								placeholder="seu-nome"
@@ -320,7 +331,11 @@ function EditorContent() {
 								className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-[100px] pr-4 text-white font-bold focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
 							/>
 						</div>
-						<Button type="submit" disabled={isSaving} className="w-full py-6 rounded-2xl text-lg font-bold bg-white text-black hover:bg-white/90">
+						<Button
+							type="submit"
+							disabled={isSaving}
+							className="w-full py-6 rounded-2xl text-lg font-bold bg-white text-black hover:bg-white/90"
+						>
 							{isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : "Criar minha página"}
 						</Button>
 					</form>
@@ -359,21 +374,47 @@ function EditorContent() {
 				onDisplayNameChange={handleDisplayNameChange}
 				onBioChange={handleBioChange}
 				onAvatarUrlChange={handleAvatarUrlChange}
-				onJobTitleChange={(v) => { setJobTitle(v); markDirty(); }}
-				onCompanyChange={(v) => { setCompany(v); markDirty(); }}
-				onPhoneChange={(v) => { setPhone(v); markDirty(); }}
-				onWhatsappChange={(v) => { setWhatsapp(v); markDirty(); }}
-				onLeadFormActiveChange={(v) => { setLeadFormActive(v); markDirty(); }}
-				onLeadFormTitleChange={(v) => { setLeadFormTitle(v); markDirty(); }}
+				onJobTitleChange={(v) => {
+					setJobTitle(v);
+					markDirty();
+				}}
+				onCompanyChange={(v) => {
+					setCompany(v);
+					markDirty();
+				}}
+				onPhoneChange={(v) => {
+					setPhone(v);
+					markDirty();
+				}}
+				onWhatsappChange={(v) => {
+					setWhatsapp(v);
+					markDirty();
+				}}
+				onLeadFormActiveChange={(v) => {
+					setLeadFormActive(v);
+					markDirty();
+				}}
+				onLeadFormTitleChange={(v) => {
+					setLeadFormTitle(v);
+					markDirty();
+				}}
 				webhookUrl={webhookUrl}
-				onWebhookUrlChange={(v) => { setWebhookUrl(v); markDirty(); }}
+				onWebhookUrlChange={(v) => {
+					setWebhookUrl(v);
+					markDirty();
+				}}
 			/>
 
 			<Separator />
 
 			<div className="space-y-4">
 				<h2 className="text-lg font-semibold">Links</h2>
-				<LinkList links={links} onReorder={handleReorder} onDelete={handleDeleteLink} onUpdate={handleUpdateLink} />
+				<LinkList
+					links={links}
+					onReorder={handleReorder}
+					onDelete={handleDeleteLink}
+					onUpdate={handleUpdateLink}
+				/>
 				<AddLinkButton
 					onAddLink={handleAddLink}
 					onAddHeader={handleAddHeader}

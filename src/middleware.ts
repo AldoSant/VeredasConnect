@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { stripAppBasePath } from "@/lib/paths";
 
 export async function middleware(request: NextRequest) {
 	const token = await getToken({
@@ -10,7 +11,7 @@ export async function middleware(request: NextRequest) {
 
 	if (!token) {
 		const loginUrl = new URL("/connect/login", request.url);
-		loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
+		loginUrl.searchParams.set("callbackUrl", stripAppBasePath(request.nextUrl.pathname));
 		return NextResponse.redirect(loginUrl);
 	}
 
@@ -18,5 +19,12 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/editor", "/editor/:path*", "/analytics", "/analytics/:path*", "/settings", "/settings/:path*"],
+	matcher: [
+		"/editor",
+		"/editor/:path*",
+		"/analytics",
+		"/analytics/:path*",
+		"/settings",
+		"/settings/:path*",
+	],
 };

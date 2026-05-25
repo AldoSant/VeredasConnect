@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { safeInternalPath } from "@/lib/paths";
 
 const inputClass =
 	"w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-all focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 backdrop-blur-sm";
@@ -12,7 +13,7 @@ const labelClass = "block text-xs font-medium text-white/60 mb-1.5 tracking-wide
 export function LoginForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams?.get("callbackUrl") || "/connect/editor";
+	const callbackUrl = safeInternalPath(searchParams?.get("callbackUrl"));
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -48,7 +49,9 @@ export function LoginForm() {
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
 			<div>
-				<label htmlFor="email" className={labelClass}>Email</label>
+				<label htmlFor="email" className={labelClass}>
+					Email
+				</label>
 				<input
 					id="email"
 					type="email"
@@ -62,7 +65,9 @@ export function LoginForm() {
 			</div>
 
 			<div>
-				<label htmlFor="password" className={labelClass}>Password</label>
+				<label htmlFor="password" className={labelClass}>
+					Password
+				</label>
 				<input
 					id="password"
 					type="password"

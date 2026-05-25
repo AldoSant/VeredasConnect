@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { apiPath } from "@/lib/paths";
 import { slugSchema } from "@/lib/validations";
 import { SlugInput } from "./slug-input";
 
@@ -11,9 +12,7 @@ const inputClass =
 
 const labelClass = "block text-xs font-medium text-white/60 mb-1.5 tracking-wide";
 
-const fieldError = (msg: string) => (
-	<p className="mt-1.5 text-xs text-red-400">{msg}</p>
-);
+const fieldError = (msg: string) => <p className="mt-1.5 text-xs text-red-400">{msg}</p>;
 
 interface FormErrors {
 	name?: string;
@@ -56,8 +55,10 @@ export function SignupForm() {
 		setErrors({});
 
 		try {
-			// 1. Create User via NextAuth credentials (auto-register)
+			// 1. Create User via explicit NextAuth credentials signup mode
 			const res = await signIn("credentials", {
+				mode: "signup",
+				name,
 				email,
 				password,
 				redirect: false,
@@ -70,7 +71,7 @@ export function SignupForm() {
 			}
 
 			// 2. Create profile with slug
-			const profileRes = await fetch("/api/profile", {
+			const profileRes = await fetch(apiPath("/api/profile"), {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ slug, displayName: name }),
@@ -84,7 +85,7 @@ export function SignupForm() {
 			}
 
 			// 3. Redirect to editor
-			router.push("/connect/editor");
+			router.push("/editor");
 			router.refresh();
 		} catch {
 			setErrors({ general: "Something went wrong. Please try again." });
@@ -95,7 +96,9 @@ export function SignupForm() {
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
 			<div>
-				<label htmlFor="signup-name" className={labelClass}>Your Name</label>
+				<label htmlFor="signup-name" className={labelClass}>
+					Your Name
+				</label>
 				<input
 					id="signup-name"
 					type="text"
@@ -110,7 +113,9 @@ export function SignupForm() {
 			</div>
 
 			<div>
-				<label htmlFor="signup-email" className={labelClass}>Email</label>
+				<label htmlFor="signup-email" className={labelClass}>
+					Email
+				</label>
 				<input
 					id="signup-email"
 					type="email"
@@ -125,7 +130,9 @@ export function SignupForm() {
 			</div>
 
 			<div>
-				<label htmlFor="signup-password" className={labelClass}>Password</label>
+				<label htmlFor="signup-password" className={labelClass}>
+					Password
+				</label>
 				<input
 					id="signup-password"
 					type="password"

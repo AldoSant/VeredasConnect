@@ -2,7 +2,7 @@
 
 import { Copy, Download, Share2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +30,7 @@ export function ShareDialog({ username }: ShareDialogProps) {
 		try {
 			await navigator.clipboard.writeText(url);
 			toast.success("Link copied to clipboard!");
-		} catch (err) {
+		} catch (_err) {
 			toast.error("Failed to copy link");
 		}
 	};
@@ -72,13 +72,7 @@ export function ShareDialog({ username }: ShareDialogProps) {
 				</DialogHeader>
 				<div className="flex flex-col items-center justify-center space-y-6 py-4">
 					<div className="rounded-xl border bg-white p-4 shadow-sm">
-						<QRCodeSVG
-							id="qr-code-svg"
-							value={url}
-							size={200}
-							level="H"
-							includeMargin={true}
-						/>
+						<QRCodeSVG id="qr-code-svg" value={url} size={200} level="H" includeMargin={true} />
 					</div>
 
 					<div className="flex w-full items-center space-x-2">

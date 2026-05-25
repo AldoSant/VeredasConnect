@@ -1,6 +1,6 @@
 import { DownloadCloud, ExternalLink, MessageCircle, Phone } from "lucide-react";
+import Image from "next/image";
 import type { ThemeProps } from "@/types";
-import { LeadFormCard } from "./lead-form-card";
 import { TestimonialsSection } from "./testimonials-section";
 
 export function PremiumTheme({
@@ -12,8 +12,6 @@ export function PremiumTheme({
 	company,
 	phone,
 	whatsapp,
-	leadFormActive,
-	leadFormTitle,
 	testimonials,
 	links,
 	isPreview,
@@ -34,9 +32,12 @@ export function PremiumTheme({
 					<div className="absolute -inset-2 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 opacity-75 blur-md group-hover:opacity-100 transition-opacity duration-500 animate-spin-slow" />
 					<div className="relative h-32 w-32 rounded-full overflow-hidden border-2 border-white/30 shadow-2xl">
 						{avatarUrl ? (
-							<img
+							<Image
 								src={avatarUrl}
 								alt={displayName || "Avatar"}
+								width={128}
+								height={128}
+								unoptimized
 								className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
 							/>
 						) : (
@@ -95,11 +96,16 @@ export function PremiumTheme({
 						}
 
 						if (item.type === "divider") {
-							return <div key={item.id} className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-8" />;
+							return (
+								<div
+									key={item.id}
+									className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-8"
+								/>
+							);
 						}
 
 						const href = isPreview ? item.url : `/api/click/${item.id}`;
-						
+
 						return (
 							<a
 								key={item.id}
@@ -110,7 +116,7 @@ export function PremiumTheme({
 							>
 								{/* Glass shine effect */}
 								<div className="absolute inset-0 -translate-x-[100%] bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
-								
+
 								<div className="flex items-center gap-4">
 									<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white group-hover:scale-110 transition-transform duration-500">
 										<ExternalLink className="h-5 w-5" />
@@ -119,7 +125,7 @@ export function PremiumTheme({
 										{item.title}
 									</span>
 								</div>
-								
+
 								<div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 									<div className="h-2 w-2 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]" />
 								</div>
@@ -131,7 +137,7 @@ export function PremiumTheme({
 				{/* Quick Contact Buttons */}
 				<div className="mt-12 flex w-full gap-4">
 					{phone && (
-						<a 
+						<a
 							href={`tel:${phone}`}
 							className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 py-4 hover:bg-white/10 transition-colors"
 						>
@@ -140,8 +146,8 @@ export function PremiumTheme({
 						</a>
 					)}
 					{whatsapp && (
-						<a 
-							href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`}
+						<a
+							href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
 							target="_blank"
 							className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 py-4 hover:bg-white/10 transition-colors"
 						>
@@ -161,11 +167,13 @@ export function PremiumTheme({
 				{/* Testimonials */}
 				{!isPreview && testimonials && testimonials.length > 0 && (
 					<div className="w-full mt-16">
-						<h3 className="text-center text-sm font-black tracking-widest text-white/30 uppercase mb-8">Depoimentos</h3>
+						<h3 className="text-center text-sm font-black tracking-widest text-white/30 uppercase mb-8">
+							Depoimentos
+						</h3>
 						<TestimonialsSection items={testimonials} />
 					</div>
 				)}
-				
+
 				{/* Footer */}
 				<div className="mt-24 mb-8 text-center">
 					<p className="text-xs font-medium text-white/30 uppercase tracking-widest">
@@ -173,7 +181,6 @@ export function PremiumTheme({
 					</p>
 				</div>
 			</div>
-
 		</div>
 	);
 }

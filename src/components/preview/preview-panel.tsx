@@ -5,7 +5,17 @@ import type { ThemeProps } from "@/types";
 
 type PreviewPanelProps = Omit<ThemeProps, "isPreview">;
 
-export function PreviewPanel({ slug, displayName, bio, avatarUrl, jobTitle, company, phone, whatsapp, links }: PreviewPanelProps) {
+export function PreviewPanel({
+	slug,
+	displayName,
+	bio,
+	avatarUrl,
+	jobTitle,
+	company,
+	phone,
+	whatsapp,
+	links,
+}: PreviewPanelProps) {
 	return (
 		<div className="flex flex-col items-center">
 			{/* Phone frame */}

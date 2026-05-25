@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { getAuthUser } from "@/lib/auth/get-user";
 import { db } from "@/lib/db";
 import { leads, profiles } from "@/lib/db/schema";
-import { z } from "zod";
 
 const updateLeadSchema = z.object({
 	status: z.enum(["new", "contacted", "qualified", "closed"]).optional(),
@@ -11,21 +11,32 @@ const updateLeadSchema = z.object({
 	notes: z.string().max(1000).optional(),
 });
 
+async function findLeadForUser(leadId: string, userId: string) {
+	const lead = await db.query.leads.findFirst({
+		where: eq(leads.id, leadId),
+	});
+
+	if (!lead) return null;
+
+	const profile = await db.query.profiles.findFirst({
+		where: eq(profiles.id, lead.profileId),
+	});
+
+	if (!profile || profile.userId !== userId) return null;
+	return lead;
+}
+
 // GET: single lead
 export async function GET(
-	request: NextRequest,
-	{ params }: { params: Promise<{ leadId: string }> }
+	_request: NextRequest,
+	{ params }: { params: Promise<{ leadId: string }> },
 ) {
 	const { user, error } = await getAuthUser();
 	if (error) return error;
 	const { leadId } = await params;
 
-	const lead = await db.query.leads.findFirst({
-		where: eq(leads.id, leadId),
-		with: { profile: true },
-	});
-
-	if (!lead || (lead.profile as any)?.userId !== user.id) {
+	const lead = await findLeadForUser(leadId, user.id);
+	if (!lead) {
 		return NextResponse.json({ error: "Not found" }, { status: 404 });
 	}
 
@@ -35,18 +46,14 @@ export async function GET(
 // PATCH: update CRM fields (status, tags, notes)
 export async function PATCH(
 	request: NextRequest,
-	{ params }: { params: Promise<{ leadId: string }> }
+	{ params }: { params: Promise<{ leadId: string }> },
 ) {
 	const { user, error } = await getAuthUser();
 	if (error) return error;
 	const { leadId } = await params;
 
-	const lead = await db.query.leads.findFirst({
-		where: eq(leads.id, leadId),
-		with: { profile: true },
-	});
-
-	if (!lead || (lead.profile as any)?.userId !== user.id) {
+	const lead = await findLeadForUser(leadId, user.id);
+	if (!lead) {
 		return NextResponse.json({ error: "Not found" }, { status: 404 });
 	}
 
@@ -63,7 +70,7 @@ export async function PATCH(
 			...(result.data.tags !== undefined && { tags: result.data.tags }),
 			...(result.data.notes !== undefined && { notes: result.data.notes }),
 		})
-		.where(eq(leads.id, leadId))
+		.where(eq(leads.id, lead.id))
 		.returning();
 
 	return NextResponse.json({ lead: updated });
@@ -71,22 +78,18 @@ export async function PATCH(
 
 // DELETE: remove lead
 export async function DELETE(
-	request: NextRequest,
-	{ params }: { params: Promise<{ leadId: string }> }
+	_request: NextRequest,
+	{ params }: { params: Promise<{ leadId: string }> },
 ) {
 	const { user, error } = await getAuthUser();
 	if (error) return error;
 	const { leadId } = await params;
 
-	const lead = await db.query.leads.findFirst({
-		where: eq(leads.id, leadId),
-		with: { profile: true },
-	});
-
-	if (!lead || (lead.profile as any)?.userId !== user.id) {
+	const lead = await findLeadForUser(leadId, user.id);
+	if (!lead) {
 		return NextResponse.json({ error: "Not found" }, { status: 404 });
 	}
 
-	await db.delete(leads).where(eq(leads.id, leadId));
+	await db.delete(leads).where(eq(leads.id, lead.id));
 	return NextResponse.json({ success: true });
 }

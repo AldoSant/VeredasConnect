@@ -4,10 +4,7 @@ import { UAParser } from "ua-parser-js";
 import { db } from "@/lib/db";
 import { clickEvents, linkItems } from "@/lib/db/schema";
 
-export async function GET(
-	request: NextRequest,
-	{ params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
 
 	try {
@@ -33,7 +30,7 @@ export async function GET(
 		// 2. Record the click event
 		await db.insert(clickEvents).values({
 			linkItemId: id,
-			clickedAt: Date.now() as any,
+			clickedAt: Date.now(),
 			deviceType,
 			browser: browser.name || "Unknown",
 			os: os.name || "Unknown",

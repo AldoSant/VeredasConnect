@@ -1,9 +1,9 @@
 import { asc, eq } from "drizzle-orm";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PremiumTheme } from "@/components/themes/premium-theme";
 import { db } from "@/lib/db";
 import { linkItems, profiles, testimonials } from "@/lib/db/schema";
-import { PremiumTheme } from "@/components/themes/premium-theme";
-import { Metadata } from "next";
 
 interface PageProps {
 	params: Promise<{ slug: string }>;
@@ -20,7 +20,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 	}
 
 	return {
-		title: profile.displayName ? `${profile.displayName} (@${profile.slug}) | Veredas Connect` : `@${profile.slug} | Veredas Connect`,
+		title: profile.displayName
+			? `${profile.displayName} (@${profile.slug}) | Veredas Connect`
+			: `@${profile.slug} | Veredas Connect`,
 		description: profile.bio || `Check out ${profile.displayName || `@${profile.slug}`}'s links`,
 		openGraph: {
 			title: profile.displayName || `@${profile.slug}`,

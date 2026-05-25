@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Building2, Users, Shield, Plus, Loader2, MoreVertical, Briefcase } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Building2, Loader2, MoreVertical, Plus } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -12,7 +13,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
+import { apiPath } from "@/lib/paths";
 
 interface User {
 	id: string;
@@ -43,22 +44,22 @@ export default function OrganizationPage() {
 	const [data, setData] = useState<OrgData | null>(null);
 	const [loading, setLoading] = useState(true);
 
-	const fetchData = async () => {
+	const fetchData = useCallback(async () => {
 		try {
-			const res = await fetch("/api/organization");
+			const res = await fetch(apiPath("/api/organization"));
 			if (!res.ok) throw new Error();
 			const json = await res.json();
 			setData(json);
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Erro ao carregar dados da organização");
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, []);
 
 	const updateUser = async (userId: string, role: string, teamId?: string | null) => {
 		try {
-			const res = await fetch(`/api/organization/users/${userId}`, {
+			const res = await fetch(apiPath(`/api/organization/users/${userId}`), {
 				method: "PATCH",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ role, teamId }),
@@ -66,14 +67,14 @@ export default function OrganizationPage() {
 			if (!res.ok) throw new Error();
 			toast.success("Membro atualizado");
 			fetchData();
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Erro ao atualizar membro");
 		}
 	};
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [fetchData]);
 
 	if (loading) {
 		return (
@@ -93,7 +94,9 @@ export default function OrganizationPage() {
 						<Building2 className="h-8 w-8 text-blue-600" />
 						{data.organization.name}
 					</h1>
-					<p className="text-muted-foreground">Portal Administrativo - Controle de Hierarquia e Times.</p>
+					<p className="text-muted-foreground">
+						Portal Administrativo - Controle de Hierarquia e Times.
+					</p>
 				</div>
 				<Button className="gap-2 bg-blue-600 hover:bg-blue-700">
 					<Plus className="h-4 w-4" />
@@ -117,7 +120,9 @@ export default function OrganizationPage() {
 				</Card>
 				<Card className="bg-blue-50/30 dark:bg-blue-900/10">
 					<CardHeader className="pb-2">
-						<CardDescription className="text-blue-600 dark:text-blue-400 font-medium">Performance Global (Leads)</CardDescription>
+						<CardDescription className="text-blue-600 dark:text-blue-400 font-medium">
+							Performance Global (Leads)
+						</CardDescription>
 						<CardTitle className="text-2xl">{data.stats.totalLeads}</CardTitle>
 					</CardHeader>
 				</Card>
@@ -140,11 +145,21 @@ export default function OrganizationPage() {
 							<table className="w-full caption-bottom text-sm">
 								<thead className="[&_tr]:border-b">
 									<tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-										<th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Nome</th>
-										<th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">E-mail</th>
-										<th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Cargo</th>
-										<th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Equipe</th>
-										<th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Ações</th>
+										<th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+											Nome
+										</th>
+										<th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+											E-mail
+										</th>
+										<th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+											Cargo
+										</th>
+										<th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+											Equipe
+										</th>
+										<th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">
+											Ações
+										</th>
 									</tr>
 								</thead>
 								<tbody className="[&_tr:last-child]:border-0">
@@ -153,16 +168,20 @@ export default function OrganizationPage() {
 											<td className="p-4 align-middle font-medium">{user.name}</td>
 											<td className="p-4 align-middle">{user.email}</td>
 											<td className="p-4 align-middle">
-												<span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-													user.role === "ADMIN" ? "bg-blue-100 text-blue-800" :
-													user.role === "SUPERVISOR" ? "bg-violet-100 text-violet-800" :
-													"bg-slate-100 text-slate-800"
-												}`}>
+												<span
+													className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+														user.role === "ADMIN"
+															? "bg-blue-100 text-blue-800"
+															: user.role === "SUPERVISOR"
+																? "bg-violet-100 text-violet-800"
+																: "bg-slate-100 text-slate-800"
+													}`}
+												>
 													{user.role}
 												</span>
 											</td>
 											<td className="p-4 align-middle">
-												{data.teams.find(t => t.id === user.teamId)?.name || "Nenhuma"}
+												{data.teams.find((t) => t.id === user.teamId)?.name || "Nenhuma"}
 											</td>
 											<td className="p-4 align-middle text-right">
 												<DropdownMenu>
@@ -187,8 +206,11 @@ export default function OrganizationPage() {
 														<DropdownMenuItem onClick={() => updateUser(user.id, user.role, null)}>
 															Remover de Equipes
 														</DropdownMenuItem>
-														{data.teams.map(team => (
-															<DropdownMenuItem key={team.id} onClick={() => updateUser(user.id, user.role, team.id)}>
+														{data.teams.map((team) => (
+															<DropdownMenuItem
+																key={team.id}
+																onClick={() => updateUser(user.id, user.role, team.id)}
+															>
 																{team.name}
 															</DropdownMenuItem>
 														))}

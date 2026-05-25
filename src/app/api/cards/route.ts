@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { getAuthUser } from "@/lib/auth/get-user";
 import { db } from "@/lib/db";
 import { nfcCards } from "@/lib/db/schema";
-import { z } from "zod";
 
 const createCardSchema = z.object({
 	label: z.string().min(1).max(50),

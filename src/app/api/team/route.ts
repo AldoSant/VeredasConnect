@@ -1,8 +1,10 @@
-import { count, eq } from "drizzle-orm";
+import { count, eq, type InferSelectModel } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getSessionScope } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
-import { leads, profiles, teams, users } from "@/lib/db/schema";
+import { leads, profiles, teams, type users } from "@/lib/db/schema";
+
+type TeamMember = InferSelectModel<typeof users>;
 
 export async function GET() {
 	try {
@@ -13,7 +15,7 @@ export async function GET() {
 		}
 
 		const teamId = scope.teamId;
-		if (!teamId && scope.role === "SUPERVISOR") {
+		if (!teamId) {
 			return NextResponse.json({ error: "No team assigned" }, { status: 400 });
 		}
 
@@ -21,7 +23,7 @@ export async function GET() {
 		// Por enquanto, focamos no supervisor vendo seu próprio time.
 
 		const team = await db.query.teams.findFirst({
-			where: eq(teams.id, teamId!),
+			where: eq(teams.id, teamId),
 			with: {
 				members: true,
 			},
@@ -35,21 +37,21 @@ export async function GET() {
 		const [leadsCount] = await db
 			.select({ value: count() })
 			.from(leads)
-			.where(eq(leads.teamId, teamId!));
+			.where(eq(leads.teamId, teamId));
 
 		const [profilesCount] = await db
 			.select({ value: count() })
 			.from(profiles)
-			.where(eq(profiles.teamId, teamId!));
+			.where(eq(profiles.teamId, teamId));
 
 		// Detalhes dos Membros
 		const membersPerformance = await Promise.all(
-			team.members.map(async (member: any) => {
+			(team.members as TeamMember[]).map(async (member) => {
 				const [mProfiles] = await db
 					.select({ value: count() })
 					.from(profiles)
 					.where(eq(profiles.userId, member.id));
-				
+
 				const [mLeads] = await db
 					.select({ value: count() })
 					.from(leads)
@@ -63,7 +65,7 @@ export async function GET() {
 					profilesCount: mProfiles.value,
 					leadsCount: mLeads.value,
 				};
-			})
+			}),
 		);
 
 		return NextResponse.json({
@@ -75,7 +77,7 @@ export async function GET() {
 			},
 			members: membersPerformance,
 		});
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }

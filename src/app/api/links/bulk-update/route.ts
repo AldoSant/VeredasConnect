@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, type InferInsertModel } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 import { getSessionScope } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
@@ -16,7 +16,7 @@ export async function PUT(request: NextRequest) {
 	try {
 		const scope = await getSessionScope();
 		const body = await request.json();
-		
+
 		const profileId = body.profileId;
 		if (!profileId) {
 			return NextResponse.json({ error: "Profile ID is required" }, { status: 400 });
@@ -46,15 +46,17 @@ export async function PUT(request: NextRequest) {
 
 		// Update each item ensuring it belongs to the verified profile
 		for (const item of result.data.items) {
-			const updateData: any = { 
-				sortOrder: item.sortOrder, 
-				updatedAt: Date.now() as any 
+			const updateData: Partial<InferInsertModel<typeof linkItems>> = {
+				sortOrder: item.sortOrder,
+				updatedAt: new Date(),
 			};
 			if (item.title !== undefined) updateData.title = item.title;
 			if (item.url !== undefined) updateData.url = item.url;
 			if (item.isActive !== undefined) updateData.isActive = item.isActive;
-			if (item.startDate !== undefined) updateData.startDate = item.startDate ? new Date(item.startDate).getTime() as any : null;
-			if (item.endDate !== undefined) updateData.endDate = item.endDate ? new Date(item.endDate).getTime() as any : null;
+			if (item.startDate !== undefined)
+				updateData.startDate = item.startDate ? new Date(item.startDate) : null;
+			if (item.endDate !== undefined)
+				updateData.endDate = item.endDate ? new Date(item.endDate) : null;
 
 			await db
 				.update(linkItems)
@@ -63,7 +65,7 @@ export async function PUT(request: NextRequest) {
 		}
 
 		return NextResponse.json({ success: true });
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }

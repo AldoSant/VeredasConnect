@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2, Send } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { apiPath } from "@/lib/paths";
 
 interface LeadFormCardProps {
 	slug: string;
@@ -31,7 +32,7 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 		};
 
 		try {
-			const res = await fetch("/api/leads", {
+			const res = await fetch(apiPath("/api/leads"), {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(data),
@@ -44,8 +45,8 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 
 			setIsSuccess(true);
 			toast.success("Mensagem enviada com sucesso!");
-		} catch (error: any) {
-			toast.error(error.message || "Ocorreu um erro. Tente novamente.");
+		} catch (error) {
+			toast.error(error instanceof Error ? error.message : "Ocorreu um erro. Tente novamente.");
 		} finally {
 			setIsSubmitting(false);
 		}

@@ -1,4 +1,4 @@
-import { count, eq, sql, and, gte, desc } from "drizzle-orm";
+import { and, count, desc, eq, gte, sql } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 import { getSessionScope } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
@@ -11,9 +11,7 @@ export async function GET(request: NextRequest) {
 
 		// 1. Get the profile
 		const profile = await db.query.profiles.findFirst({
-			where: profileId 
-				? eq(profiles.id, profileId) 
-				: eq(profiles.userId, scope.id),
+			where: profileId ? eq(profiles.id, profileId) : eq(profiles.userId, scope.id),
 		});
 
 		if (!profile) {
@@ -30,7 +28,7 @@ export async function GET(request: NextRequest) {
 		}
 
 		// 2. Get total clicks per link
-		const linksCount = count(clickEvents.id).as('clicks_count');
+		const linksCount = count(clickEvents.id).as("clicks_count");
 
 		const linksWithClicks = await db
 			.select({
@@ -51,7 +49,7 @@ export async function GET(request: NextRequest) {
 		thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
 		const rawDateSql = sql`date(${clickEvents.clickedAt} / 1000, 'unixepoch')`;
-		const dateAlias = rawDateSql.as('click_date');
+		const dateAlias = rawDateSql.as("click_date");
 
 		const trends = await db
 			.select({
@@ -63,8 +61,8 @@ export async function GET(request: NextRequest) {
 			.where(
 				and(
 					eq(linkItems.profileId, profile.id),
-					gte(clickEvents.clickedAt, thirtyDaysAgo.getTime() as any)
-				)
+					gte(clickEvents.clickedAt, thirtyDaysAgo.getTime()),
+				),
 			)
 			.groupBy(rawDateSql)
 			.orderBy(rawDateSql);
@@ -95,8 +93,8 @@ export async function GET(request: NextRequest) {
 			totalClicks: linksWithClicks.reduce((acc, curr) => acc + (Number(curr.clicks) || 0), 0),
 			links: linksWithClicks,
 			trends: trends,
-			devices: devices.map(d => ({ name: d.name || 'Unknown', value: d.value })),
-			browsers: browsers.map(b => ({ name: b.name || 'Unknown', value: b.value })),
+			devices: devices.map((d) => ({ name: d.name || "Unknown", value: d.value })),
+			browsers: browsers.map((b) => ({ name: b.name || "Unknown", value: b.value })),
 		});
 	} catch (error) {
 		console.error("Analytics API Error:", error);

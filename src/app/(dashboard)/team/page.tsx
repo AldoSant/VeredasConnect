@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Users, User, CreditCard, BarChart3, ChevronRight, Loader2, Mail } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { BarChart3, ChevronRight, CreditCard, Loader2, Mail, User, Users } from "lucide-react";
 import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { apiPath } from "@/lib/paths";
 
 interface Member {
 	id: string;
@@ -29,22 +30,22 @@ export default function TeamPage() {
 	const [data, setData] = useState<TeamData | null>(null);
 	const [loading, setLoading] = useState(true);
 
-	const fetchTeamData = async () => {
+	const fetchTeamData = useCallback(async () => {
 		try {
-			const res = await fetch("/api/team");
+			const res = await fetch(apiPath("/api/team"));
 			if (!res.ok) throw new Error("Falha ao carregar dados do time");
 			const json = await res.json();
 			setData(json);
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Erro ao carregar equipe");
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		fetchTeamData();
-	}, []);
+	}, [fetchTeamData]);
 
 	if (loading) {
 		return (
@@ -59,7 +60,9 @@ export default function TeamPage() {
 			<div className="mx-auto max-w-4xl p-12 text-center">
 				<Users className="mx-auto h-12 w-12 text-muted-foreground opacity-20" />
 				<h2 className="mt-4 text-xl font-semibold">Nenhuma equipe vinculada</h2>
-				<p className="text-muted-foreground">Você ainda não foi designado como supervisor de nenhuma equipe.</p>
+				<p className="text-muted-foreground">
+					Você ainda não foi designado como supervisor de nenhuma equipe.
+				</p>
 			</div>
 		);
 	}
@@ -68,14 +71,18 @@ export default function TeamPage() {
 		<div className="mx-auto max-w-7xl p-6">
 			<div className="mb-8">
 				<h1 className="text-3xl font-bold tracking-tight">Equipe: {data.teamName}</h1>
-				<p className="text-muted-foreground">Visão geral da performance institucional e gestão de membros.</p>
+				<p className="text-muted-foreground">
+					Visão geral da performance institucional e gestão de membros.
+				</p>
 			</div>
 
 			{/* Stats Grid */}
 			<div className="mb-8 grid gap-4 md:grid-cols-3">
 				<Card className="bg-violet-50/50 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/20">
 					<CardHeader className="pb-2">
-						<CardDescription className="text-violet-600 dark:text-violet-400 font-medium">Total de Membros</CardDescription>
+						<CardDescription className="text-violet-600 dark:text-violet-400 font-medium">
+							Total de Membros
+						</CardDescription>
 						<CardTitle className="text-3xl">{data.stats.memberCount}</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -93,7 +100,9 @@ export default function TeamPage() {
 				</Card>
 				<Card className="bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-900/20">
 					<CardHeader className="pb-2">
-						<CardDescription className="text-emerald-600 dark:text-emerald-400 font-medium">Leads Capturados</CardDescription>
+						<CardDescription className="text-emerald-600 dark:text-emerald-400 font-medium">
+							Leads Capturados
+						</CardDescription>
 						<CardTitle className="text-3xl">{data.stats.totalLeads}</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -112,7 +121,10 @@ export default function TeamPage() {
 					<CardContent>
 						<div className="divide-y">
 							{data.members.map((member) => (
-								<div key={member.id} className="group flex items-center justify-between py-4 transition-colors hover:bg-muted/30 px-2 rounded-lg">
+								<div
+									key={member.id}
+									className="group flex items-center justify-between py-4 transition-colors hover:bg-muted/30 px-2 rounded-lg"
+								>
 									<div className="flex items-center gap-4">
 										<div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
 											<User className="h-5 w-5" />
@@ -167,21 +179,31 @@ export default function TeamPage() {
 									Ver Todos os Leads do Time
 								</Button>
 							</Link>
-							<Button variant="outline" className="w-full justify-start gap-2" onClick={() => toast.info("Funcionalidade em desenvolvimento: Exportar Relatório consolidado")}>
+							<Button
+								variant="outline"
+								className="w-full justify-start gap-2"
+								onClick={() =>
+									toast.info("Funcionalidade em desenvolvimento: Exportar Relatório consolidado")
+								}
+							>
 								<ChevronRight className="h-4 w-4" />
 								Exportar Relatório do Time
 							</Button>
 						</CardContent>
 					</Card>
-					
+
 					<Card className="bg-muted/50 border-none">
 						<CardHeader>
 							<CardTitle className="text-lg">Insight Institucional</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<p className="text-sm text-muted-foreground">
-								Sua equipe gerou uma média de <strong>{(data.stats.totalLeads / (data.stats.memberCount || 1)).toFixed(1)} leads</strong> por integrante. 
-								O melhor desempenho do time reflete o engajamento individual com o compartilhamento dos cartões NFC.
+								Sua equipe gerou uma média de{" "}
+								<strong>
+									{(data.stats.totalLeads / (data.stats.memberCount || 1)).toFixed(1)} leads
+								</strong>{" "}
+								por integrante. O melhor desempenho do time reflete o engajamento individual com o
+								compartilhamento dos cartões NFC.
 							</p>
 						</CardContent>
 					</Card>

@@ -1,21 +1,12 @@
 "use client";
 
+import { Eye, EyeOff, Loader2, Plus, Quote, Star, Trash2 } from "lucide-react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import {
-	Star,
-	Plus,
-	Loader2,
-	Eye,
-	EyeOff,
-	Trash2,
-	Quote,
-} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
@@ -23,7 +14,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { apiPath } from "@/lib/paths";
 
 interface Testimonial {
 	id: string;
@@ -52,7 +46,13 @@ function StarRating({ value, onChange }: { value: number; onChange: (v: number) 
 
 export default function TestimonialsPage() {
 	return (
-		<Suspense fallback={<div className="flex h-[80vh] items-center justify-center bg-zinc-950"><Loader2 className="h-8 w-8 animate-spin text-violet-500" /></div>}>
+		<Suspense
+			fallback={
+				<div className="flex h-[80vh] items-center justify-center bg-zinc-950">
+					<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
+				</div>
+			}
+		>
 			<TestimonialsContent />
 		</Suspense>
 	);
@@ -74,7 +74,7 @@ function TestimonialsContent() {
 	});
 
 	useEffect(() => {
-		const url = profileId ? `/api/testimonials?id=${profileId}` : "/api/testimonials";
+		const url = apiPath(profileId ? `/api/testimonials?id=${profileId}` : "/api/testimonials");
 		fetch(url)
 			.then((r) => r.json())
 			.then((d) => setItems(d.testimonials ?? []))
@@ -85,7 +85,7 @@ function TestimonialsContent() {
 		if (!form.authorName || !form.content) return;
 		setIsAdding(true);
 		try {
-			const res = await fetch("/api/testimonials", {
+			const res = await fetch(apiPath("/api/testimonials"), {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ ...form, profileId, sortOrder: items.length }),
@@ -104,7 +104,7 @@ function TestimonialsContent() {
 	};
 
 	const toggleVisible = async (item: Testimonial) => {
-		const res = await fetch(`/api/testimonials/${item.id}`, {
+		const res = await fetch(apiPath(`/api/testimonials/${item.id}`), {
 			method: "PATCH",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ isVisible: !item.isVisible }),
@@ -115,7 +115,7 @@ function TestimonialsContent() {
 	};
 
 	const handleDelete = async (id: string) => {
-		const res = await fetch(`/api/testimonials/${id}`, { method: "DELETE" });
+		const res = await fetch(apiPath(`/api/testimonials/${id}`), { method: "DELETE" });
 		if (res.ok) {
 			setItems((p) => p.filter((t) => t.id !== id));
 			toast.success("Depoimento removido.");
@@ -136,7 +136,9 @@ function TestimonialsContent() {
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 					<div>
 						<h1 className="text-3xl font-bold tracking-tight">Prova Social</h1>
-						<p className="text-white/60">Gerencie os depoimentos que aparecem no seu perfil público.</p>
+						<p className="text-white/60">
+							Gerencie os depoimentos que aparecem no seu perfil público.
+						</p>
 					</div>
 					<Dialog open={addOpen} onOpenChange={setAddOpen}>
 						<DialogTrigger asChild>
@@ -185,13 +187,22 @@ function TestimonialsContent() {
 										rows={4}
 										maxLength={500}
 									/>
-									<p className="text-xs text-right text-muted-foreground">{form.content.length}/500</p>
+									<p className="text-xs text-right text-muted-foreground">
+										{form.content.length}/500
+									</p>
 								</div>
 								<div className="space-y-1.5">
 									<Label>Avaliação</Label>
-									<StarRating value={form.rating} onChange={(v) => setForm((p) => ({ ...p, rating: v }))} />
+									<StarRating
+										value={form.rating}
+										onChange={(v) => setForm((p) => ({ ...p, rating: v }))}
+									/>
 								</div>
-								<Button className="w-full" onClick={handleAdd} disabled={isAdding || !form.authorName || !form.content}>
+								<Button
+									className="w-full"
+									onClick={handleAdd}
+									disabled={isAdding || !form.authorName || !form.content}
+								>
 									{isAdding ? <Loader2 className="h-4 w-4 animate-spin" /> : "Adicionar"}
 								</Button>
 							</div>
@@ -204,24 +215,39 @@ function TestimonialsContent() {
 						<CardContent className="flex flex-col items-center justify-center p-16 text-center">
 							<Quote className="mb-4 h-12 w-12 text-white/20" />
 							<h3 className="mb-2 text-xl font-bold">Sem depoimentos ainda</h3>
-							<p className="text-white/60">Adicione depoimentos de clientes para aumentar sua credibilidade.</p>
+							<p className="text-white/60">
+								Adicione depoimentos de clientes para aumentar sua credibilidade.
+							</p>
 						</CardContent>
 					</Card>
 				)}
 
 				<div className="grid gap-4 md:grid-cols-2">
 					{items.map((item) => (
-						<Card key={item.id} className={`border-white/10 transition-all ${item.isVisible ? "bg-white/5" : "bg-black/40 opacity-60"}`}>
+						<Card
+							key={item.id}
+							className={`border-white/10 transition-all ${item.isVisible ? "bg-white/5" : "bg-black/40 opacity-60"}`}
+						>
 							<CardContent className="p-5 space-y-3">
 								<div className="flex gap-1">
 									{[1, 2, 3, 4, 5].map((s) => (
-										<Star key={s} className={`h-4 w-4 ${s <= item.rating ? "fill-amber-400 text-amber-400" : "text-white/20"}`} />
+										<Star
+											key={s}
+											className={`h-4 w-4 ${s <= item.rating ? "fill-amber-400 text-amber-400" : "text-white/20"}`}
+										/>
 									))}
 								</div>
 								<p className="text-sm text-white/80 italic line-clamp-4">"{item.content}"</p>
 								<div className="flex items-center gap-3">
 									{item.authorAvatar ? (
-										<img src={item.authorAvatar} className="h-8 w-8 rounded-full object-cover" alt={item.authorName} />
+										<Image
+											src={item.authorAvatar}
+											className="h-8 w-8 rounded-full object-cover"
+											alt={item.authorName}
+											width={32}
+											height={32}
+											unoptimized
+										/>
 									) : (
 										<div className="h-8 w-8 rounded-full bg-violet-600/40 flex items-center justify-center text-xs font-bold">
 											{item.authorName[0]}
@@ -229,7 +255,9 @@ function TestimonialsContent() {
 									)}
 									<div>
 										<p className="text-sm font-semibold text-white">{item.authorName}</p>
-										{item.authorTitle && <p className="text-xs text-white/50">{item.authorTitle}</p>}
+										{item.authorTitle && (
+											<p className="text-xs text-white/50">{item.authorTitle}</p>
+										)}
 									</div>
 								</div>
 								<div className="flex gap-2 pt-1 border-t border-white/10">
@@ -239,7 +267,11 @@ function TestimonialsContent() {
 										className="flex-1 gap-1 text-xs text-white/60 hover:text-white"
 										onClick={() => toggleVisible(item)}
 									>
-										{item.isVisible ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+										{item.isVisible ? (
+											<Eye className="h-3.5 w-3.5" />
+										) : (
+											<EyeOff className="h-3.5 w-3.5" />
+										)}
 										{item.isVisible ? "Visível" : "Oculto"}
 									</Button>
 									<Button

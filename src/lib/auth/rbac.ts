@@ -1,7 +1,7 @@
+import { eq, inArray, type SQL } from "drizzle-orm";
 import { auth } from "@/auth";
-import { eq, and, or, inArray, SQL } from "drizzle-orm";
-import { profiles, leads, users } from "@/lib/db/schema";
 import { db } from "@/lib/db";
+import { leads, profiles } from "@/lib/db/schema";
 
 export type UserScope = {
 	id: string;
@@ -34,7 +34,7 @@ export async function getSessionScope(): Promise<UserScope> {
  */
 export async function getHierarchyFilter(
 	table: typeof profiles | typeof leads,
-	scope: UserScope
+	scope: UserScope,
 ): Promise<SQL | undefined> {
 	// ADMIN: Vê tudo da Organização
 	if (scope.role === "ADMIN" && scope.organizationId) {
@@ -47,24 +47,24 @@ export async function getHierarchyFilter(
 	}
 
 	// MEMBER (ou fallback): Vê apenas seus próprios registros
-	if (table === (profiles as any)) {
+	if (table === profiles) {
 		return eq(profiles.userId, scope.id);
 	}
 
-	if (table === (leads as any)) {
+	if (table === leads) {
 		// Para leads, buscamos os perfis do usuário primeiro
 		const userProfiles = await db
 			.select({ id: profiles.id })
 			.from(profiles)
 			.where(eq(profiles.userId, scope.id));
-		
-		const profileIds = userProfiles.map(p => p.id);
-		
+
+		const profileIds = userProfiles.map((p) => p.id);
+
 		if (profileIds.length === 0) {
 			// Se não tem perfis, não tem leads (filtro que não retorna nada)
 			return eq(leads.id, "none");
 		}
-		
+
 		return inArray(leads.profileId, profileIds);
 	}
 

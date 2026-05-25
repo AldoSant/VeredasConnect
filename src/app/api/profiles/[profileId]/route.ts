@@ -5,8 +5,8 @@ import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 
 export async function DELETE(
-	request: NextRequest,
-	{ params }: { params: Promise<{ profileId: string }> }
+	_request: NextRequest,
+	{ params }: { params: Promise<{ profileId: string }> },
 ) {
 	const { user, error } = await getAuthUser();
 	if (error) return error;

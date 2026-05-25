@@ -2,12 +2,12 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Link as LinkIcon, Minus, Trash2, Type, CalendarIcon } from "lucide-react";
+import { CalendarIcon, GripVertical, Link as LinkIcon, Minus, Trash2, Type } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { Switch } from "@/components/ui/switch";
 
 interface LinkItemProps {
 	id: string;
@@ -18,10 +18,20 @@ interface LinkItemProps {
 	startDate?: Date | null;
 	endDate?: Date | null;
 	onDelete: (id: string) => void;
-	onUpdate?: (id: string, updates: any) => void;
+	onUpdate?: (id: string, updates: Partial<LinkItemProps>) => void;
 }
 
-export function LinkItemCard({ id, type, title, url, isActive = true, startDate, endDate, onDelete, onUpdate }: LinkItemProps) {
+export function LinkItemCard({
+	id,
+	type,
+	title,
+	url,
+	isActive = true,
+	startDate,
+	endDate,
+	onDelete,
+	onUpdate,
+}: LinkItemProps) {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
 	});

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { apiPath } from "@/lib/paths";
 import type { LinkItem, Profile } from "@/types";
 
 interface UseProfileReturn {
@@ -24,7 +25,7 @@ export function useProfile(profileId?: string): UseProfileReturn {
 		setError(null);
 
 		try {
-			const url = profileId ? `/api/profile?id=${profileId}` : "/api/profile";
+			const url = apiPath(profileId ? `/api/profile?id=${profileId}` : "/api/profile");
 			const res = await fetch(url);
 			if (!res.ok) {
 				if (res.status === 401) {

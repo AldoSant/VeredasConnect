@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Plus, Trash2, Edit2, ExternalLink, Loader2, CreditCard } from "lucide-react";
-import { toast } from "sonner";
+import { CreditCard, Edit2, ExternalLink, Loader2, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { apiPath } from "@/lib/paths";
 
 interface Profile {
 	id: string;
@@ -33,27 +34,27 @@ export default function ProfilesPage() {
 	const [newSlug, setNewSlug] = useState("");
 	const [createOpen, setCreateOpen] = useState(false);
 
-	const fetchProfiles = async () => {
+	const fetchProfiles = useCallback(async () => {
 		try {
-			const res = await fetch("/api/profiles");
+			const res = await fetch(apiPath("/api/profiles"));
 			const data = await res.json();
 			setProfiles(data.profiles || []);
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Erro ao carregar perfis");
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		fetchProfiles();
-	}, []);
+	}, [fetchProfiles]);
 
 	const handleCreate = async () => {
 		if (!newSlug) return;
 		setIsCreating(true);
 		try {
-			const res = await fetch("/api/profile", {
+			const res = await fetch(apiPath("/api/profile"), {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ slug: newSlug }),
@@ -76,14 +77,17 @@ export default function ProfilesPage() {
 	};
 
 	const handleDelete = async (id: string) => {
-		if (!confirm("Tem certeza que deseja excluir este perfil? Todos os links e leads serão perdidos.")) return;
+		if (
+			!confirm("Tem certeza que deseja excluir este perfil? Todos os links e leads serão perdidos.")
+		)
+			return;
 
 		try {
-			const res = await fetch(`/api/profiles/${id}`, { method: "DELETE" });
+			const res = await fetch(apiPath(`/api/profiles/${id}`), { method: "DELETE" });
 			if (!res.ok) throw new Error();
 			toast.success("Perfil excluído");
 			fetchProfiles();
-		} catch (error) {
+		} catch (_error) {
 			toast.error("Erro ao excluir perfil");
 		}
 	};
@@ -101,7 +105,9 @@ export default function ProfilesPage() {
 			<div className="mb-8 flex items-center justify-between">
 				<div>
 					<h1 className="text-3xl font-bold">Meus Cartões Digitais</h1>
-					<p className="text-muted-foreground">Gerencie múltiplos perfis para diferentes contextos.</p>
+					<p className="text-muted-foreground">
+						Gerencie múltiplos perfis para diferentes contextos.
+					</p>
 				</div>
 				<Dialog open={createOpen} onOpenChange={setCreateOpen}>
 					<DialogTrigger asChild>
@@ -132,7 +138,9 @@ export default function ProfilesPage() {
 							</div>
 						</div>
 						<DialogFooter>
-							<Button variant="outline" onClick={() => setCreateOpen(false)}>Cancelar</Button>
+							<Button variant="outline" onClick={() => setCreateOpen(false)}>
+								Cancelar
+							</Button>
 							<Button onClick={handleCreate} disabled={isCreating}>
 								{isCreating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Criar Perfil"}
 							</Button>
@@ -143,7 +151,10 @@ export default function ProfilesPage() {
 
 			<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{profiles.map((profile) => (
-					<Card key={profile.id} className="overflow-hidden transition-all hover:border-violet-500/50 hover:shadow-lg">
+					<Card
+						key={profile.id}
+						className="overflow-hidden transition-all hover:border-violet-500/50 hover:shadow-lg"
+					>
 						<CardHeader className="bg-muted/50 pb-4 pt-6">
 							<div className="flex items-start justify-between">
 								<div className="flex h-12 w-12 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400">
@@ -151,13 +162,17 @@ export default function ProfilesPage() {
 								</div>
 								<div className="flex gap-1">
 									<Link href={`/${profile.slug}`} target="_blank">
-										<Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+										<Button
+											size="icon"
+											variant="ghost"
+											className="h-8 w-8 text-muted-foreground hover:text-foreground"
+										>
 											<ExternalLink className="h-4 w-4" />
 										</Button>
 									</Link>
-									<Button 
-										size="icon" 
-										variant="ghost" 
+									<Button
+										size="icon"
+										variant="ghost"
 										className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
 										onClick={() => handleDelete(profile.id)}
 									>
@@ -165,8 +180,12 @@ export default function ProfilesPage() {
 									</Button>
 								</div>
 							</div>
-							<CardTitle className="mt-4 break-all">{profile.displayName || `@${profile.slug}`}</CardTitle>
-							<p className="text-sm text-muted-foreground">veredasinc.com.br/connect/{profile.slug}</p>
+							<CardTitle className="mt-4 break-all">
+								{profile.displayName || `@${profile.slug}`}
+							</CardTitle>
+							<p className="text-sm text-muted-foreground">
+								veredasinc.com.br/connect/{profile.slug}
+							</p>
 						</CardHeader>
 						<CardContent className="py-4">
 							<div className="space-y-1 text-sm">
@@ -176,7 +195,10 @@ export default function ProfilesPage() {
 						</CardContent>
 						<CardFooter className="border-t bg-muted/20 p-2">
 							<Link href={`/editor?id=${profile.id}`} className="w-full">
-								<Button variant="ghost" className="w-full gap-2 text-violet-600 hover:bg-violet-50 hover:text-violet-700 dark:text-violet-400 dark:hover:bg-violet-900/20">
+								<Button
+									variant="ghost"
+									className="w-full gap-2 text-violet-600 hover:bg-violet-50 hover:text-violet-700 dark:text-violet-400 dark:hover:bg-violet-900/20"
+								>
 									<Edit2 className="h-4 w-4" />
 									Editar Cartão
 								</Button>
@@ -184,7 +206,7 @@ export default function ProfilesPage() {
 						</CardFooter>
 					</Card>
 				))}
-				
+
 				{profiles.length === 0 && (
 					<div className="col-span-full py-12 text-center">
 						<p className="text-muted-foreground">Você ainda não criou nenhum perfil.</p>

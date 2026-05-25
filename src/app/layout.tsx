@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
+import { apiPath } from "@/lib/paths";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -22,7 +23,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={`${outfit.variable} font-sans antialiased bg-gray-50 dark:bg-gray-950`}>
-				<SessionProvider basePath="/api/auth">{children}</SessionProvider>
+				<SessionProvider basePath={apiPath("/api/auth")}>{children}</SessionProvider>
 				<Toaster />
 			</body>
 		</html>

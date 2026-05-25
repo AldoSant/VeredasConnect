@@ -3,10 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 
-export async function GET(
-	request: NextRequest,
-	{ params }: { params: Promise<{ slug: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
 	const { slug } = await params;
 
 	try {
@@ -29,7 +26,7 @@ export async function GET(
 		if (profile.jobTitle) {
 			vcardLines.push(`TITLE:${profile.jobTitle}`);
 		}
-		
+
 		if (profile.company) {
 			vcardLines.push(`ORG:${profile.company}`);
 		}
@@ -37,7 +34,7 @@ export async function GET(
 		if (profile.phone) {
 			vcardLines.push(`TEL;TYPE=CELL,VOICE:${profile.phone}`);
 		}
-		
+
 		if (profile.whatsapp) {
 			vcardLines.push(`TEL;TYPE=WORK,VOICE:${profile.whatsapp}`);
 		}

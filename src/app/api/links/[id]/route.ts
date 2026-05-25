@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 import { getSessionScope } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
@@ -22,17 +22,21 @@ export async function DELETE(
 		// Fetch the link and its associated profile
 		const link = await db.query.linkItems.findFirst({
 			where: eq(linkItems.id, id),
-			with: {
-				profile: true
-			}
 		});
 
-		if (!link || !link.profile) {
-			return NextResponse.json({ error: "Link or Profile not found" }, { status: 404 });
+		if (!link) {
+			return NextResponse.json({ error: "Link not found" }, { status: 404 });
+		}
+
+		const profile = await db.query.profiles.findFirst({
+			where: eq(profiles.id, link.profileId),
+		});
+
+		if (!profile) {
+			return NextResponse.json({ error: "Profile not found" }, { status: 404 });
 		}
 
 		// Validation of Hierarchy Access
-		const profile = link.profile as any;
 		const isOwner = profile.userId === scope.id;
 		const isAdminOfOrg = scope.role === "ADMIN" && scope.organizationId === profile.organizationId;
 		const isSupervisorOfTeam = scope.role === "SUPERVISOR" && scope.teamId === profile.teamId;
@@ -41,12 +45,10 @@ export async function DELETE(
 			return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 		}
 
-		await db
-			.delete(linkItems)
-			.where(eq(linkItems.id, id));
+		await db.delete(linkItems).where(eq(linkItems.id, link.id));
 
 		return NextResponse.json({ success: true });
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }

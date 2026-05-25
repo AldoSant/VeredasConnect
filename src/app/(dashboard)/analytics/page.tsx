@@ -1,29 +1,27 @@
 "use client";
 
+import {
+	ArrowUpRight,
+	BarChart3,
+	Calendar,
+	Link2,
+	Loader2,
+	MousePointer2,
+	TrendingUp,
+} from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { 
-	BarChart3, 
-	TrendingUp, 
-	MousePointer2, 
-	ArrowUpRight, 
-	Calendar,
-	Loader2,
-	Link2
-} from "lucide-react";
 import {
-	LineChart,
-	Line,
+	Area,
+	AreaChart,
+	CartesianGrid,
+	Cell,
+	Pie,
+	PieChart,
+	ResponsiveContainer,
+	Tooltip,
 	XAxis,
 	YAxis,
-	CartesianGrid,
-	Tooltip,
-	ResponsiveContainer,
-	AreaChart,
-	Area,
-	PieChart,
-	Pie,
-	Cell,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -53,7 +51,13 @@ const COLORS = ["#8b5cf6", "#d946ef", "#0ea5e9", "#10b981", "#f59e0b"];
 
 export default function AnalyticsPage() {
 	return (
-		<Suspense fallback={<div className="flex h-screen items-center justify-center bg-zinc-950"><Loader2 className="h-8 w-8 animate-spin text-violet-500" /></div>}>
+		<Suspense
+			fallback={
+				<div className="flex h-screen items-center justify-center bg-zinc-950">
+					<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
+				</div>
+			}
+		>
 			<AnalyticsContent />
 		</Suspense>
 	);
@@ -115,12 +119,10 @@ function AnalyticsContent() {
 						</CardHeader>
 						<CardContent>
 							<div className="text-3xl font-bold text-white">{data.totalClicks}</div>
-							<p className="text-xs text-white/40 mt-1">
-								Lifetime engagement
-							</p>
+							<p className="text-xs text-white/40 mt-1">Lifetime engagement</p>
 						</CardContent>
 					</Card>
-					
+
 					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 							<CardTitle className="text-sm font-medium text-white/70">Active Links</CardTitle>
@@ -128,9 +130,7 @@ function AnalyticsContent() {
 						</CardHeader>
 						<CardContent>
 							<div className="text-3xl font-bold text-white">{data?.links?.length || 0}</div>
-							<p className="text-xs text-white/40 mt-1">
-								Currently tracked
-							</p>
+							<p className="text-xs text-white/40 mt-1">Currently tracked</p>
 						</CardContent>
 					</Card>
 
@@ -143,9 +143,7 @@ function AnalyticsContent() {
 							<div className="text-3xl font-bold text-white">
 								{data?.trends?.reduce((acc, curr) => acc + curr.count, 0) || 0}
 							</div>
-							<p className="text-xs text-white/40 mt-1">
-								Recent interactions
-							</p>
+							<p className="text-xs text-white/40 mt-1">Recent interactions</p>
 						</CardContent>
 					</Card>
 				</div>
@@ -169,40 +167,40 @@ function AnalyticsContent() {
 										</linearGradient>
 									</defs>
 									<CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-									<XAxis 
-										dataKey="date" 
-										stroke="#ffffff40" 
+									<XAxis
+										dataKey="date"
+										stroke="#ffffff40"
 										fontSize={12}
 										tickLine={false}
 										axisLine={false}
 										tickFormatter={(str) => {
 											const date = new Date(str);
-											return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+											return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 										}}
 									/>
-									<YAxis 
-										stroke="#ffffff40" 
+									<YAxis
+										stroke="#ffffff40"
 										fontSize={12}
 										tickLine={false}
 										axisLine={false}
 										tickFormatter={(value) => `${value}`}
 									/>
-									<Tooltip 
-										contentStyle={{ 
-											backgroundColor: '#18181b', 
-											border: '1px solid #ffffff10',
-											borderRadius: '12px',
-											color: '#fff' 
+									<Tooltip
+										contentStyle={{
+											backgroundColor: "#18181b",
+											border: "1px solid #ffffff10",
+											borderRadius: "12px",
+											color: "#fff",
 										}}
-										itemStyle={{ color: '#8b5cf6' }}
+										itemStyle={{ color: "#8b5cf6" }}
 									/>
-									<Area 
-										type="monotone" 
-										dataKey="count" 
-										stroke="#8b5cf6" 
+									<Area
+										type="monotone"
+										dataKey="count"
+										stroke="#8b5cf6"
 										strokeWidth={3}
-										fillOpacity={1} 
-										fill="url(#colorClicks)" 
+										fillOpacity={1}
+										fill="url(#colorClicks)"
 									/>
 								</AreaChart>
 							</ResponsiveContainer>
@@ -235,16 +233,16 @@ function AnalyticsContent() {
 											dataKey="value"
 										>
 											{data.devices.map((entry, index) => (
-												<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+												<Cell key={`device-${entry.name}`} fill={COLORS[index % COLORS.length]} />
 											))}
 										</Pie>
-										<Tooltip 
-											contentStyle={{ 
-												backgroundColor: '#18181b', 
-												borderColor: '#ffffff10',
-												borderRadius: '8px',
-												color: '#fff'
-											}} 
+										<Tooltip
+											contentStyle={{
+												backgroundColor: "#18181b",
+												borderColor: "#ffffff10",
+												borderRadius: "8px",
+												color: "#fff",
+											}}
 										/>
 									</PieChart>
 								</ResponsiveContainer>
@@ -274,16 +272,19 @@ function AnalyticsContent() {
 											dataKey="value"
 										>
 											{data.browsers.map((entry, index) => (
-												<Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
+												<Cell
+													key={`browser-${entry.name}`}
+													fill={COLORS[(index + 2) % COLORS.length]}
+												/>
 											))}
 										</Pie>
-										<Tooltip 
-											contentStyle={{ 
-												backgroundColor: '#18181b', 
-												borderColor: '#ffffff10',
-												borderRadius: '8px',
-												color: '#fff'
-											}} 
+										<Tooltip
+											contentStyle={{
+												backgroundColor: "#18181b",
+												borderColor: "#ffffff10",
+												borderRadius: "8px",
+												color: "#fff",
+											}}
 										/>
 									</PieChart>
 								</ResponsiveContainer>
@@ -303,35 +304,34 @@ function AnalyticsContent() {
 					</CardHeader>
 					<CardContent className="p-0">
 						<div className="divide-y divide-white/5">
-						{data?.links?.map((link, index) => (
-							<div key={link.id} className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
-								<div className="flex items-center gap-4">
-									<span className="text-white/20 font-bold text-lg w-6">
-										{index + 1}
-									</span>
-									<div>
-										<p className="font-semibold text-white">{link.title || "Untitled Link"}</p>
-										<p className="text-xs text-white/40 truncate max-w-[200px] md:max-w-md">
-											{link.url}
-										</p>
+							{data?.links?.map((link, index) => (
+								<div
+									key={link.id}
+									className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
+								>
+									<div className="flex items-center gap-4">
+										<span className="text-white/20 font-bold text-lg w-6">{index + 1}</span>
+										<div>
+											<p className="font-semibold text-white">{link.title || "Untitled Link"}</p>
+											<p className="text-xs text-white/40 truncate max-w-[200px] md:max-w-md">
+												{link.url}
+											</p>
+										</div>
+									</div>
+									<div className="flex items-center gap-6">
+										<div className="text-right">
+											<p className="text-lg font-bold text-white">{link.clicks}</p>
+											<p className="text-[10px] uppercase tracking-widest text-white/30 font-bold">
+												Clicks
+											</p>
+										</div>
+										<ArrowUpRight className="h-4 w-4 text-white/40" />
 									</div>
 								</div>
-								<div className="flex items-center gap-6">
-									<div className="text-right">
-										<p className="text-lg font-bold text-white">{link.clicks}</p>
-										<p className="text-[10px] uppercase tracking-widest text-white/30 font-bold">
-											Clicks
-										</p>
-									</div>
-									<ArrowUpRight className="h-4 w-4 text-white/40" />
-								</div>
-							</div>
-						))}
-						{(!data?.links || data.links.length === 0) && (
-							<div className="p-8 text-center text-white/40">
-								No clicks recorded yet.
-							</div>
-						)}
+							))}
+							{(!data?.links || data.links.length === 0) && (
+								<div className="p-8 text-center text-white/40">No clicks recorded yet.</div>
+							)}
 						</div>
 					</CardContent>
 				</Card>

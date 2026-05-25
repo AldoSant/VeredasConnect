@@ -1,9 +1,9 @@
-import { desc, eq, and, or } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
-import { getSessionScope, getHierarchyFilter } from "@/lib/auth/rbac";
+import { z } from "zod";
+import { getHierarchyFilter, getSessionScope } from "@/lib/auth/rbac";
 import { db } from "@/lib/db";
 import { leads, profiles } from "@/lib/db/schema";
-import { z } from "zod";
 
 // GET: list all leads for dashboard CRM
 export async function GET(request: NextRequest) {
@@ -17,16 +17,13 @@ export async function GET(request: NextRequest) {
 		if (profileId) {
 			// Se o usuário pediu um perfil específico, validamos se ele tem acesso
 			const profile = await db.query.profiles.findFirst({
-				where: and(
-					eq(profiles.id, profileId),
-					await getHierarchyFilter(profiles, scope)
-				),
+				where: and(eq(profiles.id, profileId), await getHierarchyFilter(profiles, scope)),
 			});
-			
+
 			if (!profile) {
 				return NextResponse.json({ error: "Unauthorized or Profile not found" }, { status: 403 });
 			}
-			
+
 			filter = and(hierarchyFilter, eq(leads.profileId, profileId));
 		}
 
@@ -36,7 +33,7 @@ export async function GET(request: NextRequest) {
 		});
 
 		return NextResponse.json({ leads: userLeads });
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
 }
@@ -72,7 +69,10 @@ export async function POST(request: NextRequest) {
 
 		// 2. Disable submission if leadForm is deactivated
 		if (!profile.leadFormActive) {
-			return NextResponse.json({ error: "Lead capture is disabled for this profile" }, { status: 403 });
+			return NextResponse.json(
+				{ error: "Lead capture is disabled for this profile" },
+				{ status: 403 },
+			);
 		}
 
 		// 3. Save lead (inheriting organization and team from profile)
@@ -95,7 +95,13 @@ export async function POST(request: NextRequest) {
 				body: JSON.stringify({
 					event: "new_lead",
 					profile: profile.slug,
-					lead: { name: data.name, email: data.email, phone: data.phone, company: data.company, message: data.message },
+					lead: {
+						name: data.name,
+						email: data.email,
+						phone: data.phone,
+						company: data.company,
+						message: data.message,
+					},
 					timestamp: new Date().toISOString(),
 				}),
 			}).catch(() => null);

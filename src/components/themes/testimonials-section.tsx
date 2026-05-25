@@ -1,4 +1,5 @@
-import { Star, Quote } from "lucide-react";
+import { Quote, Star } from "lucide-react";
+import Image from "next/image";
 
 interface TestimonialItem {
 	id: string;
@@ -16,7 +17,9 @@ export function TestimonialsSection({ items }: { items: TestimonialItem[] }) {
 		<div className="mt-10 w-full">
 			<div className="mb-4 flex items-center gap-2 justify-center">
 				<Quote className="h-4 w-4 text-white/30" />
-				<span className="text-xs font-bold uppercase tracking-widest text-white/40">O que dizem de mim</span>
+				<span className="text-xs font-bold uppercase tracking-widest text-white/40">
+					O que dizem de mim
+				</span>
 				<Quote className="h-4 w-4 rotate-180 text-white/30" />
 			</div>
 			<div className="space-y-4">
@@ -37,9 +40,12 @@ export function TestimonialsSection({ items }: { items: TestimonialItem[] }) {
 						<p className="mb-4 text-sm leading-relaxed text-white/80 italic">"{item.content}"</p>
 						<div className="flex items-center gap-3">
 							{item.authorAvatar ? (
-								<img
+								<Image
 									src={item.authorAvatar}
 									alt={item.authorName}
+									width={32}
+									height={32}
+									unoptimized
 									className="h-8 w-8 rounded-full object-cover border border-white/10"
 								/>
 							) : (
@@ -49,9 +55,7 @@ export function TestimonialsSection({ items }: { items: TestimonialItem[] }) {
 							)}
 							<div>
 								<p className="text-sm font-semibold text-white">{item.authorName}</p>
-								{item.authorTitle && (
-									<p className="text-xs text-white/50">{item.authorTitle}</p>
-								)}
+								{item.authorTitle && <p className="text-xs text-white/50">{item.authorTitle}</p>}
 							</div>
 						</div>
 					</div>
