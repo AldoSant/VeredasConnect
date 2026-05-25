@@ -17,7 +17,7 @@ export function EditorToolbar({ mode, onModeChange }: EditorToolbarProps) {
 				variant={mode === "both" ? "secondary" : "ghost"}
 				size="sm"
 				onClick={() => onModeChange("both")}
-				aria-label="Show both panels"
+				aria-label="Mostrar ambos os painéis"
 			>
 				<Columns2 className="h-4 w-4" />
 			</Button>
@@ -25,7 +25,7 @@ export function EditorToolbar({ mode, onModeChange }: EditorToolbarProps) {
 				variant={mode === "editor" ? "secondary" : "ghost"}
 				size="sm"
 				onClick={() => onModeChange("editor")}
-				aria-label="Show editor only"
+				aria-label="Mostrar apenas editor"
 			>
 				<PanelLeft className="h-4 w-4" />
 			</Button>
@@ -33,7 +33,7 @@ export function EditorToolbar({ mode, onModeChange }: EditorToolbarProps) {
 				variant={mode === "preview" ? "secondary" : "ghost"}
 				size="sm"
 				onClick={() => onModeChange("preview")}
-				aria-label="Show preview only"
+				aria-label="Mostrar apenas pré-visualização"
 			>
 				<PanelRight className="h-4 w-4" />
 			</Button>
