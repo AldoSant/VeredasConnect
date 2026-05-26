@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { PremiumTheme } from "@/components/themes/premium-theme";
 import { db } from "@/lib/db";
 import { linkItems, profiles, testimonials } from "@/lib/db/schema";
+import { buildPublicProfileMetadata } from "@/lib/public-profile-seo";
 
 interface PageProps {
 	params: Promise<{ slug: string }>;
@@ -19,17 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 		return { title: "Not Found" };
 	}
 
-	return {
-		title: profile.displayName
-			? `${profile.displayName} (@${profile.slug}) | Veredas Connect`
-			: `@${profile.slug} | Veredas Connect`,
-		description: profile.bio || `Check out ${profile.displayName || `@${profile.slug}`}'s links`,
-		openGraph: {
-			title: profile.displayName || `@${profile.slug}`,
-			description: profile.bio || `Check out ${profile.displayName || `@${profile.slug}`}'s links`,
-			images: profile.avatarUrl ? [profile.avatarUrl] : [],
-		},
-	};
+	return buildPublicProfileMetadata(profile);
 }
 
 export default async function PublicProfilePage({ params }: PageProps) {
