@@ -4,7 +4,7 @@ set -e
 echo "=== E2E: Signup Flow ==="
 
 # Navigate to signup
-agent-browser open http://localhost:3000/signup
+agent-browser open "$BASE_URL/signup"
 agent-browser wait --load networkidle
 agent-browser screenshot tests/e2e/screenshots/signup-page.png
 
@@ -12,12 +12,12 @@ agent-browser screenshot tests/e2e/screenshots/signup-page.png
 agent-browser snapshot -i
 
 # Fill signup form
-agent-browser find label "Name" fill "Test User"
-agent-browser find label "Email" fill "test-$(date +%s)@example.com"
-agent-browser find label "Password" fill "TestPassword123!"
+agent-browser find label "Name" fill "$TEST_USER_NAME"
+agent-browser find label "Email" fill "$TEST_USER_EMAIL"
+agent-browser find label "Password" fill "$TEST_USER_PASSWORD"
 
 # Fill slug and wait for availability check
-agent-browser find label "Username" fill "testuser-$(date +%s)"
+agent-browser find label "Username" fill "$TEST_USER_SLUG"
 agent-browser wait 1000  # Wait for debounced slug check
 
 # Take screenshot before submit
@@ -27,7 +27,7 @@ agent-browser screenshot tests/e2e/screenshots/signup-filled.png
 agent-browser find role button click --name "Create Account"
 
 # Wait for redirect to editor
-agent-browser wait --url "**/editor"
+agent-browser wait 3000
 agent-browser wait --load networkidle
 
 # Verify we're on the editor page

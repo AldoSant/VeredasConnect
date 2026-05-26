@@ -3,7 +3,7 @@ set -e
 
 echo "=== E2E: Drag-and-Drop Reorder ==="
 
-agent-browser open http://localhost:3000/editor
+agent-browser open "$BASE_URL/editor"
 agent-browser wait --load networkidle
 
 # First ensure we have multiple links (may need to add them)

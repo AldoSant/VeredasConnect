@@ -4,7 +4,7 @@ set -e
 echo "=== E2E: Login Flow ==="
 
 # Navigate to login
-agent-browser open http://localhost:3000/login
+agent-browser open "$BASE_URL/login"
 agent-browser wait --load networkidle
 agent-browser screenshot tests/e2e/screenshots/login-page.png
 
@@ -19,7 +19,7 @@ agent-browser find label "Password" fill "$TEST_USER_PASSWORD"
 agent-browser find role button click --name "Sign In"
 
 # Wait for redirect
-agent-browser wait --url "**/editor"
+agent-browser wait 3000
 agent-browser wait --load networkidle
 
 # Verify
@@ -34,7 +34,7 @@ fi
 agent-browser screenshot tests/e2e/screenshots/login-success.png
 
 # Verify Google OAuth button exists
-agent-browser open http://localhost:3000/login
+agent-browser open "$BASE_URL/login"
 agent-browser wait --load networkidle
 agent-browser snapshot -i
 SNAPSHOT=$(agent-browser snapshot)
