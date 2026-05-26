@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Download, Share2 } from "lucide-react";
+import { Copy, Download, ExternalLink, IdCard, Share2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { buildShareLinks } from "@/lib/share-links";
 
 interface ShareDialogProps {
 	username: string;
@@ -24,14 +25,15 @@ export function ShareDialog({ username }: ShareDialogProps) {
 
 	if (!mounted) return null;
 
-	const url = `${window.location.origin}/${username}`;
+	const shareLinks = buildShareLinks(window.location.origin, username);
+	const url = shareLinks.publicUrl;
 
 	const copyToClipboard = async () => {
 		try {
 			await navigator.clipboard.writeText(url);
-			toast.success("Link copied to clipboard!");
+			toast.success("Link copiado para a área de transferência!");
 		} catch (_err) {
-			toast.error("Failed to copy link");
+			toast.error("Não foi possível copiar o link");
 		}
 	};
 
@@ -60,14 +62,14 @@ export function ShareDialog({ username }: ShareDialogProps) {
 			<DialogTrigger asChild>
 				<Button variant="outline" size="sm" className="gap-2">
 					<Share2 className="h-4 w-4" />
-					Share
+					Compartilhar
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
-					<DialogTitle>Share your Veredas Connect</DialogTitle>
+					<DialogTitle>Compartilhe seu Veredas Connect</DialogTitle>
 					<DialogDescription>
-						Anyone with this link or QR code can access your profile.
+						Use o link público, QR Code ou vCard para divulgar seu perfil.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex flex-col items-center justify-center space-y-6 py-4">
@@ -77,19 +79,34 @@ export function ShareDialog({ username }: ShareDialogProps) {
 
 					<div className="flex w-full items-center space-x-2">
 						<div className="grid flex-1 gap-2">
-							<div className="rounded-md border bg-muted px-3 py-2 text-sm text-muted-foreground truncate">
+							<div className="truncate rounded-md border bg-muted px-3 py-2 text-sm text-muted-foreground">
 								{url}
 							</div>
 						</div>
-						<Button type="submit" size="sm" className="px-3" onClick={copyToClipboard}>
-							<span className="sr-only">Copy</span>
+						<Button type="button" size="sm" className="px-3" onClick={copyToClipboard}>
+							<span className="sr-only">Copiar link</span>
 							<Copy className="h-4 w-4" />
 						</Button>
 					</div>
 
-					<Button onClick={downloadQRCode} className="w-full gap-2">
-						<Download className="h-4 w-4" />
-						Download QR Code
+					<div className="grid w-full gap-2 sm:grid-cols-2">
+						<Button onClick={downloadQRCode} className="gap-2">
+							<Download className="h-4 w-4" />
+							Baixar QR Code
+						</Button>
+						<Button asChild variant="outline" className="gap-2">
+							<a href={shareLinks.vcardPath} download>
+								<IdCard className="h-4 w-4" />
+								Baixar vCard
+							</a>
+						</Button>
+					</div>
+
+					<Button asChild variant="secondary" className="w-full gap-2">
+						<a href={shareLinks.publicPath} target="_blank" rel="noreferrer">
+							<ExternalLink className="h-4 w-4" />
+							Abrir página pública
+						</a>
 					</Button>
 				</div>
 			</DialogContent>
