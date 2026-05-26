@@ -51,4 +51,26 @@ describe("buildPublicProfileMetadata", () => {
 		);
 		expect(metadata.openGraph?.images).toBeUndefined();
 	});
+
+	it("handles extremely long inputs gracefully without crashing or overflowing", () => {
+		const longString = "A".repeat(500); // Test for buffer overflow/performance issue on string handling
+		const metadata = buildPublicProfileMetadata({
+			slug: longString.substring(0, 100),
+			displayName: longString,
+			bio: longString,
+			avatarUrl: "https://cdn.example.com/test.png",
+			jobTitle: "Tester",
+			company: "StressTest Corp.",
+		});
+
+		// Check if the output fields are correctly generated (even if truncated internally)
+		expect(metadata.title).toContain("Tester"); 
+		expect(metadata.description).toBeDefined();
+	});
+
+	it("handles slugs with special characters by encoding them correctly", () => {
+		const metadata = buildPublicProfileMetadata({ slug: "profile-with-&!@#$", displayName: "Test Profile" });
+		// Expect the URL/canonical to reflect encoded characters or use a safe fallback pattern.
+		expect(metadata.alternates?.canonical).toMatch(/profile-with-%26%21%40%23%24/);
+	});
 });
