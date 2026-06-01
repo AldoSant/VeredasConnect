@@ -47,6 +47,9 @@ export async function GET(request: NextRequest) {
 
 		return NextResponse.json({ deliveries });
 	} catch (_error) {
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+		return NextResponse.json(
+			{ error: "Entre novamente para ver os últimos envios." },
+			{ status: 401 },
+		);
 	}
 }

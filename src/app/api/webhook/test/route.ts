@@ -13,7 +13,10 @@ export async function POST(request: NextRequest) {
 	const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
 	const { success } = apiRateLimiter.check(ip);
 	if (!success) {
-		return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+		return NextResponse.json(
+			{ error: "Muitos testes em sequência. Aguarde um instante e tente novamente." },
+			{ status: 429 },
+		);
 	}
 
 	try {
@@ -31,7 +34,10 @@ export async function POST(request: NextRequest) {
 		});
 
 		if (!profile) {
-			return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+			return NextResponse.json(
+				{ error: "Perfil não encontrado para testar a automação." },
+				{ status: 404 },
+			);
 		}
 
 		if (!profile.webhookUrl) {
@@ -59,6 +65,9 @@ export async function POST(request: NextRequest) {
 
 		return NextResponse.json({ delivery, payload });
 	} catch (_error) {
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+		return NextResponse.json(
+			{ error: "Entre novamente para testar a automação." },
+			{ status: 401 },
+		);
 	}
 }
