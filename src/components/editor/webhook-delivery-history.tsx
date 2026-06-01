@@ -3,7 +3,7 @@
 import { AlertCircle, CheckCircle2, Clock3, Loader2, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { getDeliveryStatusCopy } from "@/lib/automation-copy";
+import { getDeliveryRecoveryCopy, getDeliveryStatusCopy } from "@/lib/automation-copy";
 import { apiPath } from "@/lib/paths";
 
 interface WebhookDeliverySummary {
@@ -112,6 +112,10 @@ export function WebhookDeliveryHistory({ profileId, refreshKey = 0 }: WebhookDel
 				<div className="mt-3 space-y-2">
 					{deliveries.map((delivery) => {
 						const statusCopy = getDeliveryStatusCopy(delivery.isSuccess);
+						const recoveryCopy = getDeliveryRecoveryCopy({
+							isSuccess: delivery.isSuccess,
+							canRetry: false,
+						});
 
 						return (
 							<div key={delivery.id} className="rounded-md border p-3 text-xs">
@@ -147,6 +151,12 @@ export function WebhookDeliveryHistory({ profileId, refreshKey = 0 }: WebhookDel
 										Não conseguimos confirmar a entrega. Confira o endereço da automação e teste
 										novamente.
 									</p>
+								)}
+								{recoveryCopy && (
+									<div className="mt-2 rounded-md border border-amber-500/30 bg-amber-500/10 p-2 text-amber-700">
+										<p className="font-medium">{recoveryCopy.label}</p>
+										<p className="mt-1 text-muted-foreground">{recoveryCopy.description}</p>
+									</div>
 								)}
 							</div>
 						);

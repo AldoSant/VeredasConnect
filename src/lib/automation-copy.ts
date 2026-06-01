@@ -13,6 +13,11 @@ export interface DeliveryStatusCopy {
 	tone: "success" | "error";
 }
 
+export interface DeliveryRecoveryCopy {
+	label: string;
+	description: string;
+}
+
 const healthCopyByStatus: Record<WebhookHealthStatus, AutomationHealthCopy> = {
 	idle: {
 		label: "Ainda não testado",
@@ -44,4 +49,27 @@ export function getDeliveryStatusCopy(isSuccess: boolean): DeliveryStatusCopy {
 	return isSuccess
 		? { label: "Enviado", tone: "success" }
 		: { label: "Não entregue", tone: "error" };
+}
+
+export function getDeliveryRecoveryCopy({
+	isSuccess,
+	canRetry,
+}: {
+	isSuccess: boolean;
+	canRetry: boolean;
+}): DeliveryRecoveryCopy | null {
+	if (isSuccess) return null;
+
+	if (canRetry) {
+		return {
+			label: "Tentar enviar de novo",
+			description: "Reenvia este evento usando os dados salvos com segurança.",
+		};
+	}
+
+	return {
+		label: "Reenvio indisponível para este registro",
+		description:
+			"Por segurança, os dados completos desse envio não foram salvos. Envie um novo teste após ajustar a configuração.",
+	};
 }
