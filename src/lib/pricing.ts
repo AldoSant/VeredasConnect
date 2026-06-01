@@ -23,14 +23,15 @@ export const pricingPlans: PricingPlan[] = [
 	{
 		name: "Pro",
 		price: "R$ 79/mês",
-		description: "Para vender melhor com captação de leads, CRM leve e automações n8n.",
+		description:
+			"Para vender melhor com captação de leads, automações e operação comercial mensurável.",
 		cta: "Escolher Pro",
 		highlighted: true,
 		features: [
 			"Tudo do Starter",
 			"Formulário de leads com LGPD",
 			"CRM de leads e tags",
-			"Webhook para n8n/Zapier/Make",
+			"Webhook para automações e integrações",
 			"Relatórios de conversão",
 		],
 	},

@@ -2,6 +2,12 @@
 
 Este diretório contém uma base importável para o n8n local da VPS receber eventos do Veredas Connect.
 
+O n8n é o orquestrador inicial recomendado, mas o produto deve permanecer **vendor-neutral**: o valor está nas receitas de automação comercial — qualificação, roteamento, follow-up, sincronização, score e relatórios — não em uma ferramenta específica.
+
+Leia também:
+
+- `docs/n8n/market-standard-router.md`
+
 ## Workflow inicial
 
 Importe no n8n:
@@ -102,11 +108,23 @@ Disparado quando alguém baixa o vCard público do perfil via `/api/vcard/:slug`
 5. Envie um evento de teste via `POST /api/webhook/test` autenticado.
 6. Envie um lead de teste pela página pública.
 7. Clique em um link público e baixe o vCard para validar os eventos extras.
-8. No n8n, adicione um nó **Switch** por `event`:
-   - `lead.created`: Google Sheets/Airtable, CRM/Odoo, alerta Telegram/WhatsApp;
-   - `link.clicked`: pontuação de interesse, remarketing, analytics;
-   - `vcard.downloaded`: alerta comercial leve ou score;
-   - `webhook.test`: apenas confirmação/log.
+8. No n8n, adicione um nó **Switch** por `event` e conecte cada ramo a uma receita genérica:
+   - `lead.created`: captação, qualificação, roteamento, sincronização de pipeline e follow-up;
+   - `link.clicked`: score de interesse, analytics operacional e priorização comercial;
+   - `vcard.downloaded`: score, contexto de relacionamento e gatilho leve de acompanhamento;
+   - `webhook.test`: confirmação, log e validação de contrato.
+
+## Receitas de automação em padrão de mercado
+
+Use estas categorias para vender e implementar integrações sem prender o produto a um fornecedor:
+
+1. **Captação e qualificação** — padronizar dados, origem, intenção e prioridade.
+2. **Roteamento inteligente** — enviar oportunidade ao responsável correto por regra comercial.
+3. **Sequência de follow-up** — criar lembretes ou ações temporizadas quando não houver avanço.
+4. **Enriquecimento de contato** — completar dados somente quando houver base legal e valor claro.
+5. **Sincronização de pipeline** — manter o sistema de registro do cliente atualizado.
+6. **Score de engajamento** — converter cliques, leads e downloads em prioridade operacional.
+7. **Resumo de performance** — consolidar resultados por perfil, campanha, equipe e período.
 
 ## Cuidados
 

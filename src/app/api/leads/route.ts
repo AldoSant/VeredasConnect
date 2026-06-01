@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 			})
 			.returning();
 
-		// 4. Notify external automation (n8n/Zapier/Make) without blocking lead capture.
+		// 4. Notify external automation without blocking lead capture.
 		if (profile.webhookUrl) {
 			const origin = request.nextUrl.origin;
 			const event = buildLeadCreatedEvent({

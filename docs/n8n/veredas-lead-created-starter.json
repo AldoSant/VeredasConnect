@@ -57,7 +57,7 @@
 		{
 			"parameters": {
 				"respondWith": "json",
-				"responseBody": "={\n  \"ok\": true,\n  \"received\": $json.leadId,\n  \"next\": \"Configure aqui Google Sheets, CRM, Email, WhatsApp ou Telegram.\"\n}",
+				"responseBody": "={\n  \"ok\": true,\n  \"received\": $json.leadId,\n  \"next\": \"Conecte este ramo à receita necessária: qualificação, roteamento, follow-up, sincronização, score ou relatório.\"\n}",
 				"options": {
 					"responseCode": 200
 				}

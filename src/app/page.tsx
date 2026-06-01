@@ -18,6 +18,7 @@ import {
 	Zap,
 } from "lucide-react";
 import Link from "next/link";
+import { automationRecipes } from "@/lib/automation-recipes";
 import { pricingPlans } from "@/lib/pricing";
 
 const outcomes = [
@@ -306,8 +307,9 @@ export default function Home() {
 						Planos claros para vender página, cartão e automação como pacote.
 					</h2>
 					<p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/58">
-						A base já nasce pronta para operar com n8n: cada lead pode acionar atendimento,
-						planilhas, CRM, email e alertas sem prender a plataforma a uma única ferramenta.
+						A base já nasce pronta para automação: cada lead, clique ou vCard pode acionar
+						qualificação, roteamento, follow-up, sincronização e relatórios sem prender a plataforma
+						a uma única ferramenta.
 					</p>
 				</div>
 
@@ -359,10 +361,10 @@ export default function Home() {
 							<Webhook className="h-5 w-5 text-emerald-200" />
 						</div>
 						<div>
-							<p className="font-semibold text-white">Preparado para n8n local na VPS</p>
+							<p className="font-semibold text-white">Automação aberta, padrão de mercado</p>
 							<p className="mt-1 text-sm leading-6">
-								O Veredas envia eventos JSON estáveis para um webhook; a orquestração fica livre
-								para o n8n fazer follow-up, CRM, alertas e relatórios.
+								O Veredas envia eventos JSON estáveis para um orquestrador; a operação escolhe as
+								ferramentas de relacionamento, dados, comunicação e análise que já usa.
 							</p>
 						</div>
 					</div>
@@ -372,6 +374,42 @@ export default function Home() {
 					>
 						Configurar integração
 					</Link>
+				</div>
+			</section>
+
+			<section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-24">
+				<div className="mx-auto mb-12 max-w-3xl text-center">
+					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-indigo-200">
+						Automação comercial aberta
+					</p>
+					<h2 className="text-balance text-4xl font-semibold tracking-[-0.045em] md:text-6xl">
+						Receitas de automação sem vendor lock-in.
+					</h2>
+					<p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/58">
+						Em vez de vender integração com uma ferramenta específica, o produto organiza os fluxos
+						que empresas esperam: qualificar, rotear, acompanhar, sincronizar e medir.
+					</p>
+				</div>
+
+				<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+					{automationRecipes.map((recipe) => (
+						<div
+							key={recipe.id}
+							className="rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-6 transition-all hover:-translate-y-1 hover:border-emerald-300/25 hover:bg-white/[0.06]"
+						>
+							<div className="mb-5 flex items-center justify-between gap-3">
+								<span className="rounded-full border border-emerald-200/20 bg-emerald-300/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-100">
+									{recipe.lifecycleStage}
+								</span>
+								<span className="text-xs text-white/35">{recipe.events.join(" + ")}</span>
+							</div>
+							<h3 className="text-xl font-semibold tracking-tight text-white">{recipe.title}</h3>
+							<p className="mt-3 text-sm leading-7 text-white/55">{recipe.summary}</p>
+							<p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-white/35">
+								Categoria: {recipe.destinationCategory}
+							</p>
+						</div>
+					))}
 				</div>
 			</section>
 
