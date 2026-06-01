@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
@@ -8,11 +8,67 @@ import "./globals.css";
 const outfit = Outfit({
 	variable: "--font-outfit",
 	subsets: ["latin"],
+	display: "swap",
 });
 
+const siteUrl = "https://veredasinc.com.br/connect";
+const title = "Veredas Connect — Identidade digital premium";
+const description =
+	"Crie uma presença digital premium com link inteligente, cartão digital, QR/NFC, captação de leads, vCard e analytics para transformar conexões em negócios.";
+
 export const metadata: Metadata = {
-	title: "Veredas Connect",
-	description: "Conecte-se com sua identidade digital premium.",
+	metadataBase: new URL(siteUrl),
+	title: {
+		default: title,
+		template: "%s | Veredas Connect",
+	},
+	description,
+	applicationName: "Veredas Connect",
+	keywords: [
+		"Veredas Connect",
+		"cartão digital",
+		"link na bio",
+		"QR Code profissional",
+		"NFC",
+		"vCard",
+		"identidade digital",
+		"captação de leads",
+	],
+	authors: [{ name: "Veredas Inc." }],
+	creator: "Veredas Inc.",
+	publisher: "Veredas Inc.",
+	alternates: {
+		canonical: "/",
+	},
+	openGraph: {
+		type: "website",
+		locale: "pt_BR",
+		url: siteUrl,
+		siteName: "Veredas Connect",
+		title,
+		description,
+	},
+	twitter: {
+		card: "summary_large_image",
+		title,
+		description,
+	},
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+			"max-image-preview": "large",
+			"max-snippet": -1,
+			"max-video-preview": -1,
+		},
+	},
+};
+
+export const viewport: Viewport = {
+	themeColor: "#020308",
+	colorScheme: "dark light",
 };
 
 export default function RootLayout({
@@ -21,8 +77,8 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
-			<body className={`${outfit.variable} font-sans antialiased bg-gray-50 dark:bg-gray-950`}>
+		<html lang="pt-BR" suppressHydrationWarning>
+			<body className={`${outfit.variable} bg-gray-50 font-sans antialiased dark:bg-gray-950`}>
 				<SessionProvider basePath={apiPath("/api/auth")}>{children}</SessionProvider>
 				<Toaster />
 			</body>
