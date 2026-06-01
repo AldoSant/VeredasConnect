@@ -1,13 +1,14 @@
 export const APP_BASE_PATH = "/connect";
+export const DEFAULT_APP_BASE_PATH = "/connect";
 export const DEFAULT_AUTH_CALLBACK_PATH = "/editor";
 
-export function appPath(path: string): string {
+export function appPath(path: string, basePath: string = DEFAULT_APP_BASE_PATH): string {
 	const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-	return `${APP_BASE_PATH}${normalizedPath}`;
+	return `${basePath}${normalizedPath}`;
 }
 
-export function apiPath(path: string): string {
-	return appPath(path);
+export function apiPath(path: string, basePath: string = DEFAULT_APP_BASE_PATH): string {
+	return appPath(path, basePath);
 }
 
 export function stripAppBasePath(path: string): string {

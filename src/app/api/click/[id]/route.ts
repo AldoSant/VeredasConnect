@@ -13,7 +13,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 			where: eq(linkItems.id, id),
 		});
 
-		if (!link || !link.url) {
+		if (!link?.url) {
 			return NextResponse.redirect(new URL("/", request.url));
 		}
 

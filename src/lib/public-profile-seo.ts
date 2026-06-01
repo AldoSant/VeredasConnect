@@ -19,7 +19,8 @@ export function buildPublicProfileMetadata(profile: PublicProfileSeoInput): Meta
 	const bio = compactText(profile.bio);
 	const avatarUrl = compactText(profile.avatarUrl);
 	const publicHandle = `@${slug}`;
-	const publicPath = `/${slug}`;
+	const encodedSlug = encodeURIComponent(slug).replace(/!/g, "%21");
+	const publicPath = `/${encodedSlug}`;
 	const title = displayName
 		? `${displayName} (${publicHandle}) | Veredas Connect`
 		: `${publicHandle} | Veredas Connect`;

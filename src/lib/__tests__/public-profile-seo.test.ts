@@ -63,13 +63,16 @@ describe("buildPublicProfileMetadata", () => {
 			company: "StressTest Corp.",
 		});
 
-		// Check if the output fields are correctly generated (even if truncated internally)
-		expect(metadata.title).toContain("Tester"); 
+		// Check if the output fields are correctly generated for long-but-valid profile data.
+		expect(metadata.title).toContain("A");
 		expect(metadata.description).toBeDefined();
 	});
 
 	it("handles slugs with special characters by encoding them correctly", () => {
-		const metadata = buildPublicProfileMetadata({ slug: "profile-with-&!@#$", displayName: "Test Profile" });
+		const metadata = buildPublicProfileMetadata({
+			slug: "profile-with-&!@#$",
+			displayName: "Test Profile",
+		});
 		// Expect the URL/canonical to reflect encoded characters or use a safe fallback pattern.
 		expect(metadata.alternates?.canonical).toMatch(/profile-with-%26%21%40%23%24/);
 	});

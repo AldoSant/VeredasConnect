@@ -150,6 +150,7 @@ export function ProfileForm({
 						</p>
 					</div>
 					<Switch
+						aria-label="Ativar ou desativar a captação de leads"
 						id="leadFormActive"
 						checked={leadFormActive}
 						onCheckedChange={onLeadFormActiveChange}
@@ -175,7 +176,8 @@ export function ProfileForm({
 				<div className="space-y-0.5">
 					<h4 className="text-base font-semibold">Integrações (Webhook)</h4>
 					<p className="text-sm text-muted-foreground">
-						Cole aqui a URL do Zapier, n8n ou Make para receber um POST a cada novo lead.
+						Cole aqui o URL do serviço de webhook (Zapier, n8n, Make) para receber novos leads.
+						*Atenção: Nunca cole chaves secretas aqui; use um endpoint seguro.*
 					</p>
 				</div>
 				<Input

@@ -1,5 +1,5 @@
 import { CheckCircle2, Circle, Sparkles } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import {
 	getProfileCompletion,
 	type ProfileCompletionLink,
@@ -21,7 +21,7 @@ export function OnboardingChecklist({ profile, links }: OnboardingChecklistProps
 				<CardHeader className="pb-3">
 					<div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300">
 						<CheckCircle2 className="h-5 w-5" />
-						<CardTitle>Perfil pronto para compartilhar</CardTitle>
+						<h2 className="text-xl font-semibold">Perfil pronto para compartilhar</h2>
 					</div>
 					<CardDescription>
 						Sua página já tem os principais elementos para gerar confiança e conversão.
@@ -38,7 +38,7 @@ export function OnboardingChecklist({ profile, links }: OnboardingChecklistProps
 					<div className="space-y-1">
 						<div className="flex items-center gap-2">
 							<Sparkles className="h-5 w-5 text-violet-500" />
-							<CardTitle>Complete sua página</CardTitle>
+							<h3 className="text-lg font-semibold">Complete sua página</h3>
 						</div>
 						<CardDescription>
 							Finalize estes passos para publicar uma presença mais confiável.

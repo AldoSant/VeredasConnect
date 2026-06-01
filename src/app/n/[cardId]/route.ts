@@ -21,7 +21,7 @@ export async function GET(
 		});
 
 		// Card not found or paused → go to home
-		if (!card || !card.isActive) {
+		if (!card?.isActive) {
 			return NextResponse.redirect(new URL("/", request.url));
 		}
 

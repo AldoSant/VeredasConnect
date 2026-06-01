@@ -1,5 +1,6 @@
 import { DownloadCloud, ExternalLink, MessageCircle, Phone } from "lucide-react";
 import Image from "next/image";
+import { apiPath } from "@/lib/paths";
 import type { ThemeProps } from "@/types";
 import { TestimonialsSection } from "./testimonials-section";
 
@@ -70,7 +71,7 @@ export function PremiumTheme({
 				{/* Primary CTA: Save Contact */}
 				<div className="w-full mb-12">
 					<a
-						href={isPreview ? "#" : `/api/vcard/${slug}`}
+						href={isPreview ? "#" : apiPath(`/api/vcard/${slug}`)}
 						className={`group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-white p-5 font-bold text-black shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all duration-300 hover:scale-[1.02] active:scale-95 ${
 							isPreview ? "cursor-default" : ""
 						}`}
@@ -104,7 +105,7 @@ export function PremiumTheme({
 							);
 						}
 
-						const href = isPreview ? item.url : `/api/click/${item.id}`;
+						const href = isPreview ? item.url : apiPath(`/api/click/${item.id}`);
 
 						return (
 							<a
@@ -149,6 +150,7 @@ export function PremiumTheme({
 						<a
 							href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
 							target="_blank"
+							rel="noopener"
 							className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 py-4 hover:bg-white/10 transition-colors"
 						>
 							<MessageCircle className="h-5 w-5 text-indigo-400" />
