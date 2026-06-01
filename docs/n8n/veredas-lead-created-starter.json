@@ -1,0 +1,120 @@
+{
+	"name": "Veredas Connect - Lead Created Starter",
+	"nodes": [
+		{
+			"parameters": {
+				"httpMethod": "POST",
+				"path": "veredas-connect/lead-created",
+				"responseMode": "responseNode",
+				"options": {}
+			},
+			"id": "webhook-lead-created",
+			"name": "Webhook - lead.created",
+			"type": "n8n-nodes-base.webhook",
+			"typeVersion": 2,
+			"position": [0, 0]
+		},
+		{
+			"parameters": {
+				"jsCode": "const body = $json.body ?? $json;\nconst lead = body.lead ?? {};\nconst profile = body.profile ?? {};\nreturn [{\n  json: {\n    event: body.event,\n    occurredAt: body.occurredAt,\n    profileSlug: profile.slug,\n    profileName: profile.displayName,\n    profileCompany: profile.company,\n    publicUrl: profile.publicUrl,\n    leadId: lead.id,\n    leadName: lead.name,\n    leadEmail: lead.email,\n    leadPhone: lead.phone,\n    leadCompany: lead.company,\n    leadMessage: lead.message,\n    leadCreatedAt: lead.createdAt,\n    whatsappText: `Olá ${lead.name || ''}, recebi seu contato pelo Veredas Connect e vou te atender por aqui.`,\n  }\n}];"
+			},
+			"id": "normalize-event",
+			"name": "Normalizar evento",
+			"type": "n8n-nodes-base.code",
+			"typeVersion": 2,
+			"position": [260, 0]
+		},
+		{
+			"parameters": {
+				"conditions": {
+					"options": {
+						"caseSensitive": true,
+						"leftValue": "",
+						"typeValidation": "strict"
+					},
+					"conditions": [
+						{
+							"id": "has-phone",
+							"leftValue": "={{ $json.leadPhone }}",
+							"rightValue": "",
+							"operator": {
+								"type": "string",
+								"operation": "notEmpty",
+								"singleValue": true
+							}
+						}
+					],
+					"combinator": "and"
+				},
+				"options": {}
+			},
+			"id": "if-phone",
+			"name": "Tem telefone?",
+			"type": "n8n-nodes-base.if",
+			"typeVersion": 2,
+			"position": [520, 0]
+		},
+		{
+			"parameters": {
+				"respondWith": "json",
+				"responseBody": "={\n  \"ok\": true,\n  \"received\": $json.leadId,\n  \"next\": \"Configure aqui Google Sheets, CRM, Email, WhatsApp ou Telegram.\"\n}",
+				"options": {
+					"responseCode": 200
+				}
+			},
+			"id": "respond-ok",
+			"name": "Responder OK",
+			"type": "n8n-nodes-base.respondToWebhook",
+			"typeVersion": 1,
+			"position": [780, 0]
+		}
+	],
+	"connections": {
+		"Webhook - lead.created": {
+			"main": [
+				[
+					{
+						"node": "Normalizar evento",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Normalizar evento": {
+			"main": [
+				[
+					{
+						"node": "Tem telefone?",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Tem telefone?": {
+			"main": [
+				[
+					{
+						"node": "Responder OK",
+						"type": "main",
+						"index": 0
+					}
+				],
+				[
+					{
+						"node": "Responder OK",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		}
+	},
+	"pinData": {},
+	"settings": {
+		"executionOrder": "v1"
+	},
+	"staticData": null,
+	"tags": []
+}

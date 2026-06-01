@@ -2,8 +2,11 @@ import { and, desc, eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getHierarchyFilter, getSessionScope } from "@/lib/auth/rbac";
+import { buildLeadCreatedEvent } from "@/lib/automation-events";
 import { db } from "@/lib/db";
 import { leads, profiles } from "@/lib/db/schema";
+import { appPath } from "@/lib/paths";
+import { dispatchWebhookEvent } from "@/lib/webhook-dispatcher";
 
 // GET: list all leads for dashboard CRM
 export async function GET(request: NextRequest) {
@@ -79,38 +82,42 @@ export async function POST(request: NextRequest) {
 		}
 
 		// 3. Save lead (inheriting organization and team from profile)
-		await db.insert(leads).values({
-			profileId: profile.id,
-			name: data.name,
-			email: data.email,
-			phone: data.phone || null,
-			company: data.company || null,
-			message: data.message || null,
-			organizationId: profile.organizationId,
-			teamId: profile.teamId,
-		});
+		const [lead] = await db
+			.insert(leads)
+			.values({
+				profileId: profile.id,
+				name: data.name,
+				email: data.email,
+				phone: data.phone || null,
+				company: data.company || null,
+				message: data.message || null,
+				organizationId: profile.organizationId,
+				teamId: profile.teamId,
+			})
+			.returning();
 
-		// 4. Fire-and-forget webhook
+		// 4. Notify external automation (n8n/Zapier/Make) without blocking lead capture.
 		if (profile.webhookUrl) {
-			fetch(profile.webhookUrl, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					event: "new_lead",
-					profile: profile.slug,
-					lead: {
-						name: data.name,
-						email: data.email,
-						phone: data.phone,
-						company: data.company,
-						message: data.message,
-					},
-					timestamp: new Date().toISOString(),
-				}),
-			}).catch(() => null);
+			const origin = request.nextUrl.origin;
+			const event = buildLeadCreatedEvent({
+				profile,
+				lead,
+				publicUrl: `${origin}${appPath(`/${profile.slug}`)}`,
+			});
+
+			dispatchWebhookEvent({ url: profile.webhookUrl, payload: event }).then((delivery) => {
+				if (!delivery.delivered) {
+					console.warn("Lead webhook delivery failed", {
+						profileId: profile.id,
+						leadId: lead.id,
+						status: delivery.status,
+						error: delivery.error,
+					});
+				}
+			});
 		}
 
-		return NextResponse.json({ success: true }, { status: 201 });
+		return NextResponse.json({ lead }, { status: 201 });
 	} catch (error) {
 		console.error("Error creating lead:", error);
 		return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

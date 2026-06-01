@@ -14,9 +14,11 @@ import {
 	ShieldCheck,
 	Sparkles,
 	Users,
+	Webhook,
 	Zap,
 } from "lucide-react";
 import Link from "next/link";
+import { pricingPlans } from "@/lib/pricing";
 
 const outcomes = [
 	"Perfil público com SEO pronto para Google e WhatsApp",
@@ -112,6 +114,9 @@ export default function Home() {
 						</a>
 						<a href="#experiencia" className="transition-colors hover:text-white">
 							Experiência
+						</a>
+						<a href="#planos" className="transition-colors hover:text-white">
+							Planos
 						</a>
 						<a href="#operacao" className="transition-colors hover:text-white">
 							Operação
@@ -289,6 +294,84 @@ export default function Home() {
 							</div>
 						);
 					})}
+				</div>
+			</section>
+
+			<section id="planos" className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-24">
+				<div className="mx-auto mb-12 max-w-3xl text-center">
+					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">
+						Produto comercial
+					</p>
+					<h2 className="text-balance text-4xl font-semibold tracking-[-0.045em] md:text-6xl">
+						Planos claros para vender página, cartão e automação como pacote.
+					</h2>
+					<p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/58">
+						A base já nasce pronta para operar com n8n: cada lead pode acionar atendimento,
+						planilhas, CRM, email e alertas sem prender a plataforma a uma única ferramenta.
+					</p>
+				</div>
+
+				<div className="grid gap-4 lg:grid-cols-3">
+					{pricingPlans.map((plan) => (
+						<div
+							key={plan.name}
+							className={`relative rounded-[1.8rem] border p-6 transition-all hover:-translate-y-1 ${
+								plan.highlighted
+									? "border-indigo-300/45 bg-indigo-400/[0.09] shadow-[0_24px_90px_rgba(99,102,241,0.22)]"
+									: "border-white/10 bg-white/[0.035]"
+							}`}
+						>
+							{plan.highlighted ? (
+								<div className="absolute right-5 top-5 rounded-full border border-indigo-200/25 bg-indigo-300/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo-100">
+									Mais vendável
+								</div>
+							) : null}
+							<h3 className="text-2xl font-semibold tracking-tight">{plan.name}</h3>
+							<p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-white">
+								{plan.price}
+							</p>
+							<p className="mt-4 min-h-16 text-sm leading-7 text-white/58">{plan.description}</p>
+							<Link
+								href="/signup"
+								className={`mt-6 inline-flex w-full items-center justify-center rounded-2xl px-5 py-3 font-semibold transition-all ${
+									plan.highlighted
+										? "bg-white text-black hover:-translate-y-0.5"
+										: "border border-white/10 bg-black/20 text-white/78 hover:bg-black/30 hover:text-white"
+								}`}
+							>
+								{plan.cta}
+							</Link>
+							<ul className="mt-6 space-y-3">
+								{plan.features.map((feature) => (
+									<li key={feature} className="flex gap-3 text-sm leading-6 text-white/68">
+										<CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-300" />
+										<span>{feature}</span>
+									</li>
+								))}
+							</ul>
+						</div>
+					))}
+				</div>
+
+				<div className="mt-6 flex flex-col gap-4 rounded-[1.6rem] border border-white/10 bg-black/25 p-6 text-white/65 backdrop-blur-xl md:flex-row md:items-center md:justify-between">
+					<div className="flex gap-4">
+						<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200/20 bg-emerald-300/10">
+							<Webhook className="h-5 w-5 text-emerald-200" />
+						</div>
+						<div>
+							<p className="font-semibold text-white">Preparado para n8n local na VPS</p>
+							<p className="mt-1 text-sm leading-6">
+								O Veredas envia eventos JSON estáveis para um webhook; a orquestração fica livre
+								para o n8n fazer follow-up, CRM, alertas e relatórios.
+							</p>
+						</div>
+					</div>
+					<Link
+						href="/login"
+						className="shrink-0 rounded-2xl bg-white px-5 py-3 font-semibold text-black"
+					>
+						Configurar integração
+					</Link>
 				</div>
 			</section>
 
