@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Send } from "lucide-react";
+import { CheckCircle2, Circle, Loader2, Send } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { getAutomationSetupSteps } from "@/lib/automation-setup-state";
 import { apiPath } from "@/lib/paths";
 import { WebhookDeliveryHistory } from "./webhook-delivery-history";
 import { WebhookHealthPanel } from "./webhook-health-panel";
@@ -64,6 +65,11 @@ export function ProfileForm({
 }: ProfileFormProps) {
 	const [isTestingWebhook, setIsTestingWebhook] = useState(false);
 	const [deliveryHistoryRefreshKey, setDeliveryHistoryRefreshKey] = useState(0);
+	const automationSetupSteps = getAutomationSetupSteps({
+		webhookUrl,
+		hasUnsavedChanges,
+		hasRecentDelivery: deliveryHistoryRefreshKey > 0,
+	});
 
 	const handleTestWebhook = async () => {
 		if (!webhookUrl.trim()) {
@@ -219,30 +225,59 @@ export function ProfileForm({
 				)}
 			</div>
 
-			{/* Integrations Section */}
+			{/* Automation Section */}
 			<div className="rounded-xl border bg-muted/30 p-4 space-y-4">
 				<div className="space-y-1">
-					<h4 className="text-base font-semibold">Integrações (Webhook / n8n)</h4>
+					<h4 className="text-base font-semibold">Automação</h4>
 					<p className="text-sm text-muted-foreground">
-						Cole a URL de produção do Webhook do n8n para receber eventos como lead.created e
-						webhook.test. O Veredas salva o lead antes de chamar a automação, então uma falha no n8n
-						não perde o contato.
+						Envie novos contatos e ações importantes para outra ferramenta, sem precisar copiar nada
+						manualmente.
 					</p>
 					<p className="text-xs text-muted-foreground">
-						Nunca cole tokens ou chaves secretas neste campo. Use um endpoint com path randômico,
-						proxy seguro ou autenticação no n8n/VPS.
+						Se você recebeu um endereço de automação, cole abaixo, salve e envie um teste.
 					</p>
 				</div>
-				<Input
-					id="webhookUrl"
-					value={webhookUrl}
-					onChange={(e) => onWebhookUrlChange?.(e.target.value)}
-					placeholder="https://n8n.seudominio.com/webhook/veredas-connect/lead-created"
-				/>
+
+				<div className="grid gap-2 rounded-lg border bg-background/70 p-3 sm:grid-cols-2">
+					{automationSetupSteps.map((step) => {
+						const isDone = step.status === "done";
+						const isCurrent = step.status === "current";
+
+						return (
+							<div
+								key={step.label}
+								className={`flex items-center gap-2 text-xs ${
+									isCurrent ? "font-medium text-foreground" : "text-muted-foreground"
+								}`}
+							>
+								{isDone ? (
+									<CheckCircle2 className="h-4 w-4 text-emerald-500" />
+								) : (
+									<Circle className="h-4 w-4" />
+								)}
+								<span>{step.label}</span>
+							</div>
+						);
+					})}
+				</div>
+
+				<div className="space-y-2">
+					<Label htmlFor="webhookUrl">Endereço da automação</Label>
+					<Input
+						id="webhookUrl"
+						value={webhookUrl}
+						onChange={(e) => onWebhookUrlChange?.(e.target.value)}
+						placeholder="https://sua-ferramenta.com/automacao/veredas-connect"
+					/>
+					<p className="text-xs text-muted-foreground">
+						Não cole senhas ou chaves secretas aqui. Use apenas o endereço fornecido pela sua
+						ferramenta de automação.
+					</p>
+				</div>
 				<div className="flex flex-col gap-2 rounded-lg border bg-background/70 p-3 sm:flex-row sm:items-center sm:justify-between">
 					<p className="text-xs text-muted-foreground">
-						Envia um evento <code className="font-mono">webhook.test</code> para validar o
-						orquestrador configurado no perfil salvo.
+						Depois de salvar, envie um teste para confirmar se a automação está recebendo os dados
+						corretamente.
 					</p>
 					<Button
 						type="button"
@@ -257,7 +292,7 @@ export function ProfileForm({
 						) : (
 							<Send className="h-4 w-4" />
 						)}
-						Testar webhook
+						Enviar teste
 					</Button>
 				</div>
 				<WebhookHealthPanel profileId={profileId} refreshKey={deliveryHistoryRefreshKey} />
