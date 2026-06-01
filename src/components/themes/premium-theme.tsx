@@ -1,7 +1,9 @@
 import { DownloadCloud, ExternalLink, MessageCircle, Phone } from "lucide-react";
 import Image from "next/image";
 import { apiPath } from "@/lib/paths";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import type { ThemeProps } from "@/types";
+import { LeadFormCard } from "./lead-form-card";
 import { TestimonialsSection } from "./testimonials-section";
 
 export function PremiumTheme({
@@ -13,10 +15,14 @@ export function PremiumTheme({
 	company,
 	phone,
 	whatsapp,
+	leadFormActive,
+	leadFormTitle,
 	testimonials,
 	links,
 	isPreview,
 }: ThemeProps) {
+	const whatsappUrl = whatsapp ? buildWhatsAppUrl({ number: whatsapp, displayName, slug }) : null;
+
 	return (
 		<div className="relative flex min-h-screen flex-col items-center px-6 py-16 text-white overflow-hidden bg-[#030303]">
 			{/* Advanced Animated Mesh Background */}
@@ -146,11 +152,12 @@ export function PremiumTheme({
 							<span className="text-sm font-bold uppercase tracking-tight">Ligar</span>
 						</a>
 					)}
-					{whatsapp && (
+					{whatsappUrl && (
 						<a
-							href={`https://wa.me/${whatsapp.replace(/\D/g, "")}`}
+							href={isPreview ? "#" : whatsappUrl}
 							target="_blank"
-							rel="noopener"
+							rel="noopener noreferrer"
+							aria-label="Conversar pelo WhatsApp"
 							className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-white/5 border border-white/10 py-4 hover:bg-white/10 transition-colors"
 						>
 							<MessageCircle className="h-5 w-5 text-indigo-400" />
@@ -159,12 +166,12 @@ export function PremiumTheme({
 					)}
 				</div>
 
-				{/* Lead Capture - Disabled for launch, kept for future update */}
-				{/* {leadFormActive && (
+				{/* Lead Capture */}
+				{leadFormActive && (
 					<div className="w-full mt-16 p-8 rounded-3xl bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-md">
 						<LeadFormCard slug={slug} title={leadFormTitle || "Vamos trabalhar juntos?"} />
 					</div>
-				)} */}
+				)}
 
 				{/* Testimonials */}
 				{!isPreview && testimonials && testimonials.length > 0 && (

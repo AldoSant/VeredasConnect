@@ -45,6 +45,9 @@ const leadSchema = z.object({
 	phone: z.string().optional(),
 	company: z.string().optional(),
 	message: z.string().optional(),
+	lgpdConsent: z.literal(true, {
+		error: "Consentimento LGPD é obrigatório para enviar o contato",
+	}),
 });
 
 export async function POST(request: NextRequest) {

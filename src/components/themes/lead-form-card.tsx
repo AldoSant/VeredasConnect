@@ -22,6 +22,12 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 		setIsSubmitting(true);
 
 		const formData = new FormData(e.currentTarget);
+		if (formData.get("lgpdConsent") !== "on") {
+			toast.error("Confirme o consentimento para enviar seu contato.");
+			setIsSubmitting(false);
+			return;
+		}
+
 		const data = {
 			slug,
 			name: formData.get("name") as string,
@@ -29,6 +35,7 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 			phone: formData.get("phone") as string,
 			company: formData.get("company") as string,
 			message: formData.get("message") as string,
+			lgpdConsent: true,
 		};
 
 		try {
@@ -59,7 +66,9 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 					<Send className="h-6 w-6" />
 				</div>
 				<h3 className="mb-2 text-xl font-bold text-white">Pronto!</h3>
-				<p className="text-sm text-white/70">Recebemos seu contato com sucesso.</p>
+				<p className="text-sm text-white/70">
+					Recebemos seu contato. O responsável retornará pelo canal informado.
+				</p>
 			</div>
 		);
 	}
@@ -67,6 +76,9 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 	return (
 		<div className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg">
 			<h3 className="mb-4 text-center text-lg font-bold text-white">{title}</h3>
+			<p className="mb-5 text-center text-sm text-white/60">
+				Deixe seus dados para receber retorno comercial sem perder o contato.
+			</p>
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<div>
 					<Input
@@ -110,6 +122,17 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 						className="border-white/10 bg-black/20 text-white placeholder:text-white/40 focus-visible:ring-violet-500 resize-none"
 					/>
 				</div>
+				<label className="flex items-start gap-3 rounded-xl border border-white/10 bg-black/20 p-3 text-xs leading-relaxed text-white/60">
+					<input
+						type="checkbox"
+						name="lgpdConsent"
+						required
+						className="mt-0.5 h-4 w-4 rounded border-white/30 accent-emerald-500"
+					/>
+					<span>
+						Autorizo o uso dos meus dados para retorno sobre este contato, conforme a LGPD.
+					</span>
+				</label>
 				<Button
 					type="submit"
 					disabled={isSubmitting}

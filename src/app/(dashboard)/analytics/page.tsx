@@ -24,6 +24,7 @@ import {
 	YAxis,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { apiPath } from "@/lib/paths";
 
 interface AnalyticsData {
 	totalClicks: number;
@@ -72,7 +73,7 @@ function AnalyticsContent() {
 	useEffect(() => {
 		async function fetchAnalytics() {
 			try {
-				const url = profileId ? `/api/analytics?id=${profileId}` : "/api/analytics";
+				const url = apiPath(profileId ? `/api/analytics?id=${profileId}` : "/api/analytics");
 				const res = await fetch(url);
 				const json = await res.json();
 				setData(json);
@@ -106,44 +107,46 @@ function AnalyticsContent() {
 			<div className="mx-auto max-w-7xl space-y-8">
 				{/* Header */}
 				<div className="flex flex-col gap-2">
-					<h1 className="text-3xl font-bold tracking-tight text-white">Performance Analytics</h1>
-					<p className="text-white/60">Real-time engagement data for your Links.</p>
+					<h1 className="text-3xl font-bold tracking-tight text-white">Painel de Conversão</h1>
+					<p className="text-white/60">
+						Entenda quais contatos, cartões e links estão gerando oportunidades reais.
+					</p>
 				</div>
 
 				{/* Stats Cards */}
 				<div className="grid gap-4 md:grid-cols-3">
 					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-white/70">Total Clicks</CardTitle>
+							<CardTitle className="text-sm font-medium text-white/70">Cliques Totais</CardTitle>
 							<MousePointer2 className="h-4 w-4 text-violet-400" />
 						</CardHeader>
 						<CardContent>
 							<div className="text-3xl font-bold text-white">{data.totalClicks}</div>
-							<p className="text-xs text-white/40 mt-1">Lifetime engagement</p>
+							<p className="text-xs text-white/40 mt-1">Interações acumuladas</p>
 						</CardContent>
 					</Card>
 
 					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-white/70">Active Links</CardTitle>
+							<CardTitle className="text-sm font-medium text-white/70">Links Ativos</CardTitle>
 							<Link2 className="h-4 w-4 text-fuchsia-400" />
 						</CardHeader>
 						<CardContent>
 							<div className="text-3xl font-bold text-white">{data?.links?.length || 0}</div>
-							<p className="text-xs text-white/40 mt-1">Currently tracked</p>
+							<p className="text-xs text-white/40 mt-1">Canais monitorados</p>
 						</CardContent>
 					</Card>
 
 					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-white/70">Last 30 Days</CardTitle>
+							<CardTitle className="text-sm font-medium text-white/70">Últimos 30 dias</CardTitle>
 							<Calendar className="h-4 w-4 text-blue-400" />
 						</CardHeader>
 						<CardContent>
 							<div className="text-3xl font-bold text-white">
 								{data?.trends?.reduce((acc, curr) => acc + curr.count, 0) || 0}
 							</div>
-							<p className="text-xs text-white/40 mt-1">Recent interactions</p>
+							<p className="text-xs text-white/40 mt-1">Interações recentes</p>
 						</CardContent>
 					</Card>
 				</div>
@@ -152,7 +155,9 @@ function AnalyticsContent() {
 				<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
 					<CardHeader>
 						<div className="flex items-center justify-between">
-							<CardTitle className="text-lg font-semibold text-white">Click Trends</CardTitle>
+							<CardTitle className="text-lg font-semibold text-white">
+								Tendência de cliques
+							</CardTitle>
 							<TrendingUp className="h-5 w-5 text-emerald-400" />
 						</div>
 					</CardHeader>

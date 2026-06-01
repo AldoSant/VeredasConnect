@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { apiPath } from "@/lib/paths";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const STATUS_CONFIG = {
 	new: { label: "Novo", color: "bg-violet-500/20 text-violet-300" },
@@ -240,6 +241,12 @@ function LeadsContent() {
 				<div className="space-y-3">
 					{filtered.map((lead) => {
 						const isExpanded = expandedId === lead.id;
+						const whatsappUrl = lead.phone
+							? buildWhatsAppUrl({
+									number: lead.phone,
+									message: `Olá, ${lead.name}! Recebi seu contato pelo Veredas Connect e quero continuar seu atendimento.`,
+								})
+							: null;
 						const tags = lead.tags
 							? lead.tags
 									.split(",")
@@ -285,11 +292,13 @@ function LeadsContent() {
 										</a>
 										{lead.phone && (
 											<a
-												href={`tel:${lead.phone}`}
+												href={whatsappUrl ?? `tel:${lead.phone}`}
+												target={whatsappUrl ? "_blank" : undefined}
+												rel={whatsappUrl ? "noopener noreferrer" : undefined}
 												className="flex items-center gap-1.5 hover:text-emerald-300 transition-colors"
 											>
 												<Phone className="h-3.5 w-3.5 text-emerald-400" />
-												{lead.phone}
+												{whatsappUrl ? "Responder no WhatsApp" : lead.phone}
 											</a>
 										)}
 										{lead.company && (
