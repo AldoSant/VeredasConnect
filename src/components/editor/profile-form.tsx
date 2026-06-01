@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { apiPath } from "@/lib/paths";
 import { WebhookDeliveryHistory } from "./webhook-delivery-history";
+import { WebhookHealthPanel } from "./webhook-health-panel";
 
 interface ProfileFormProps {
 	displayName: string;
@@ -259,6 +260,7 @@ export function ProfileForm({
 						Testar webhook
 					</Button>
 				</div>
+				<WebhookHealthPanel profileId={profileId} refreshKey={deliveryHistoryRefreshKey} />
 				<WebhookDeliveryHistory profileId={profileId} refreshKey={deliveryHistoryRefreshKey} />
 			</div>
 		</div>
