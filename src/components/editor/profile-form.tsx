@@ -173,18 +173,23 @@ export function ProfileForm({
 
 			{/* Integrations Section */}
 			<div className="rounded-xl border bg-muted/30 p-4 space-y-4">
-				<div className="space-y-0.5">
-					<h4 className="text-base font-semibold">Integrações (Webhook)</h4>
+				<div className="space-y-1">
+					<h4 className="text-base font-semibold">Integrações (Webhook / n8n)</h4>
 					<p className="text-sm text-muted-foreground">
-						Cole aqui o URL do serviço de webhook (Zapier, n8n, Make) para receber novos leads.
-						*Atenção: Nunca cole chaves secretas aqui; use um endpoint seguro.*
+						Cole a URL de produção do Webhook do n8n para receber eventos como lead.created e
+						webhook.test. O Veredas salva o lead antes de chamar a automação, então uma falha no n8n
+						não perde o contato.
+					</p>
+					<p className="text-xs text-muted-foreground">
+						Nunca cole tokens ou chaves secretas neste campo. Use um endpoint com path randômico,
+						proxy seguro ou autenticação no n8n/VPS.
 					</p>
 				</div>
 				<Input
 					id="webhookUrl"
 					value={webhookUrl}
 					onChange={(e) => onWebhookUrlChange?.(e.target.value)}
-					placeholder="https://hooks.zapier.com/..."
+					placeholder="https://n8n.seudominio.com/webhook/veredas-connect/lead-created"
 				/>
 			</div>
 		</div>

@@ -1,7 +1,11 @@
 import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
+import { buildVcardDownloadedEvent } from "@/lib/automation-events";
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
+import { appPath } from "@/lib/paths";
+import { buildVisitorContext } from "@/lib/visitor-context";
+import { dispatchWebhookEvent } from "@/lib/webhook-dispatcher";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
 	const { slug } = await params;
@@ -51,6 +55,22 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 			// Escape newlines for vCard note
 			const note = profile.bio.replace(/\n/g, "\\n");
 			vcardLines.push(`NOTE:${note}`);
+		}
+
+		if (profile.webhookUrl) {
+			const payload = buildVcardDownloadedEvent({
+				profile,
+				visitor: buildVisitorContext(request),
+				publicUrl: `${request.nextUrl.origin}${appPath(`/${profile.slug}`)}`,
+			});
+			const delivery = await dispatchWebhookEvent({ url: profile.webhookUrl, payload });
+			if (!delivery.delivered) {
+				console.warn("vCard webhook delivery failed", {
+					profileId: profile.id,
+					status: delivery.status,
+					error: delivery.error,
+				});
+			}
 		}
 
 		vcardLines.push("END:VCARD");

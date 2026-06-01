@@ -1,8 +1,12 @@
 import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 import { UAParser } from "ua-parser-js";
+import { buildLinkClickedEvent } from "@/lib/automation-events";
 import { db } from "@/lib/db";
-import { clickEvents, linkItems } from "@/lib/db/schema";
+import { clickEvents, linkItems, profiles } from "@/lib/db/schema";
+import { appPath } from "@/lib/paths";
+import { buildVisitorContext } from "@/lib/visitor-context";
+import { dispatchWebhookEvent } from "@/lib/webhook-dispatcher";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
@@ -36,6 +40,26 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 			os: os.name || "Unknown",
 			referrer: referer,
 		});
+
+		const profile = await db.query.profiles.findFirst({
+			where: eq(profiles.id, link.profileId),
+		});
+		if (profile?.webhookUrl) {
+			const payload = buildLinkClickedEvent({
+				profile,
+				link: { id: link.id, title: link.title, url: link.url },
+				visitor: buildVisitorContext(request),
+				publicUrl: `${request.nextUrl.origin}${appPath(`/${profile.slug}`)}`,
+			});
+			const delivery = await dispatchWebhookEvent({ url: profile.webhookUrl, payload });
+			if (!delivery.delivered) {
+				console.warn("Link webhook delivery failed", {
+					linkId: link.id,
+					status: delivery.status,
+					error: delivery.error,
+				});
+			}
+		}
 
 		// 3. Redirect to the target URL
 		// We use a 302 (Found) to ensure browsers don't cache the redirect and bypass tracking next time

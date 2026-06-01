@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { buildLeadCreatedEvent } from "@/lib/automation-events";
+import {
+	buildLeadCreatedEvent,
+	buildLinkClickedEvent,
+	buildVcardDownloadedEvent,
+	buildWebhookTestEvent,
+} from "@/lib/automation-events";
 
 describe("buildLeadCreatedEvent", () => {
 	it("builds a stable n8n-friendly lead.created payload", () => {
@@ -67,5 +72,60 @@ describe("buildLeadCreatedEvent", () => {
 		expect(event.lead.phone).toBeNull();
 		expect(event.lead.company).toBeNull();
 		expect(event.lead.message).toBeNull();
+	});
+});
+
+describe("additional automation events", () => {
+	it("builds a webhook.test payload for n8n validation", () => {
+		const event = buildWebhookTestEvent({
+			profile: { id: "profile-1", slug: "ana", displayName: "Ana", company: "Veredas" },
+			publicUrl: "https://example.com/connect/ana",
+			now: new Date("2026-06-01T12:00:00.000Z"),
+		});
+
+		expect(event).toEqual({
+			event: "webhook.test",
+			occurredAt: "2026-06-01T12:00:00.000Z",
+			source: "veredas-connect",
+			profile: {
+				id: "profile-1",
+				slug: "ana",
+				displayName: "Ana",
+				company: "Veredas",
+				organizationId: null,
+				teamId: null,
+				publicUrl: "https://example.com/connect/ana",
+			},
+			message: "Evento de teste enviado pelo Veredas Connect.",
+		});
+	});
+
+	it("builds a link.clicked payload", () => {
+		const event = buildLinkClickedEvent({
+			profile: { id: "profile-1", slug: "ana", displayName: "Ana" },
+			link: { id: "link-1", title: "WhatsApp", url: "https://wa.me/5577999990000" },
+			visitor: { ipHash: "hash-1", userAgent: "Mozilla/5.0" },
+			now: new Date("2026-06-01T12:00:00.000Z"),
+		});
+
+		expect(event.event).toBe("link.clicked");
+		expect(event.link).toEqual({
+			id: "link-1",
+			title: "WhatsApp",
+			url: "https://wa.me/5577999990000",
+		});
+		expect(event.visitor).toEqual({ ipHash: "hash-1", userAgent: "Mozilla/5.0" });
+	});
+
+	it("builds a vcard.downloaded payload", () => {
+		const event = buildVcardDownloadedEvent({
+			profile: { id: "profile-1", slug: "ana", displayName: "Ana" },
+			visitor: { ipHash: null, userAgent: "curl/8" },
+			now: new Date("2026-06-01T12:00:00.000Z"),
+		});
+
+		expect(event.event).toBe("vcard.downloaded");
+		expect(event.visitor.ipHash).toBeNull();
+		expect(event.visitor.userAgent).toBe("curl/8");
 	});
 });
