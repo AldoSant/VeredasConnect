@@ -1,10 +1,15 @@
 "use client";
 
+import { Loader2, Send } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { apiPath } from "@/lib/paths";
 
 interface ProfileFormProps {
 	displayName: string;
@@ -25,7 +30,9 @@ interface ProfileFormProps {
 	onWhatsappChange?: (value: string) => void;
 	onLeadFormActiveChange?: (value: boolean) => void;
 	onLeadFormTitleChange?: (value: string) => void;
+	profileId?: string;
 	webhookUrl?: string;
+	hasUnsavedChanges?: boolean;
 	onWebhookUrlChange?: (value: string) => void;
 }
 
@@ -48,9 +55,46 @@ export function ProfileForm({
 	onWhatsappChange,
 	onLeadFormActiveChange,
 	onLeadFormTitleChange,
+	profileId,
 	webhookUrl = "",
+	hasUnsavedChanges = false,
 	onWebhookUrlChange,
 }: ProfileFormProps) {
+	const [isTestingWebhook, setIsTestingWebhook] = useState(false);
+
+	const handleTestWebhook = async () => {
+		if (!webhookUrl.trim()) {
+			toast.error("Configure a URL do webhook antes de enviar um teste.");
+			return;
+		}
+
+		if (hasUnsavedChanges) {
+			toast.error("Salve as alterações antes de testar o webhook.");
+			return;
+		}
+
+		setIsTestingWebhook(true);
+		try {
+			const res = await fetch(apiPath("/api/webhook/test"), {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ profileId }),
+			});
+			const data = await res.json().catch(() => null);
+
+			if (!res.ok) {
+				throw new Error(data?.error ?? "Não foi possível testar o webhook.");
+			}
+
+			const status = data?.delivery?.status ? ` Status ${data.delivery.status}.` : "";
+			toast.success(`Evento webhook.test entregue com sucesso.${status}`);
+		} catch (error) {
+			toast.error(error instanceof Error ? error.message : "Falha ao testar o webhook.");
+		} finally {
+			setIsTestingWebhook(false);
+		}
+	};
+
 	return (
 		<div className="space-y-4">
 			<div className="space-y-2">
@@ -191,6 +235,27 @@ export function ProfileForm({
 					onChange={(e) => onWebhookUrlChange?.(e.target.value)}
 					placeholder="https://n8n.seudominio.com/webhook/veredas-connect/lead-created"
 				/>
+				<div className="flex flex-col gap-2 rounded-lg border bg-background/70 p-3 sm:flex-row sm:items-center sm:justify-between">
+					<p className="text-xs text-muted-foreground">
+						Envia um evento <code className="font-mono">webhook.test</code> para validar o
+						orquestrador configurado no perfil salvo.
+					</p>
+					<Button
+						type="button"
+						variant="outline"
+						size="sm"
+						className="shrink-0 gap-2"
+						disabled={isTestingWebhook || !webhookUrl.trim()}
+						onClick={handleTestWebhook}
+					>
+						{isTestingWebhook ? (
+							<Loader2 className="h-4 w-4 animate-spin" />
+						) : (
+							<Send className="h-4 w-4" />
+						)}
+						Testar webhook
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

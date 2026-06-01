@@ -384,6 +384,8 @@ function EditorContent() {
 				whatsapp={whatsapp}
 				leadFormActive={leadFormActive}
 				leadFormTitle={leadFormTitle}
+				profileId={profile.id}
+				hasUnsavedChanges={isDirty}
 				onDisplayNameChange={handleDisplayNameChange}
 				onBioChange={handleBioChange}
 				onAvatarUrlChange={handleAvatarUrlChange}
