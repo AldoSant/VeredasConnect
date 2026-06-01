@@ -6,7 +6,7 @@ import { buildLeadCreatedEvent } from "@/lib/automation-events";
 import { db } from "@/lib/db";
 import { leads, profiles } from "@/lib/db/schema";
 import { appPath } from "@/lib/paths";
-import { dispatchWebhookEvent } from "@/lib/webhook-dispatcher";
+import { dispatchAndRecordWebhook } from "@/lib/webhook-deliveries";
 
 // GET: list all leads for dashboard CRM
 export async function GET(request: NextRequest) {
@@ -105,7 +105,12 @@ export async function POST(request: NextRequest) {
 				publicUrl: `${origin}${appPath(`/${profile.slug}`)}`,
 			});
 
-			dispatchWebhookEvent({ url: profile.webhookUrl, payload: event }).then((delivery) => {
+			dispatchAndRecordWebhook({
+				profileId: profile.id,
+				event: event.event,
+				url: profile.webhookUrl,
+				payload: event,
+			}).then((delivery) => {
 				if (!delivery.delivered) {
 					console.warn("Lead webhook delivery failed", {
 						profileId: profile.id,

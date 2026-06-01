@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { clickEvents, linkItems, profiles } from "@/lib/db/schema";
 import { appPath } from "@/lib/paths";
 import { buildVisitorContext } from "@/lib/visitor-context";
-import { dispatchWebhookEvent } from "@/lib/webhook-dispatcher";
+import { dispatchAndRecordWebhook } from "@/lib/webhook-deliveries";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params;
@@ -51,7 +51,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 				visitor: buildVisitorContext(request),
 				publicUrl: `${request.nextUrl.origin}${appPath(`/${profile.slug}`)}`,
 			});
-			const delivery = await dispatchWebhookEvent({ url: profile.webhookUrl, payload });
+			const delivery = await dispatchAndRecordWebhook({
+				profileId: profile.id,
+				event: payload.event,
+				url: profile.webhookUrl,
+				payload,
+			});
 			if (!delivery.delivered) {
 				console.warn("Link webhook delivery failed", {
 					linkId: link.id,

@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 import { appPath } from "@/lib/paths";
 import { apiRateLimiter } from "@/lib/rate-limit";
-import { dispatchWebhookEvent } from "@/lib/webhook-dispatcher";
+import { dispatchAndRecordWebhook } from "@/lib/webhook-deliveries";
 
 export async function POST(request: NextRequest) {
 	const ip = request.headers.get("x-forwarded-for") ?? "anonymous";
@@ -41,7 +41,12 @@ export async function POST(request: NextRequest) {
 			profile,
 			publicUrl: `${request.nextUrl.origin}${appPath(`/${profile.slug}`)}`,
 		});
-		const delivery = await dispatchWebhookEvent({ url: profile.webhookUrl, payload });
+		const delivery = await dispatchAndRecordWebhook({
+			profileId: profile.id,
+			event: payload.event,
+			url: profile.webhookUrl,
+			payload,
+		});
 
 		return NextResponse.json({ delivery, payload });
 	} catch (_error) {

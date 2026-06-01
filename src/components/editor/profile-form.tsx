@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { apiPath } from "@/lib/paths";
+import { WebhookDeliveryHistory } from "./webhook-delivery-history";
 
 interface ProfileFormProps {
 	displayName: string;
@@ -61,6 +62,7 @@ export function ProfileForm({
 	onWebhookUrlChange,
 }: ProfileFormProps) {
 	const [isTestingWebhook, setIsTestingWebhook] = useState(false);
+	const [deliveryHistoryRefreshKey, setDeliveryHistoryRefreshKey] = useState(0);
 
 	const handleTestWebhook = async () => {
 		if (!webhookUrl.trim()) {
@@ -88,6 +90,7 @@ export function ProfileForm({
 
 			const status = data?.delivery?.status ? ` Status ${data.delivery.status}.` : "";
 			toast.success(`Evento webhook.test entregue com sucesso.${status}`);
+			setDeliveryHistoryRefreshKey((key) => key + 1);
 		} catch (error) {
 			toast.error(error instanceof Error ? error.message : "Falha ao testar o webhook.");
 		} finally {
@@ -256,6 +259,7 @@ export function ProfileForm({
 						Testar webhook
 					</Button>
 				</div>
+				<WebhookDeliveryHistory profileId={profileId} refreshKey={deliveryHistoryRefreshKey} />
 			</div>
 		</div>
 	);

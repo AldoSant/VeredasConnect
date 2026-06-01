@@ -231,6 +231,34 @@ export const clickEvents = sqliteTable("click_events", {
 	referrer: text("referrer"),
 });
 
+export const webhookDeliveries = sqliteTable(
+	"webhook_deliveries",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		profileId: text("profile_id")
+			.notNull()
+			.references(() => profiles.id, { onDelete: "cascade" }),
+		event: text("event").notNull(),
+		status: text("status").notNull(),
+		httpStatus: integer("http_status"),
+		error: text("error"),
+		endpointHost: text("endpoint_host").notNull(),
+		endpointPath: text("endpoint_path"),
+		durationMs: integer("duration_ms").notNull().default(0),
+		createdAt: integer("created_at")
+			.$defaultFn(() => Date.now())
+			.notNull(),
+	},
+	(table) => ({
+		profileIdx: index("webhook_delivery_profile_idx").on(table.profileId),
+		eventIdx: index("webhook_delivery_event_idx").on(table.event),
+		statusIdx: index("webhook_delivery_status_idx").on(table.status),
+		createdAtIdx: index("webhook_delivery_created_at_idx").on(table.createdAt),
+	}),
+);
+
 // NFC Physical Cards Management
 export const nfcCards = sqliteTable("nfc_cards", {
 	id: text("id")
@@ -287,6 +315,7 @@ export const profilesRelations = relations(profiles, ({ many, one }) => ({
 	leads: many(leads),
 	nfcCards: many(nfcCards),
 	testimonials: many(testimonials),
+	webhookDeliveries: many(webhookDeliveries),
 	organization: one(organizations, {
 		fields: [profiles.organizationId],
 		references: [organizations.id],
@@ -324,6 +353,13 @@ export const clickEventsRelations = relations(clickEvents, ({ one }) => ({
 	linkItem: one(linkItems, {
 		fields: [clickEvents.linkItemId],
 		references: [linkItems.id],
+	}),
+}));
+
+export const webhookDeliveriesRelations = relations(webhookDeliveries, ({ one }) => ({
+	profile: one(profiles, {
+		fields: [webhookDeliveries.profileId],
+		references: [profiles.id],
 	}),
 }));
 
