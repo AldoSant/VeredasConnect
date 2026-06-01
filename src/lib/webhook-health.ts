@@ -43,13 +43,13 @@ function average(values: number[]) {
 function getRecommendation(status: WebhookHealthStatus) {
 	switch (status) {
 		case "healthy":
-			return "Automação saudável. Manter monitoramento preventivo.";
+			return "Tudo certo. Os últimos envios chegaram normalmente.";
 		case "degraded":
-			return "Monitorar falhas recentes e validar se o orquestrador está respondendo de forma estável.";
+			return "Alguns envios não chegaram. Confira o endereço configurado e envie um novo teste.";
 		case "failing":
-			return "Revisar o endpoint, credenciais e disponibilidade do orquestrador antes de depender desta automação.";
+			return "A automação não está entregando. Verifique o endereço e teste novamente antes de depender dela.";
 		case "idle":
-			return "Enviar um teste para validar a automação antes de colocá-la em produção.";
+			return "Envie um teste para confirmar se a automação está pronta.";
 	}
 }
 

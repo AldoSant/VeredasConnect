@@ -48,7 +48,7 @@ describe("webhook health summary", () => {
 		expect(summary.status).toBe("degraded");
 		expect(summary.successRate).toBe(67);
 		expect(summary.lastFailure?.httpStatus).toBe(500);
-		expect(summary.recommendation).toContain("Monitorar");
+		expect(summary.recommendation).toContain("Alguns envios não chegaram");
 	});
 
 	it("flags failing automation when failure rate is high", () => {
@@ -60,7 +60,7 @@ describe("webhook health summary", () => {
 
 		expect(summary.status).toBe("failing");
 		expect(summary.failureRate).toBe(67);
-		expect(summary.recommendation).toContain("Revisar o endpoint");
+		expect(summary.recommendation).toContain("não está entregando");
 	});
 
 	it("reports idle when there are no deliveries", () => {
@@ -69,6 +69,6 @@ describe("webhook health summary", () => {
 		expect(summary.status).toBe("idle");
 		expect(summary.totalDeliveries).toBe(0);
 		expect(summary.successRate).toBe(0);
-		expect(summary.recommendation).toContain("Enviar um teste");
+		expect(summary.recommendation).toContain("Envie um teste");
 	});
 });

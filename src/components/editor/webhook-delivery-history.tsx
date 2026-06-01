@@ -3,6 +3,7 @@
 import { AlertCircle, CheckCircle2, Clock3, Loader2, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { getDeliveryStatusCopy } from "@/lib/automation-copy";
 import { apiPath } from "@/lib/paths";
 
 interface WebhookDeliverySummary {
@@ -71,9 +72,9 @@ export function WebhookDeliveryHistory({ profileId, refreshKey = 0 }: WebhookDel
 		<div className="rounded-lg border bg-background/70 p-3">
 			<div className="flex items-center justify-between gap-3">
 				<div>
-					<p className="text-sm font-medium">Histórico de entregas</p>
+					<p className="text-sm font-medium">Últimos envios</p>
 					<p className="text-xs text-muted-foreground">
-						Últimos eventos enviados ao orquestrador. Sem expor URL completa ou segredos.
+						Acompanhe se a automação recebeu os testes e eventos recentes.
 					</p>
 				</div>
 				<Button
@@ -103,44 +104,53 @@ export function WebhookDeliveryHistory({ profileId, refreshKey = 0 }: WebhookDel
 			{!error && !isLoading && deliveries.length === 0 && (
 				<div className="mt-3 flex items-center gap-2 rounded-md border border-dashed p-3 text-xs text-muted-foreground">
 					<Clock3 className="h-4 w-4" />
-					Nenhuma entrega registrada ainda. Envie um teste ou aguarde eventos reais.
+					Nenhum envio registrado ainda. Envie um teste para confirmar a automação.
 				</div>
 			)}
 
 			{deliveries.length > 0 && (
 				<div className="mt-3 space-y-2">
-					{deliveries.map((delivery) => (
-						<div key={delivery.id} className="rounded-md border p-3 text-xs">
-							<div className="flex items-start justify-between gap-3">
-								<div className="min-w-0">
-									<div className="flex items-center gap-2">
-										{delivery.isSuccess ? (
-											<CheckCircle2 className="h-4 w-4 text-emerald-500" />
-										) : (
-											<AlertCircle className="h-4 w-4 text-destructive" />
-										)}
-										<span className="font-mono font-medium">{delivery.event}</span>
+					{deliveries.map((delivery) => {
+						const statusCopy = getDeliveryStatusCopy(delivery.isSuccess);
+
+						return (
+							<div key={delivery.id} className="rounded-md border p-3 text-xs">
+								<div className="flex items-start justify-between gap-3">
+									<div className="min-w-0">
+										<div className="flex items-center gap-2">
+											{delivery.isSuccess ? (
+												<CheckCircle2 className="h-4 w-4 text-emerald-500" />
+											) : (
+												<AlertCircle className="h-4 w-4 text-destructive" />
+											)}
+											<span className="font-medium">{delivery.event}</span>
+										</div>
+										<p className="mt-1 truncate text-muted-foreground">
+											Destino configurado: {delivery.endpoint}
+										</p>
 									</div>
-									<p className="mt-1 truncate text-muted-foreground">{delivery.endpoint}</p>
+									<span
+										className={`rounded-full px-2 py-0.5 font-medium ${
+											delivery.isSuccess
+												? "bg-emerald-500/10 text-emerald-600"
+												: "bg-destructive/10 text-destructive"
+										}`}
+									>
+										{statusCopy.label}
+									</span>
 								</div>
-								<span
-									className={`rounded-full px-2 py-0.5 font-medium ${
-										delivery.isSuccess
-											? "bg-emerald-500/10 text-emerald-600"
-											: "bg-destructive/10 text-destructive"
-									}`}
-								>
-									{delivery.httpStatus ?? delivery.status}
-								</span>
+								<div className="mt-2 flex flex-wrap gap-2 text-muted-foreground">
+									<span>{formatRelativeTime(delivery.createdAt)}</span>
+								</div>
+								{delivery.error && (
+									<p className="mt-2 text-destructive">
+										Não conseguimos confirmar a entrega. Confira o endereço da automação e teste
+										novamente.
+									</p>
+								)}
 							</div>
-							<div className="mt-2 flex flex-wrap gap-2 text-muted-foreground">
-								<span>{delivery.durationMs} ms</span>
-								<span>•</span>
-								<span>{formatRelativeTime(delivery.createdAt)}</span>
-							</div>
-							{delivery.error && <p className="mt-2 text-destructive">{delivery.error}</p>}
-						</div>
-					))}
+						);
+					})}
 				</div>
 			)}
 		</div>

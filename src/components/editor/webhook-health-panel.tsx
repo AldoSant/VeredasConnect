@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { getAutomationHealthCopy } from "@/lib/automation-copy";
 import { apiPath } from "@/lib/paths";
 
 type WebhookHealthStatus = "healthy" | "degraded" | "failing" | "idle";
@@ -39,27 +40,20 @@ interface WebhookHealthPanelProps {
 	refreshKey?: number;
 }
 
-const statusConfig: Record<
-	WebhookHealthStatus,
-	{ label: string; className: string; icon: typeof Activity }
-> = {
+const statusConfig: Record<WebhookHealthStatus, { className: string; icon: typeof Activity }> = {
 	healthy: {
-		label: "Saudável",
 		className: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700",
 		icon: CheckCircle2,
 	},
 	degraded: {
-		label: "Atenção",
 		className: "border-amber-500/30 bg-amber-500/10 text-amber-700",
 		icon: AlertTriangle,
 	},
 	failing: {
-		label: "Falhando",
 		className: "border-destructive/30 bg-destructive/10 text-destructive",
 		icon: AlertTriangle,
 	},
 	idle: {
-		label: "Sem dados",
 		className: "border-muted bg-muted/40 text-muted-foreground",
 		icon: Clock3,
 	},
@@ -97,15 +91,16 @@ export function WebhookHealthPanel({ profileId, refreshKey = 0 }: WebhookHealthP
 	}, [loadHealth, refreshKey]);
 
 	const config = statusConfig[health?.status ?? "idle"];
+	const copy = getAutomationHealthCopy(health?.status ?? "idle");
 	const StatusIcon = config.icon;
 
 	return (
 		<div className="rounded-lg border bg-background/70 p-3">
 			<div className="flex items-center justify-between gap-3">
 				<div>
-					<p className="text-sm font-medium">Saúde das automações</p>
+					<p className="text-sm font-medium">Status da automação</p>
 					<p className="text-xs text-muted-foreground">
-						Resumo das últimas entregas para operação e suporte.
+						Veja se os envios estão chegando corretamente.
 					</p>
 				</div>
 				<Button
@@ -121,7 +116,7 @@ export function WebhookHealthPanel({ profileId, refreshKey = 0 }: WebhookHealthP
 					) : (
 						<RefreshCw className="h-4 w-4" />
 					)}
-					Atualizar
+					Atualizar status
 				</Button>
 			</div>
 
@@ -135,37 +130,42 @@ export function WebhookHealthPanel({ profileId, refreshKey = 0 }: WebhookHealthP
 				<div className="flex items-center justify-between gap-3">
 					<div className="flex items-center gap-2">
 						<StatusIcon className="h-4 w-4" />
-						<span className="text-sm font-semibold">{config.label}</span>
+						<span className="text-sm font-semibold">{copy.label}</span>
 					</div>
-					<span className="text-xs">{health?.totalDeliveries ?? 0} entregas</span>
+					<span className="text-xs">{health?.totalDeliveries ?? 0} envios recentes</span>
 				</div>
-				<p className="mt-2 text-xs">
-					{health?.recommendation ??
-						"Enviar um teste para validar a automação antes de colocá-la em produção."}
-				</p>
+				<p className="mt-2 text-xs">{health?.recommendation ?? copy.description}</p>
 			</div>
 
 			<div className="mt-3 grid gap-2 sm:grid-cols-3">
 				<div className="rounded-md border p-2">
-					<p className="text-[11px] uppercase text-muted-foreground">Sucesso</p>
+					<p className="text-[11px] uppercase text-muted-foreground">Funcionaram</p>
 					<p className="text-lg font-semibold">{health?.successRate ?? 0}%</p>
 				</div>
 				<div className="rounded-md border p-2">
-					<p className="text-[11px] uppercase text-muted-foreground">Falhas</p>
+					<p className="text-[11px] uppercase text-muted-foreground">Não entregues</p>
 					<p className="text-lg font-semibold">{health?.failureRate ?? 0}%</p>
 				</div>
 				<div className="rounded-md border p-2">
-					<p className="text-[11px] uppercase text-muted-foreground">Latência média</p>
-					<p className="text-lg font-semibold">{health?.averageDurationMs ?? 0} ms</p>
+					<p className="text-[11px] uppercase text-muted-foreground">Último envio</p>
+					<p className="text-lg font-semibold">
+						{health?.lastDeliveryAt
+							? new Date(health.lastDeliveryAt).toLocaleTimeString("pt-BR", {
+									hour: "2-digit",
+									minute: "2-digit",
+								})
+							: "—"}
+					</p>
 				</div>
 			</div>
 
 			{health?.lastFailure && (
 				<div className="mt-3 rounded-md border border-destructive/20 p-2 text-xs">
-					<p className="font-medium text-destructive">Última falha: {health.lastFailure.event}</p>
+					<p className="font-medium text-destructive">
+						Último problema: {health.lastFailure.event}
+					</p>
 					<p className="mt-1 text-muted-foreground">
-						Status {health.lastFailure.httpStatus ?? "sem resposta"} —{" "}
-						{health.lastFailure.error ?? "erro não informado"}
+						Não conseguimos confirmar a entrega. Confira a configuração e envie um novo teste.
 					</p>
 				</div>
 			)}
@@ -177,9 +177,9 @@ export function WebhookHealthPanel({ profileId, refreshKey = 0 }: WebhookHealthP
 							key={item.event}
 							className="flex items-center justify-between rounded-md bg-muted/40 px-2 py-1"
 						>
-							<span className="font-mono">{item.event}</span>
+							<span>{item.event}</span>
 							<span className="text-muted-foreground">
-								{item.total} total · {item.failures} falhas
+								{item.total} envios · {item.failures} não entregues
 							</span>
 						</div>
 					))}
