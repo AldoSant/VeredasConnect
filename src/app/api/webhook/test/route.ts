@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 import { getHierarchyFilter, getSessionScope } from "@/lib/auth/rbac";
 import { buildWebhookTestEvent } from "@/lib/automation-events";
+import { validateAutomationUrl } from "@/lib/automation-url";
 import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 import { appPath } from "@/lib/paths";
@@ -34,7 +35,15 @@ export async function POST(request: NextRequest) {
 		}
 
 		if (!profile.webhookUrl) {
-			return NextResponse.json({ error: "Webhook URL is not configured" }, { status: 400 });
+			return NextResponse.json(
+				{ error: "Configure o endereço da automação antes de testar." },
+				{ status: 400 },
+			);
+		}
+
+		const urlValidation = validateAutomationUrl(profile.webhookUrl);
+		if (!urlValidation.ok) {
+			return NextResponse.json({ error: urlValidation.error }, { status: 400 });
 		}
 
 		const payload = buildWebhookTestEvent({

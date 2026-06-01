@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { getAutomationSetupSteps } from "@/lib/automation-setup-state";
+import { validateAutomationUrl } from "@/lib/automation-url";
 import { apiPath } from "@/lib/paths";
 import { WebhookDeliveryHistory } from "./webhook-delivery-history";
 import { WebhookHealthPanel } from "./webhook-health-panel";
@@ -72,13 +73,14 @@ export function ProfileForm({
 	});
 
 	const handleTestWebhook = async () => {
-		if (!webhookUrl.trim()) {
-			toast.error("Configure a URL do webhook antes de enviar um teste.");
+		const urlValidation = validateAutomationUrl(webhookUrl);
+		if (!urlValidation.ok) {
+			toast.error(urlValidation.error);
 			return;
 		}
 
 		if (hasUnsavedChanges) {
-			toast.error("Salve as alterações antes de testar o webhook.");
+			toast.error("Salve as alterações antes de enviar o teste.");
 			return;
 		}
 
@@ -92,14 +94,13 @@ export function ProfileForm({
 			const data = await res.json().catch(() => null);
 
 			if (!res.ok) {
-				throw new Error(data?.error ?? "Não foi possível testar o webhook.");
+				throw new Error(data?.error ?? "Não foi possível enviar o teste.");
 			}
 
-			const status = data?.delivery?.status ? ` Status ${data.delivery.status}.` : "";
-			toast.success(`Evento webhook.test entregue com sucesso.${status}`);
+			toast.success("Teste enviado com sucesso. Confira o status abaixo.");
 			setDeliveryHistoryRefreshKey((key) => key + 1);
 		} catch (error) {
-			toast.error(error instanceof Error ? error.message : "Falha ao testar o webhook.");
+			toast.error(error instanceof Error ? error.message : "Falha ao enviar o teste.");
 		} finally {
 			setIsTestingWebhook(false);
 		}
