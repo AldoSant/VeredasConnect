@@ -87,46 +87,46 @@ const journeySteps = [
 
 export default function Home() {
 	return (
-		<main className="relative min-h-screen overflow-hidden bg-[#020308] text-[#f7f8f8] selection:bg-indigo-500/30">
+		<main className="relative min-h-screen overflow-hidden bg-[#fbf7ef] text-[#251b12] selection:bg-amber-200/70">
 			<div className="pointer-events-none absolute inset-0 overflow-hidden">
-				<div className="absolute left-1/2 top-[-20rem] h-[42rem] w-[42rem] -translate-x-1/2 rounded-full bg-indigo-600/25 blur-[150px]" />
-				<div className="absolute bottom-[8%] left-[-18rem] h-[38rem] w-[38rem] rounded-full bg-emerald-500/10 blur-[130px]" />
-				<div className="absolute right-[-18rem] top-[25%] h-[40rem] w-[40rem] rounded-full bg-violet-600/15 blur-[150px]" />
-				<div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(circle_at_top,black,transparent_72%)]" />
+				<div className="absolute left-1/2 top-[-20rem] h-[42rem] w-[42rem] -translate-x-1/2 rounded-full bg-amber-200/55 blur-[150px]" />
+				<div className="absolute bottom-[8%] left-[-18rem] h-[38rem] w-[38rem] rounded-full bg-[#d7c08c]/30 blur-[130px]" />
+				<div className="absolute right-[-18rem] top-[25%] h-[40rem] w-[40rem] rounded-full bg-[#f0dfbf]/45 blur-[150px]" />
+				<div className="absolute inset-0 bg-[linear-gradient(rgba(120,83,38,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(120,83,38,0.055)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(circle_at_top,black,transparent_72%)]" />
 			</div>
 
-			<header className="relative z-10 border-white/10 border-b bg-black/20 backdrop-blur-2xl">
+			<header className="relative z-10 border-[#eadcc5] border-b bg-[#fffaf1]/80 shadow-[0_1px_30px_rgba(86,61,31,0.06)] backdrop-blur-2xl">
 				<nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
 					<Link href="/" className="group flex items-center gap-3" aria-label="Veredas Connect">
-						<div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-							<Layers3 className="h-5 w-5 text-indigo-300 transition-transform group-hover:-rotate-6" />
+						<div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-[#eadcc5] bg-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+							<Layers3 className="h-5 w-5 text-[#9a6a2f] transition-transform group-hover:-rotate-6" />
 						</div>
 						<div>
 							<p className="font-semibold text-sm tracking-tight">Veredas Connect</p>
-							<p className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/35">
+							<p className="text-[10px] font-medium uppercase tracking-[0.22em] text-[#8d7459]">
 								Digital identity OS
 							</p>
 						</div>
 					</Link>
 
-					<div className="hidden items-center gap-8 text-sm font-medium text-white/55 md:flex">
-						<a href="#valor" className="transition-colors hover:text-white">
+					<div className="hidden items-center gap-8 text-sm font-medium text-[#6a5845] md:flex">
+						<a href="#valor" className="transition-colors hover:text-[#251b12]">
 							Valor
 						</a>
-						<a href="#experiencia" className="transition-colors hover:text-white">
+						<a href="#experiencia" className="transition-colors hover:text-[#251b12]">
 							Experiência
 						</a>
-						<a href="#planos" className="transition-colors hover:text-white">
+						<a href="#planos" className="transition-colors hover:text-[#251b12]">
 							Planos
 						</a>
-						<a href="#operacao" className="transition-colors hover:text-white">
+						<a href="#operacao" className="transition-colors hover:text-[#251b12]">
 							Operação
 						</a>
 					</div>
 
 					<Link
 						href="/login"
-						className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-white/80 transition-all hover:border-indigo-300/40 hover:bg-white/[0.08] hover:text-white"
+						className="rounded-full border border-[#eadcc5] bg-white/70 px-5 py-2.5 text-sm font-semibold text-[#3b2a1d] transition-all hover:border-[#c9a86a] hover:bg-white hover:text-[#251b12]"
 					>
 						Entrar
 					</Link>
@@ -135,16 +135,16 @@ export default function Home() {
 
 			<section className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 py-20 md:py-28 lg:grid-cols-[1.02fr_0.98fr] lg:py-32">
 				<div className="space-y-10 text-center lg:text-left">
-					<div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-indigo-200 shadow-[0_0_40px_rgba(99,102,241,0.22)] backdrop-blur-xl">
+					<div className="inline-flex items-center gap-2 rounded-full border border-[#eadcc5] bg-white/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9a6a2f] shadow-[0_0_40px_rgba(99,102,241,0.22)] backdrop-blur-xl">
 						<Sparkles className="h-4 w-4" />
 						Estado da arte para networking premium
 					</div>
 
 					<div className="space-y-6">
-						<h1 className="text-balance text-5xl font-semibold leading-[0.96] tracking-[-0.06em] text-white md:text-7xl xl:text-8xl">
+						<h1 className="text-balance text-5xl font-semibold leading-[0.96] tracking-[-0.06em] text-[#24170d] md:text-7xl xl:text-8xl">
 							Sua presença digital, organizada para gerar confiança e negócios.
 						</h1>
-						<p className="mx-auto max-w-2xl text-lg leading-8 text-white/62 md:text-xl lg:mx-0">
+						<p className="mx-auto max-w-2xl text-lg leading-8 text-[#685744] md:text-xl lg:mx-0">
 							O Veredas Connect une link inteligente, cartão digital, QR/NFC, captação de leads e
 							analytics em uma experiência premium para profissionais e marcas que precisam ser
 							lembrados.
@@ -155,10 +155,10 @@ export default function Home() {
 						{outcomes.map((outcome) => (
 							<div
 								key={outcome}
-								className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-xl"
+								className="rounded-2xl border border-[#eadcc5] bg-white/70 p-4 backdrop-blur-xl"
 							>
-								<CheckCircle2 className="mb-3 h-4 w-4 text-emerald-300" />
-								<p className="text-sm leading-6 text-white/70">{outcome}</p>
+								<CheckCircle2 className="mb-3 h-4 w-4 text-[#8f7a35]" />
+								<p className="text-sm leading-6 text-[#675644]">{outcome}</p>
 							</div>
 						))}
 					</div>
@@ -166,15 +166,15 @@ export default function Home() {
 					<div className="flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
 						<Link
 							href="/signup"
-							className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-white px-8 py-4 font-semibold text-black shadow-[0_24px_80px_rgba(255,255,255,0.16)] transition-all hover:-translate-y-0.5 hover:shadow-[0_30px_100px_rgba(129,140,248,0.25)] active:translate-y-0 sm:w-auto"
+							className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-[#2c2117] px-8 py-4 font-semibold text-[#fffaf1] shadow-[0_24px_80px_rgba(255,255,255,0.16)] transition-all hover:-translate-y-0.5 hover:shadow-[0_30px_100px_rgba(129,140,248,0.25)] active:translate-y-0 sm:w-auto"
 						>
 							Criar minha página premium
 							<ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-							<span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-black/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+							<span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 						</Link>
 						<a
 							href="#experiencia"
-							className="flex w-full items-center justify-center gap-3 rounded-2xl border border-indigo-300/20 bg-indigo-400/[0.06] px-8 py-4 font-semibold text-indigo-100 transition-all hover:border-indigo-200/40 hover:bg-indigo-400/[0.1] sm:w-auto"
+							className="flex w-full items-center justify-center gap-3 rounded-2xl border border-[#c9a86a]/50 bg-white/65 px-8 py-4 font-semibold text-[#5c4025] transition-all hover:border-[#b98e45] hover:bg-white sm:w-auto"
 						>
 							Ver experiência
 							<ExternalLink className="h-4 w-4" />
@@ -183,30 +183,30 @@ export default function Home() {
 				</div>
 
 				<div className="relative mx-auto w-full max-w-xl">
-					<div className="absolute -inset-6 rounded-[3rem] bg-gradient-to-tr from-indigo-500/20 via-violet-500/10 to-emerald-400/20 blur-3xl" />
-					<div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#08090a]/85 shadow-2xl backdrop-blur-3xl">
-						<div className="flex items-center justify-between border-white/10 border-b px-5 py-4">
+					<div className="absolute -inset-6 rounded-[3rem] bg-gradient-to-tr from-[#ead09a]/45 via-[#fff7e8]/50 to-[#c9d7bb]/35 blur-3xl" />
+					<div className="relative overflow-hidden rounded-[2rem] border border-[#e5d2b3] bg-[#fffaf3]/90 shadow-2xl backdrop-blur-3xl">
+						<div className="flex items-center justify-between border-[#eadcc5] border-b px-5 py-4">
 							<div className="flex gap-2">
 								<span className="h-3 w-3 rounded-full border border-red-400/30 bg-red-400/20" />
 								<span className="h-3 w-3 rounded-full border border-yellow-400/30 bg-yellow-400/20" />
 								<span className="h-3 w-3 rounded-full border border-emerald-400/30 bg-emerald-400/20" />
 							</div>
-							<div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
+							<div className="rounded-full border border-[#eadcc5] bg-white/70 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#251b12]/40">
 								veredasinc.com.br/connect/ana
 							</div>
 						</div>
 
 						<div className="grid gap-5 p-5 sm:p-7">
-							<div className="rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-6 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+							<div className="rounded-[1.6rem] border border-[#eadcc5] bg-white/70 p-6 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
 								<div className="relative mx-auto mb-5 h-24 w-24">
-									<div className="absolute inset-[-4px] rounded-full bg-gradient-to-r from-indigo-400 via-violet-400 to-emerald-300 opacity-70 blur-sm" />
-									<div className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white/20 bg-[#111318] text-3xl font-semibold text-white/60">
+									<div className="absolute inset-[-4px] rounded-full bg-gradient-to-r from-[#c9a05f] via-[#e5c788] to-[#9aa66b] opacity-70 blur-sm" />
+									<div className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-[#ead6b7] bg-[#f4ead9] text-3xl font-semibold text-[#9a6a2f]">
 										AV
 									</div>
 								</div>
 								<h2 className="text-2xl font-semibold tracking-tight">Ana Veredas</h2>
-								<p className="mt-2 text-sm text-indigo-200">Consultora em negócios digitais</p>
-								<p className="mx-auto mt-4 max-w-xs text-sm leading-6 text-white/55">
+								<p className="mt-2 text-sm text-[#9a6a2f]">Consultora em negócios digitais</p>
+								<p className="mx-auto mt-4 max-w-xs text-sm leading-6 text-[#6a5845]">
 									Estratégia, presença e conexões de alto valor para empresas locais em expansão.
 								</p>
 							</div>
@@ -219,31 +219,31 @@ export default function Home() {
 								].map((title, index) => (
 									<div
 										key={title}
-										className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition-all hover:-translate-y-0.5 hover:border-indigo-300/30 hover:bg-white/[0.07]"
+										className="group flex items-center justify-between rounded-2xl border border-[#eadcc5] bg-white/70 p-4 transition-all hover:-translate-y-0.5 hover:border-[#c9a86a] hover:bg-white"
 									>
 										<div className="flex items-center gap-3">
-											<div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.06] text-xs font-semibold text-white/45">
+											<div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f5ead7] text-xs font-semibold text-[#a07942]">
 												0{index + 1}
 											</div>
-											<span className="text-sm font-semibold text-white/85">{title}</span>
+											<span className="text-sm font-semibold text-[#332316]">{title}</span>
 										</div>
-										<ExternalLink className="h-4 w-4 text-white/25 transition-colors group-hover:text-indigo-200" />
+										<ExternalLink className="h-4 w-4 text-[#b79a70] transition-colors group-hover:text-[#9a6a2f]" />
 									</div>
 								))}
 							</div>
 
 							<div className="grid grid-cols-2 gap-3">
-								<div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-									<QrCode className="mb-4 h-5 w-5 text-indigo-200" />
+								<div className="rounded-2xl border border-[#eadcc5] bg-white/70 p-4">
+									<QrCode className="mb-4 h-5 w-5 text-[#9a6a2f]" />
 									<p className="text-sm font-semibold">QR/NFC-ready</p>
-									<p className="mt-1 text-xs text-white/45">
+									<p className="mt-1 text-xs text-[#806b55]">
 										Pronto para eventos e cartões físicos.
 									</p>
 								</div>
-								<div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-									<DownloadCloud className="mb-4 h-5 w-5 text-emerald-200" />
+								<div className="rounded-2xl border border-[#eadcc5] bg-white/70 p-4">
+									<DownloadCloud className="mb-4 h-5 w-5 text-[#8f7a35]" />
 									<p className="text-sm font-semibold">vCard instantâneo</p>
-									<p className="mt-1 text-xs text-white/45">Contato salvo sem fricção.</p>
+									<p className="mt-1 text-xs text-[#806b55]">Contato salvo sem fricção.</p>
 								</div>
 							</div>
 						</div>
@@ -252,16 +252,16 @@ export default function Home() {
 			</section>
 
 			<section id="valor" className="relative z-10 mx-auto max-w-7xl px-6 py-12 md:py-20">
-				<div className="grid gap-4 rounded-[2rem] border border-white/10 bg-white/[0.03] p-4 backdrop-blur-xl md:grid-cols-3 md:p-6">
+				<div className="grid gap-4 rounded-[2rem] border border-[#eadcc5] bg-white/55 p-4 backdrop-blur-xl md:grid-cols-3 md:p-6">
 					{trustMetrics.map((metric) => (
 						<div
 							key={metric.label}
-							className="rounded-[1.5rem] border border-white/10 bg-black/20 p-6 text-center"
+							className="rounded-[1.5rem] border border-[#eadcc5] bg-white/75 p-6 text-center shadow-[0_20px_70px_rgba(86,61,31,0.08)]"
 						>
-							<p className="text-4xl font-semibold tracking-[-0.05em] text-white md:text-5xl">
+							<p className="text-4xl font-semibold tracking-[-0.05em] text-[#24170d] md:text-5xl">
 								{metric.value}
 							</p>
-							<p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/38">
+							<p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#8d7459]">
 								{metric.label}
 							</p>
 						</div>
@@ -271,7 +271,7 @@ export default function Home() {
 
 			<section id="experiencia" className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-24">
 				<div className="mx-auto mb-12 max-w-3xl text-center">
-					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-indigo-200">
+					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[#9a6a2f]">
 						Experiência premium ponta a ponta
 					</p>
 					<h2 className="text-balance text-4xl font-semibold tracking-[-0.045em] md:text-6xl">
@@ -285,13 +285,13 @@ export default function Home() {
 						return (
 							<div
 								key={feature.title}
-								className="group rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-6 transition-all hover:-translate-y-1 hover:border-indigo-300/30 hover:bg-white/[0.06]"
+								className="group rounded-[1.6rem] border border-[#eadcc5] bg-white/70 p-6 transition-all hover:-translate-y-1 hover:border-[#c9a86a] hover:bg-white"
 							>
-								<div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-indigo-200">
+								<div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#eadcc5] bg-[#fffaf1] text-[#9a6a2f]">
 									<Icon className="h-5 w-5" />
 								</div>
 								<h3 className="text-xl font-semibold tracking-tight">{feature.title}</h3>
-								<p className="mt-4 text-sm leading-7 text-white/55">{feature.description}</p>
+								<p className="mt-4 text-sm leading-7 text-[#6a5845]">{feature.description}</p>
 							</div>
 						);
 					})}
@@ -300,13 +300,13 @@ export default function Home() {
 
 			<section id="planos" className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-24">
 				<div className="mx-auto mb-12 max-w-3xl text-center">
-					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">
+					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[#8f7a35]">
 						Produto comercial
 					</p>
 					<h2 className="text-balance text-4xl font-semibold tracking-[-0.045em] md:text-6xl">
 						Planos claros para vender página, cartão e automação como pacote.
 					</h2>
-					<p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/58">
+					<p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#685744]">
 						A base já nasce pronta para automação: cada lead, clique ou vCard pode acionar
 						qualificação, roteamento, follow-up, sincronização e relatórios sem prender a plataforma
 						a uma única ferramenta.
@@ -319,34 +319,34 @@ export default function Home() {
 							key={plan.name}
 							className={`relative rounded-[1.8rem] border p-6 transition-all hover:-translate-y-1 ${
 								plan.highlighted
-									? "border-indigo-300/45 bg-indigo-400/[0.09] shadow-[0_24px_90px_rgba(99,102,241,0.22)]"
-									: "border-white/10 bg-white/[0.035]"
+									? "border-[#c9a86a] bg-[#fff8e8] shadow-[0_28px_90px_rgba(154,106,47,0.18)]"
+									: "border-[#eadcc5] bg-white/75"
 							}`}
 						>
 							{plan.highlighted ? (
-								<div className="absolute right-5 top-5 rounded-full border border-indigo-200/25 bg-indigo-300/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo-100">
+								<div className="absolute right-5 top-5 rounded-full border border-[#c9a86a]/50 bg-[#f1dfbd] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7b552d]">
 									Mais vendável
 								</div>
 							) : null}
 							<h3 className="text-2xl font-semibold tracking-tight">{plan.name}</h3>
-							<p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-white">
+							<p className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-[#251b12]">
 								{plan.price}
 							</p>
-							<p className="mt-4 min-h-16 text-sm leading-7 text-white/58">{plan.description}</p>
+							<p className="mt-4 min-h-16 text-sm leading-7 text-[#685744]">{plan.description}</p>
 							<Link
 								href="/signup"
 								className={`mt-6 inline-flex w-full items-center justify-center rounded-2xl px-5 py-3 font-semibold transition-all ${
 									plan.highlighted
-										? "bg-white text-black hover:-translate-y-0.5"
-										: "border border-white/10 bg-black/20 text-white/78 hover:bg-black/30 hover:text-white"
+										? "bg-[#2c2117] text-[#fffaf1] hover:-translate-y-0.5"
+										: "border border-[#d8c2a0] bg-white/70 text-[#3b2a1d] hover:bg-white hover:text-[#251b12]"
 								}`}
 							>
 								{plan.cta}
 							</Link>
 							<ul className="mt-6 space-y-3">
 								{plan.features.map((feature) => (
-									<li key={feature} className="flex gap-3 text-sm leading-6 text-white/68">
-										<CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-300" />
+									<li key={feature} className="flex gap-3 text-sm leading-6 text-[#251b12]/68">
+										<CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-[#8f7a35]" />
 										<span>{feature}</span>
 									</li>
 								))}
@@ -355,13 +355,13 @@ export default function Home() {
 					))}
 				</div>
 
-				<div className="mt-6 flex flex-col gap-4 rounded-[1.6rem] border border-white/10 bg-black/25 p-6 text-white/65 backdrop-blur-xl md:flex-row md:items-center md:justify-between">
+				<div className="mt-6 flex flex-col gap-4 rounded-[1.6rem] border border-[#eadcc5] bg-white/70 p-6 text-[#685744] backdrop-blur-xl md:flex-row md:items-center md:justify-between">
 					<div className="flex gap-4">
-						<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200/20 bg-emerald-300/10">
-							<Webhook className="h-5 w-5 text-emerald-200" />
+						<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#b4a26b]/30 bg-[#f2ead2]">
+							<Webhook className="h-5 w-5 text-[#8f7a35]" />
 						</div>
 						<div>
-							<p className="font-semibold text-white">Automação aberta, padrão de mercado</p>
+							<p className="font-semibold text-[#251b12]">Automação aberta, padrão de mercado</p>
 							<p className="mt-1 text-sm leading-6">
 								O Veredas envia eventos JSON estáveis para um orquestrador; a operação escolhe as
 								ferramentas de relacionamento, dados, comunicação e análise que já usa.
@@ -370,7 +370,7 @@ export default function Home() {
 					</div>
 					<Link
 						href="/login"
-						className="shrink-0 rounded-2xl bg-white px-5 py-3 font-semibold text-black"
+						className="shrink-0 rounded-2xl bg-[#2c2117] px-5 py-3 font-semibold text-[#fffaf1]"
 					>
 						Configurar integração
 					</Link>
@@ -379,13 +379,13 @@ export default function Home() {
 
 			<section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-24">
 				<div className="mx-auto mb-12 max-w-3xl text-center">
-					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-indigo-200">
+					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[#9a6a2f]">
 						Automação comercial aberta
 					</p>
 					<h2 className="text-balance text-4xl font-semibold tracking-[-0.045em] md:text-6xl">
 						Receitas de automação sem vendor lock-in.
 					</h2>
-					<p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/58">
+					<p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#685744]">
 						Em vez de vender integração com uma ferramenta específica, o produto organiza os fluxos
 						que empresas esperam: qualificar, rotear, acompanhar, sincronizar e medir.
 					</p>
@@ -395,17 +395,19 @@ export default function Home() {
 					{automationRecipes.map((recipe) => (
 						<div
 							key={recipe.id}
-							className="rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-6 transition-all hover:-translate-y-1 hover:border-emerald-300/25 hover:bg-white/[0.06]"
+							className="rounded-[1.6rem] border border-[#eadcc5] bg-white/70 p-6 transition-all hover:-translate-y-1 hover:border-[#c9a86a] hover:bg-white"
 						>
 							<div className="mb-5 flex items-center justify-between gap-3">
-								<span className="rounded-full border border-emerald-200/20 bg-emerald-300/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-100">
+								<span className="rounded-full border border-[#b4a26b]/30 bg-[#f2ead2] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-100">
 									{recipe.lifecycleStage}
 								</span>
-								<span className="text-xs text-white/35">{recipe.events.join(" + ")}</span>
+								<span className="text-xs text-[#8d7459]">{recipe.events.join(" + ")}</span>
 							</div>
-							<h3 className="text-xl font-semibold tracking-tight text-white">{recipe.title}</h3>
-							<p className="mt-3 text-sm leading-7 text-white/55">{recipe.summary}</p>
-							<p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-white/35">
+							<h3 className="text-xl font-semibold tracking-tight text-[#251b12]">
+								{recipe.title}
+							</h3>
+							<p className="mt-3 text-sm leading-7 text-[#6a5845]">{recipe.summary}</p>
+							<p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7459]">
 								Categoria: {recipe.destinationCategory}
 							</p>
 						</div>
@@ -417,14 +419,14 @@ export default function Home() {
 				id="operacao"
 				className="relative z-10 mx-auto grid max-w-7xl gap-6 px-6 py-16 md:py-24 lg:grid-cols-[0.9fr_1.1fr]"
 			>
-				<div className="rounded-[2rem] border border-white/10 bg-white/[0.035] p-8 md:p-10">
-					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-200">
+				<div className="rounded-[2rem] border border-[#eadcc5] bg-white/70 p-8 md:p-10">
+					<p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[#8f7a35]">
 						Fluxo operacional
 					</p>
 					<h2 className="text-4xl font-semibold tracking-[-0.045em] md:text-5xl">
 						Do primeiro clique ao relacionamento recorrente.
 					</h2>
-					<p className="mt-6 text-base leading-8 text-white/58">
+					<p className="mt-6 text-base leading-8 text-[#685744]">
 						A plataforma foi pensada para unir estética, velocidade e utilidade real: publicar
 						rápido, compartilhar em qualquer canal e aprender com os dados.
 					</p>
@@ -432,7 +434,7 @@ export default function Home() {
 						{useCases.map((item) => (
 							<span
 								key={item}
-								className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/62"
+								className="rounded-full border border-[#eadcc5] bg-white/70 px-4 py-2 text-sm text-[#685744]"
 							>
 								{item}
 							</span>
@@ -444,14 +446,14 @@ export default function Home() {
 					{journeySteps.map((step) => (
 						<div
 							key={step.label}
-							className="flex gap-5 rounded-[1.6rem] border border-white/10 bg-white/[0.035] p-6 transition-all hover:bg-white/[0.055]"
+							className="flex gap-5 rounded-[1.6rem] border border-[#eadcc5] bg-white/70 p-6 transition-all hover:bg-white/[0.055]"
 						>
-							<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-black/30 text-sm font-semibold text-indigo-200">
+							<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#eadcc5] bg-[#f5ead7] text-sm font-semibold text-[#9a6a2f]">
 								{step.label}
 							</div>
 							<div>
 								<h3 className="text-xl font-semibold tracking-tight">{step.title}</h3>
-								<p className="mt-2 text-sm leading-7 text-white/55">{step.description}</p>
+								<p className="mt-2 text-sm leading-7 text-[#6a5845]">{step.description}</p>
 							</div>
 						</div>
 					))}
@@ -459,28 +461,28 @@ export default function Home() {
 			</section>
 
 			<section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:py-24">
-				<div className="overflow-hidden rounded-[2.2rem] border border-white/10 bg-gradient-to-br from-white/[0.08] via-indigo-500/[0.08] to-emerald-400/[0.06] p-8 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] md:p-14">
-					<div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06]">
-						<Zap className="h-6 w-6 text-indigo-100" />
+				<div className="overflow-hidden rounded-[2.2rem] border border-[#eadcc5] bg-gradient-to-br from-white via-[#fff4dd] to-[#eef0df] p-8 text-center shadow-[0_28px_90px_rgba(86,61,31,0.10)] md:p-14">
+					<div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#eadcc5] bg-[#f6ead8]">
+						<Zap className="h-6 w-6 text-[#7b552d]" />
 					</div>
 					<h2 className="mx-auto max-w-3xl text-balance text-4xl font-semibold tracking-[-0.045em] md:text-6xl">
 						Publique uma presença que parece premium porque funciona como premium.
 					</h2>
-					<p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/60">
+					<p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#251b12]/60">
 						Comece com uma página, evolua para operação comercial e transforme cada ponto de contato
 						em relacionamento mensurável.
 					</p>
 					<div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
 						<Link
 							href="/signup"
-							className="inline-flex items-center justify-center gap-3 rounded-2xl bg-white px-8 py-4 font-semibold text-black transition-all hover:-translate-y-0.5"
+							className="inline-flex items-center justify-center gap-3 rounded-2xl bg-[#2c2117] px-8 py-4 font-semibold text-[#fffaf1] transition-all hover:-translate-y-0.5"
 						>
 							Começar agora
 							<ArrowRight className="h-5 w-5" />
 						</Link>
 						<Link
 							href="/login"
-							className="inline-flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-black/20 px-8 py-4 font-semibold text-white/78 transition-all hover:bg-black/30 hover:text-white"
+							className="inline-flex items-center justify-center gap-3 rounded-2xl border border-[#d8c2a0] bg-white/70 px-8 py-4 font-semibold text-[#3b2a1d] transition-all hover:bg-white hover:text-[#251b12]"
 						>
 							Acessar plataforma
 						</Link>
@@ -488,7 +490,7 @@ export default function Home() {
 				</div>
 			</section>
 
-			<footer className="relative z-10 border-white/10 border-t px-6 py-10 text-center text-sm text-white/40">
+			<footer className="relative z-10 border-[#eadcc5] border-t px-6 py-10 text-center text-sm text-[#251b12]/40">
 				<div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 md:flex-row">
 					<p>© 2026 Veredas Connect. Identidade digital premium para conexões reais.</p>
 					<div className="flex items-center gap-5">

@@ -48,7 +48,7 @@ export default function TestimonialsPage() {
 	return (
 		<Suspense
 			fallback={
-				<div className="flex h-[80vh] items-center justify-center bg-zinc-950">
+				<div className="flex h-[80vh] items-center justify-center bg-[#fbf7ef]">
 					<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
 				</div>
 			}
@@ -124,19 +124,19 @@ function TestimonialsContent() {
 
 	if (loading) {
 		return (
-			<div className="flex h-[80vh] items-center justify-center bg-zinc-950">
+			<div className="flex h-[80vh] items-center justify-center bg-[#fbf7ef]">
 				<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
 			</div>
 		);
 	}
 
 	return (
-		<div className="min-h-screen bg-zinc-950 p-6 text-white">
+		<div className="min-h-screen bg-[#fbf7ef] p-6 text-[#251b12]">
 			<div className="mx-auto max-w-5xl space-y-8">
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 					<div>
 						<h1 className="text-3xl font-bold tracking-tight">Prova Social</h1>
-						<p className="text-white/60">
+						<p className="text-[#6a5845]">
 							Gerencie os depoimentos que aparecem no seu perfil público.
 						</p>
 					</div>
@@ -211,11 +211,11 @@ function TestimonialsContent() {
 				</div>
 
 				{items.length === 0 && (
-					<Card className="bg-white/5 border-white/10">
+					<Card className="bg-white/75 border-[#eadcc5]">
 						<CardContent className="flex flex-col items-center justify-center p-16 text-center">
-							<Quote className="mb-4 h-12 w-12 text-white/20" />
+							<Quote className="mb-4 h-12 w-12 text-[#d4bd9e]" />
 							<h3 className="mb-2 text-xl font-bold">Sem depoimentos ainda</h3>
-							<p className="text-white/60">
+							<p className="text-[#6a5845]">
 								Adicione depoimentos de clientes para aumentar sua credibilidade.
 							</p>
 						</CardContent>
@@ -226,18 +226,18 @@ function TestimonialsContent() {
 					{items.map((item) => (
 						<Card
 							key={item.id}
-							className={`border-white/10 transition-all ${item.isVisible ? "bg-white/5" : "bg-black/40 opacity-60"}`}
+							className={`border-[#eadcc5] transition-all ${item.isVisible ? "bg-white/75" : "bg-[#efe2cf] opacity-60"}`}
 						>
 							<CardContent className="p-5 space-y-3">
 								<div className="flex gap-1">
 									{[1, 2, 3, 4, 5].map((s) => (
 										<Star
 											key={s}
-											className={`h-4 w-4 ${s <= item.rating ? "fill-amber-400 text-amber-400" : "text-white/20"}`}
+											className={`h-4 w-4 ${s <= item.rating ? "fill-amber-400 text-amber-400" : "text-[#d4bd9e]"}`}
 										/>
 									))}
 								</div>
-								<p className="text-sm text-white/80 italic line-clamp-4">"{item.content}"</p>
+								<p className="text-sm text-[#3b2a1d] italic line-clamp-4">"{item.content}"</p>
 								<div className="flex items-center gap-3">
 									{item.authorAvatar ? (
 										<Image
@@ -254,17 +254,17 @@ function TestimonialsContent() {
 										</div>
 									)}
 									<div>
-										<p className="text-sm font-semibold text-white">{item.authorName}</p>
+										<p className="text-sm font-semibold text-[#251b12]">{item.authorName}</p>
 										{item.authorTitle && (
-											<p className="text-xs text-white/50">{item.authorTitle}</p>
+											<p className="text-xs text-[#8d7459]">{item.authorTitle}</p>
 										)}
 									</div>
 								</div>
-								<div className="flex gap-2 pt-1 border-t border-white/10">
+								<div className="flex gap-2 pt-1 border-t border-[#eadcc5]">
 									<Button
 										size="sm"
 										variant="ghost"
-										className="flex-1 gap-1 text-xs text-white/60 hover:text-white"
+										className="flex-1 gap-1 text-xs text-[#6a5845] hover:text-[#251b12]"
 										onClick={() => toggleVisible(item)}
 									>
 										{item.isVisible ? (

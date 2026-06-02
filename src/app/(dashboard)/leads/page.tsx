@@ -58,13 +58,13 @@ function StatusBadge({ status, onChange }: { status: Status; onChange: (s: Statu
 				<ChevronDown className="h-3 w-3 opacity-60" />
 			</button>
 			{open && (
-				<div className="absolute left-0 top-7 z-50 w-36 rounded-lg border border-white/10 bg-zinc-800 p-1 shadow-xl">
+				<div className="absolute left-0 top-7 z-50 w-36 rounded-lg border border-[#eadcc5] bg-white p-1 shadow-xl">
 					{(Object.entries(STATUS_CONFIG) as [Status, (typeof STATUS_CONFIG)[Status]][]).map(
 						([k, v]) => (
 							<button
 								type="button"
 								key={k}
-								className={`w-full rounded px-3 py-1.5 text-left text-xs font-bold hover:bg-white/10 ${v.color}`}
+								className={`w-full rounded px-3 py-1.5 text-left text-xs font-bold hover:bg-[#f6ead8] ${v.color}`}
 								onClick={() => {
 									onChange(k);
 									setOpen(false);
@@ -84,7 +84,7 @@ export default function LeadsPage() {
 	return (
 		<Suspense
 			fallback={
-				<div className="flex h-screen items-center justify-center bg-zinc-950">
+				<div className="flex h-screen items-center justify-center bg-[#fbf7ef]">
 					<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
 				</div>
 			}
@@ -172,30 +172,30 @@ function LeadsContent() {
 
 	if (loading) {
 		return (
-			<div className="flex h-[80vh] items-center justify-center bg-zinc-950">
+			<div className="flex h-[80vh] items-center justify-center bg-[#fbf7ef]">
 				<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
 			</div>
 		);
 	}
 
 	return (
-		<div className="min-h-screen bg-zinc-950 p-6 text-white">
+		<div className="min-h-screen bg-[#fbf7ef] p-6 text-[#251b12]">
 			<div className="mx-auto max-w-6xl space-y-8">
 				{/* Header */}
 				<div className="flex flex-wrap gap-4 items-center justify-between">
 					<div>
 						<h1 className="text-3xl font-bold">CRM de Leads</h1>
-						<p className="text-white/60">Gerencie, qualifique e exporte seus contatos.</p>
+						<p className="text-[#6a5845]">Gerencie, qualifique e exporte seus contatos.</p>
 					</div>
 					<div className="flex items-center gap-2">
-						<span className="rounded-full bg-white/10 px-3 py-1 text-sm font-semibold">
+						<span className="rounded-full bg-[#f6ead8] px-3 py-1 text-sm font-semibold">
 							{leads.length} total
 						</span>
 						<a href={apiPath("/api/leads/export")}>
 							<Button
 								variant="outline"
 								size="sm"
-								className="gap-1.5 border-white/20 text-white hover:bg-white/10"
+								className="gap-1.5 border-[#d8c2a0] text-[#251b12] hover:bg-[#f6ead8]"
 							>
 								<FileDown className="h-4 w-4" />
 								Exportar CSV
@@ -214,7 +214,7 @@ function LeadsContent() {
 							type="button"
 							key={k}
 							onClick={() => setFilterStatus(k as Status | "all")}
-							className={`rounded-full px-3 py-1 text-sm font-semibold transition-colors ${filterStatus === k ? "bg-violet-600 text-white" : "bg-white/10 text-white/70 hover:bg-white/20"}`}
+							className={`rounded-full px-3 py-1 text-sm font-semibold transition-colors ${filterStatus === k ? "bg-[#2c2117] text-[#fffaf1]" : "bg-[#f6ead8] text-[#5d4b3a] hover:bg-white"}`}
 						>
 							{label}
 							{k !== "all" && (
@@ -228,11 +228,13 @@ function LeadsContent() {
 
 				{/* Empty */}
 				{filtered.length === 0 && (
-					<Card className="bg-white/5 border-white/10">
+					<Card className="bg-white/75 border-[#eadcc5]">
 						<CardContent className="flex flex-col items-center justify-center p-16 text-center">
-							<MessageSquare className="mb-4 h-12 w-12 text-white/20" />
+							<MessageSquare className="mb-4 h-12 w-12 text-[#d4bd9e]" />
 							<h3 className="text-xl font-bold mb-2">Sem leads nessa categoria</h3>
-							<p className="text-white/60">Ative o formulário de captura no editor para começar.</p>
+							<p className="text-[#6a5845]">
+								Ative o formulário de captura no editor para começar.
+							</p>
 						</CardContent>
 					</Card>
 				)}
@@ -257,7 +259,7 @@ function LeadsContent() {
 						return (
 							<Card
 								key={lead.id}
-								className="border-white/10 bg-white/5 hover:bg-white/[0.07] transition-colors"
+								className="border-[#eadcc5] bg-white/75 hover:bg-white transition-colors"
 							>
 								<CardContent className="p-4 space-y-3">
 									{/* Top row */}
@@ -267,8 +269,8 @@ function LeadsContent() {
 												{lead.name[0].toUpperCase()}
 											</div>
 											<div>
-												<p className="font-bold text-white">{lead.name}</p>
-												<p className="text-xs text-white/50">
+												<p className="font-bold text-[#251b12]">{lead.name}</p>
+												<p className="text-xs text-[#8d7459]">
 													{format(new Date(lead.createdAt), "dd/MM/yyyy 'às' HH:mm", {
 														locale: ptBR,
 													})}
@@ -282,7 +284,7 @@ function LeadsContent() {
 									</div>
 
 									{/* Contact info */}
-									<div className="flex flex-wrap gap-4 text-sm text-white/70">
+									<div className="flex flex-wrap gap-4 text-sm text-[#5d4b3a]">
 										<a
 											href={`mailto:${lead.email}`}
 											className="flex items-center gap-1.5 hover:text-violet-300 transition-colors"
@@ -311,7 +313,7 @@ function LeadsContent() {
 
 									{/* Message */}
 									{lead.message && (
-										<p className="text-sm italic text-white/60 bg-black/20 rounded-lg px-3 py-2">
+										<p className="text-sm italic text-[#6a5845] bg-[#f6ead8] rounded-lg px-3 py-2">
 											"{lead.message}"
 										</p>
 									)}
@@ -332,7 +334,7 @@ function LeadsContent() {
 										))}
 										<div className="flex items-center gap-1">
 											<input
-												className="h-6 w-20 rounded-md bg-black/20 px-2 text-xs text-white outline-violet-500 border border-white/10"
+												className="h-6 w-20 rounded-md bg-[#f6ead8] px-2 text-xs text-[#251b12] outline-[#b98e45] border border-[#eadcc5]"
 												placeholder="+ tag"
 												value={tagInput[lead.id] ?? ""}
 												onChange={(e) => setTagInput((p) => ({ ...p, [lead.id]: e.target.value }))}
@@ -349,7 +351,7 @@ function LeadsContent() {
 									{/* Expand toggle */}
 									<button
 										type="button"
-										className="text-xs text-white/40 hover:text-white/70 transition-colors"
+										className="text-xs text-[#9b8268] hover:text-[#5d4b3a] transition-colors"
 										onClick={() => {
 											setExpandedId(isExpanded ? null : lead.id);
 											if (!isExpanded) setNotesDraft((p) => ({ ...p, [lead.id]: lead.notes }));
@@ -368,7 +370,7 @@ function LeadsContent() {
 												}
 												placeholder="Anotações internas sobre esse lead..."
 												rows={3}
-												className="border-white/10 bg-black/30 text-white placeholder:text-white/30 resize-none"
+												className="border-[#eadcc5] bg-[#f4ead9] text-[#251b12] placeholder:text-[#b29878] resize-none"
 											/>
 											<div className="flex justify-between">
 												<Button

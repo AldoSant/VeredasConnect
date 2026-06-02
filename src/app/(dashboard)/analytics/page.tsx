@@ -54,7 +54,7 @@ export default function AnalyticsPage() {
 	return (
 		<Suspense
 			fallback={
-				<div className="flex h-screen items-center justify-center bg-zinc-950">
+				<div className="flex h-screen items-center justify-center bg-[#fbf7ef]">
 					<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
 				</div>
 			}
@@ -88,7 +88,7 @@ function AnalyticsContent() {
 
 	if (loading) {
 		return (
-			<div className="flex h-[80vh] w-full items-center justify-center bg-zinc-950">
+			<div className="flex h-[80vh] w-full items-center justify-center bg-[#fbf7ef]">
 				<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
 			</div>
 		);
@@ -96,66 +96,66 @@ function AnalyticsContent() {
 
 	if (!data) {
 		return (
-			<div className="p-8 text-center text-white bg-zinc-950 min-h-screen">
+			<div className="p-8 text-center text-[#251b12] bg-[#fbf7ef] min-h-screen">
 				<p>Error loading analytics. Please try again later.</p>
 			</div>
 		);
 	}
 
 	return (
-		<div className="min-h-screen bg-zinc-950 p-6 text-white selection:bg-violet-500/30">
+		<div className="min-h-screen bg-[#fbf7ef] p-6 text-[#251b12] selection:bg-violet-500/30">
 			<div className="mx-auto max-w-7xl space-y-8">
 				{/* Header */}
 				<div className="flex flex-col gap-2">
-					<h1 className="text-3xl font-bold tracking-tight text-white">Painel de Conversão</h1>
-					<p className="text-white/60">
+					<h1 className="text-3xl font-bold tracking-tight text-[#251b12]">Painel de Conversão</h1>
+					<p className="text-[#6a5845]">
 						Entenda quais contatos, cartões e links estão gerando oportunidades reais.
 					</p>
 				</div>
 
 				{/* Stats Cards */}
 				<div className="grid gap-4 md:grid-cols-3">
-					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+					<Card className="bg-white/75 border-[#eadcc5] backdrop-blur-xl">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-white/70">Cliques Totais</CardTitle>
+							<CardTitle className="text-sm font-medium text-[#5d4b3a]">Cliques Totais</CardTitle>
 							<MousePointer2 className="h-4 w-4 text-violet-400" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-3xl font-bold text-white">{data.totalClicks}</div>
-							<p className="text-xs text-white/40 mt-1">Interações acumuladas</p>
+							<div className="text-3xl font-bold text-[#251b12]">{data.totalClicks}</div>
+							<p className="text-xs text-[#9b8268] mt-1">Interações acumuladas</p>
 						</CardContent>
 					</Card>
 
-					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+					<Card className="bg-white/75 border-[#eadcc5] backdrop-blur-xl">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-white/70">Links Ativos</CardTitle>
+							<CardTitle className="text-sm font-medium text-[#5d4b3a]">Links Ativos</CardTitle>
 							<Link2 className="h-4 w-4 text-fuchsia-400" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-3xl font-bold text-white">{data?.links?.length || 0}</div>
-							<p className="text-xs text-white/40 mt-1">Canais monitorados</p>
+							<div className="text-3xl font-bold text-[#251b12]">{data?.links?.length || 0}</div>
+							<p className="text-xs text-[#9b8268] mt-1">Canais monitorados</p>
 						</CardContent>
 					</Card>
 
-					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+					<Card className="bg-white/75 border-[#eadcc5] backdrop-blur-xl">
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium text-white/70">Últimos 30 dias</CardTitle>
+							<CardTitle className="text-sm font-medium text-[#5d4b3a]">Últimos 30 dias</CardTitle>
 							<Calendar className="h-4 w-4 text-blue-400" />
 						</CardHeader>
 						<CardContent>
-							<div className="text-3xl font-bold text-white">
+							<div className="text-3xl font-bold text-[#251b12]">
 								{data?.trends?.reduce((acc, curr) => acc + curr.count, 0) || 0}
 							</div>
-							<p className="text-xs text-white/40 mt-1">Interações recentes</p>
+							<p className="text-xs text-[#9b8268] mt-1">Interações recentes</p>
 						</CardContent>
 					</Card>
 				</div>
 
 				{/* Main Chart */}
-				<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+				<Card className="bg-white/75 border-[#eadcc5] backdrop-blur-xl">
 					<CardHeader>
 						<div className="flex items-center justify-between">
-							<CardTitle className="text-lg font-semibold text-white">
+							<CardTitle className="text-lg font-semibold text-[#251b12]">
 								Tendência de cliques
 							</CardTitle>
 							<TrendingUp className="h-5 w-5 text-emerald-400" />
@@ -210,7 +210,7 @@ function AnalyticsContent() {
 								</AreaChart>
 							</ResponsiveContainer>
 						) : (
-							<div className="flex h-full flex-col items-center justify-center text-white/20">
+							<div className="flex h-full flex-col items-center justify-center text-[#d4bd9e]">
 								<BarChart3 className="mb-4 h-12 w-12 opacity-20" />
 								<p>Not enough data to display trends yet.</p>
 							</div>
@@ -220,9 +220,9 @@ function AnalyticsContent() {
 
 				{/* Device and Browser Charts */}
 				<div className="grid gap-4 md:grid-cols-2">
-					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+					<Card className="bg-white/75 border-[#eadcc5] backdrop-blur-xl">
 						<CardHeader>
-							<CardTitle className="text-lg font-semibold text-white">Devices</CardTitle>
+							<CardTitle className="text-lg font-semibold text-[#251b12]">Devices</CardTitle>
 						</CardHeader>
 						<CardContent className="h-[300px]">
 							{data?.devices && data.devices.length > 0 ? (
@@ -252,16 +252,16 @@ function AnalyticsContent() {
 									</PieChart>
 								</ResponsiveContainer>
 							) : (
-								<div className="flex h-full items-center justify-center text-white/20">
+								<div className="flex h-full items-center justify-center text-[#d4bd9e]">
 									<p>No device data yet.</p>
 								</div>
 							)}
 						</CardContent>
 					</Card>
 
-					<Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+					<Card className="bg-white/75 border-[#eadcc5] backdrop-blur-xl">
 						<CardHeader>
-							<CardTitle className="text-lg font-semibold text-white">Browsers</CardTitle>
+							<CardTitle className="text-lg font-semibold text-[#251b12]">Browsers</CardTitle>
 						</CardHeader>
 						<CardContent className="h-[300px]">
 							{data?.browsers && data.browsers.length > 0 ? (
@@ -294,7 +294,7 @@ function AnalyticsContent() {
 									</PieChart>
 								</ResponsiveContainer>
 							) : (
-								<div className="flex h-full items-center justify-center text-white/20">
+								<div className="flex h-full items-center justify-center text-[#d4bd9e]">
 									<p>No browser data yet.</p>
 								</div>
 							)}
@@ -303,39 +303,41 @@ function AnalyticsContent() {
 				</div>
 
 				{/* Links Ranking */}
-				<Card className="bg-white/5 border-white/10 backdrop-blur-xl overflow-hidden">
+				<Card className="bg-white/75 border-[#eadcc5] backdrop-blur-xl overflow-hidden">
 					<CardHeader>
-						<CardTitle className="text-lg font-semibold text-white">Popular Links</CardTitle>
+						<CardTitle className="text-lg font-semibold text-[#251b12]">Popular Links</CardTitle>
 					</CardHeader>
 					<CardContent className="p-0">
 						<div className="divide-y divide-white/5">
 							{data?.links?.map((link, index) => (
 								<div
 									key={link.id}
-									className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
+									className="flex items-center justify-between p-4 hover:bg-white/75 transition-colors"
 								>
 									<div className="flex items-center gap-4">
-										<span className="text-white/20 font-bold text-lg w-6">{index + 1}</span>
+										<span className="text-[#d4bd9e] font-bold text-lg w-6">{index + 1}</span>
 										<div>
-											<p className="font-semibold text-white">{link.title || "Untitled Link"}</p>
-											<p className="text-xs text-white/40 truncate max-w-[200px] md:max-w-md">
+											<p className="font-semibold text-[#251b12]">
+												{link.title || "Untitled Link"}
+											</p>
+											<p className="text-xs text-[#9b8268] truncate max-w-[200px] md:max-w-md">
 												{link.url}
 											</p>
 										</div>
 									</div>
 									<div className="flex items-center gap-6">
 										<div className="text-right">
-											<p className="text-lg font-bold text-white">{link.clicks}</p>
-											<p className="text-[10px] uppercase tracking-widest text-white/30 font-bold">
+											<p className="text-lg font-bold text-[#251b12]">{link.clicks}</p>
+											<p className="text-[10px] uppercase tracking-widest text-[#b29878] font-bold">
 												Clicks
 											</p>
 										</div>
-										<ArrowUpRight className="h-4 w-4 text-white/40" />
+										<ArrowUpRight className="h-4 w-4 text-[#9b8268]" />
 									</div>
 								</div>
 							))}
 							{(!data?.links || data.links.length === 0) && (
-								<div className="p-8 text-center text-white/40">No clicks recorded yet.</div>
+								<div className="p-8 text-center text-[#9b8268]">No clicks recorded yet.</div>
 							)}
 						</div>
 					</CardContent>

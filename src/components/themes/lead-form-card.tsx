@@ -61,12 +61,12 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 
 	if (isSuccess) {
 		return (
-			<div className="mt-8 flex w-full flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-8 text-center backdrop-blur-lg">
+			<div className="mt-8 flex w-full flex-col items-center justify-center rounded-2xl border border-[#eadcc5] bg-white/80 p-8 text-center backdrop-blur-lg">
 				<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
 					<Send className="h-6 w-6" />
 				</div>
-				<h3 className="mb-2 text-xl font-bold text-white">Pronto!</h3>
-				<p className="text-sm text-white/70">
+				<h3 className="mb-2 text-xl font-bold text-[#251b12]">Pronto!</h3>
+				<p className="text-sm text-[#6a5845]">
 					Recebemos seu contato. O responsável retornará pelo canal informado.
 				</p>
 			</div>
@@ -74,9 +74,9 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 	}
 
 	return (
-		<div className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-lg">
-			<h3 className="mb-4 text-center text-lg font-bold text-white">{title}</h3>
-			<p className="mb-5 text-center text-sm text-white/60">
+		<div className="mt-8 w-full rounded-2xl border border-[#eadcc5] bg-white/80 p-6 backdrop-blur-lg">
+			<h3 className="mb-4 text-center text-lg font-bold text-[#251b12]">{title}</h3>
+			<p className="mb-5 text-center text-sm text-[#6a5845]">
 				Deixe seus dados para receber retorno comercial sem perder o contato.
 			</p>
 			<form onSubmit={handleSubmit} className="space-y-4">
@@ -85,7 +85,7 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 						name="name"
 						placeholder="Seu Nome completo"
 						required
-						className="border-white/10 bg-black/20 text-white placeholder:text-white/40 focus-visible:ring-violet-500"
+						className="border-[#eadcc5] bg-white/85 text-[#251b12] placeholder:text-[#8d7459] focus-visible:ring-[#c9a86a]"
 					/>
 				</div>
 				<div>
@@ -94,7 +94,7 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 						type="email"
 						placeholder="E-mail profissional"
 						required
-						className="border-white/10 bg-black/20 text-white placeholder:text-white/40 focus-visible:ring-violet-500"
+						className="border-[#eadcc5] bg-white/85 text-[#251b12] placeholder:text-[#8d7459] focus-visible:ring-[#c9a86a]"
 					/>
 				</div>
 				<div className="grid grid-cols-2 gap-4">
@@ -103,14 +103,14 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 							name="phone"
 							type="tel"
 							placeholder="WhatsApp/Telefone"
-							className="border-white/10 bg-black/20 text-white placeholder:text-white/40 focus-visible:ring-violet-500"
+							className="border-[#eadcc5] bg-white/85 text-[#251b12] placeholder:text-[#8d7459] focus-visible:ring-[#c9a86a]"
 						/>
 					</div>
 					<div>
 						<Input
 							name="company"
 							placeholder="Empresa"
-							className="border-white/10 bg-black/20 text-white placeholder:text-white/40 focus-visible:ring-violet-500"
+							className="border-[#eadcc5] bg-white/85 text-[#251b12] placeholder:text-[#8d7459] focus-visible:ring-[#c9a86a]"
 						/>
 					</div>
 				</div>
@@ -119,10 +119,10 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 						name="message"
 						placeholder="Sua Mensagem..."
 						rows={3}
-						className="border-white/10 bg-black/20 text-white placeholder:text-white/40 focus-visible:ring-violet-500 resize-none"
+						className="resize-none border-[#eadcc5] bg-white/85 text-[#251b12] placeholder:text-[#8d7459] focus-visible:ring-[#c9a86a]"
 					/>
 				</div>
-				<label className="flex items-start gap-3 rounded-xl border border-white/10 bg-black/20 p-3 text-xs leading-relaxed text-white/60">
+				<label className="flex items-start gap-3 rounded-xl border border-[#eadcc5] bg-[#fffaf1] p-3 text-xs leading-relaxed text-[#6a5845]">
 					<input
 						type="checkbox"
 						name="lgpdConsent"
@@ -136,7 +136,7 @@ export function LeadFormCard({ slug, title }: LeadFormCardProps) {
 				<Button
 					type="submit"
 					disabled={isSubmitting}
-					className="w-full bg-white text-black hover:bg-white/90 font-bold"
+					className="w-full bg-[#2c2117] font-bold text-[#fffaf1] hover:bg-[#3b2a1d]"
 				>
 					{isSubmitting ? (
 						<>

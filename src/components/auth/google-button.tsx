@@ -21,7 +21,7 @@ export function GoogleButton() {
 			type="button"
 			onClick={handleGoogleSignIn}
 			disabled={loading}
-			className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/25 active:scale-[0.98] disabled:opacity-60"
+			className="flex w-full items-center justify-center gap-3 rounded-xl border border-[#eadcc5] bg-white/85 px-4 py-3 text-sm font-semibold text-[#251b12] shadow-[0_12px_35px_rgba(86,61,31,0.06)] backdrop-blur-sm transition-all hover:border-[#c9a86a] hover:bg-white active:scale-[0.98] disabled:opacity-60"
 		>
 			{/* Google Logo SVG */}
 			{!loading && (
@@ -44,7 +44,7 @@ export function GoogleButton() {
 					/>
 				</svg>
 			)}
-			{loading ? "Redirecting..." : "Continue with Google"}
+			{loading ? "Redirecionando..." : "Continuar com Google"}
 		</button>
 	);
 }

@@ -67,8 +67,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-	themeColor: "#020308",
-	colorScheme: "dark light",
+	themeColor: "#fbf7ef",
+	colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -78,7 +78,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="pt-BR" suppressHydrationWarning>
-			<body className={`${outfit.variable} bg-gray-50 font-sans antialiased dark:bg-gray-950`}>
+			<body className={`${outfit.variable} bg-[#fbf7ef] font-sans antialiased`}>
 				<SessionProvider basePath={apiPath("/api/auth")}>{children}</SessionProvider>
 				<Toaster />
 			</body>

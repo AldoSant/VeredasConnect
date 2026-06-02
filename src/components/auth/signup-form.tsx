@@ -8,11 +8,11 @@ import { slugSchema } from "@/lib/validations";
 import { SlugInput } from "./slug-input";
 
 const inputClass =
-	"w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-all focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 backdrop-blur-sm";
+	"w-full rounded-xl border border-[#eadcc5] bg-white/80 px-4 py-3 text-sm text-[#251b12] placeholder:text-[#251b12]/30 outline-none transition-all focus:border-[#b98e45] focus:ring-2 focus:ring-[#c9a86a]/20 backdrop-blur-sm";
 
-const labelClass = "block text-xs font-medium text-white/60 mb-1.5 tracking-wide";
+const labelClass = "block text-xs font-medium text-[#6a5845] mb-1.5 tracking-wide";
 
-const fieldError = (msg: string) => <p className="mt-1.5 text-xs text-red-400">{msg}</p>;
+const fieldError = (msg: string) => <p className="mt-1.5 text-xs text-red-600">{msg}</p>;
 
 interface FormErrors {
 	name?: string;
@@ -34,13 +34,13 @@ export function SignupForm() {
 	const validate = (): boolean => {
 		const newErrors: FormErrors = {};
 
-		if (!name.trim()) newErrors.name = "Name is required";
-		if (!email.trim()) newErrors.email = "Email is required";
-		if (password.length < 8) newErrors.password = "Password must be at least 8 characters";
+		if (!name.trim()) newErrors.name = "Informe seu nome";
+		if (!email.trim()) newErrors.email = "Informe seu e-mail";
+		if (password.length < 8) newErrors.password = "A senha precisa ter pelo menos 8 caracteres";
 
 		const slugResult = slugSchema.safeParse(slug);
 		if (!slugResult.success) {
-			newErrors.slug = slugResult.error.issues[0]?.message ?? "Invalid username";
+			newErrors.slug = slugResult.error.issues[0]?.message ?? "Endereço inválido";
 		}
 
 		setErrors(newErrors);
@@ -65,7 +65,7 @@ export function SignupForm() {
 			});
 
 			if (res?.error) {
-				setErrors({ general: "Failed to create account" });
+				setErrors({ general: "Não foi possível criar a conta" });
 				setLoading(false);
 				return;
 			}
@@ -79,7 +79,7 @@ export function SignupForm() {
 
 			if (!profileRes.ok) {
 				const data = await profileRes.json();
-				setErrors({ general: data.error || "Failed to create profile" });
+				setErrors({ general: data.error || "Não foi possível criar o perfil" });
 				setLoading(false);
 				return;
 			}
@@ -88,7 +88,7 @@ export function SignupForm() {
 			router.push("/editor");
 			router.refresh();
 		} catch {
-			setErrors({ general: "Something went wrong. Please try again." });
+			setErrors({ general: "Não foi possível concluir. Tente novamente." });
 			setLoading(false);
 		}
 	};
@@ -97,7 +97,7 @@ export function SignupForm() {
 		<form onSubmit={handleSubmit} className="space-y-4">
 			<div>
 				<label htmlFor="signup-name" className={labelClass}>
-					Your Name
+					Nome
 				</label>
 				<input
 					id="signup-name"
@@ -131,12 +131,12 @@ export function SignupForm() {
 
 			<div>
 				<label htmlFor="signup-password" className={labelClass}>
-					Password
+					Senha
 				</label>
 				<input
 					id="signup-password"
 					type="password"
-					placeholder="At least 8 characters"
+					placeholder="Pelo menos 8 caracteres"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					aria-label="Password"
@@ -149,7 +149,7 @@ export function SignupForm() {
 			<SlugInput value={slug} onChange={setSlug} error={errors.slug} />
 
 			{errors.general && (
-				<p className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-center text-sm text-red-400">
+				<p className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-center text-sm text-red-600">
 					{errors.general}
 				</p>
 			)}
@@ -157,9 +157,9 @@ export function SignupForm() {
 			<button
 				type="submit"
 				disabled={loading}
-				className="w-full rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-950 transition-all hover:bg-white/90 active:scale-[0.98] disabled:opacity-60"
+				className="w-full rounded-xl bg-[#2c2117] px-4 py-3 text-sm font-semibold text-[#fffaf1] transition-all hover:bg-[#3b2a1d] active:scale-[0.98] disabled:opacity-60"
 			>
-				{loading ? "Creating Account…" : "Create Account"}
+				{loading ? "Criando conta…" : "Criar conta"}
 			</button>
 		</form>
 	);

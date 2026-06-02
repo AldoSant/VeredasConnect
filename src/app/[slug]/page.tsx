@@ -71,7 +71,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
 		}));
 
 	return (
-		<main className="min-h-screen bg-black">
+		<main className="min-h-screen bg-[#fbf7ef]">
 			<PremiumTheme
 				slug={profile.slug}
 				displayName={profile.displayName}

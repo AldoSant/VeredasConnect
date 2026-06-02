@@ -6,9 +6,9 @@ import { useState } from "react";
 import { safeInternalPath } from "@/lib/paths";
 
 const inputClass =
-	"w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition-all focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 backdrop-blur-sm";
+	"w-full rounded-xl border border-[#eadcc5] bg-white/80 px-4 py-3 text-sm text-[#251b12] placeholder:text-[#251b12]/30 outline-none transition-all focus:border-[#b98e45] focus:ring-2 focus:ring-[#c9a86a]/20 backdrop-blur-sm";
 
-const labelClass = "block text-xs font-medium text-white/60 mb-1.5 tracking-wide";
+const labelClass = "block text-xs font-medium text-[#6a5845] mb-1.5 tracking-wide";
 
 export function LoginForm() {
 	const router = useRouter();
@@ -33,7 +33,7 @@ export function LoginForm() {
 			});
 
 			if (res?.error) {
-				setError("Invalid email or password");
+				setError("E-mail ou senha inválidos");
 				setLoading(false);
 				return;
 			}
@@ -41,7 +41,7 @@ export function LoginForm() {
 			router.push(callbackUrl);
 			router.refresh();
 		} catch {
-			setError("Something went wrong. Please try again.");
+			setError("Não foi possível entrar. Tente novamente.");
 			setLoading(false);
 		}
 	};
@@ -66,12 +66,12 @@ export function LoginForm() {
 
 			<div>
 				<label htmlFor="password" className={labelClass}>
-					Password
+					Senha
 				</label>
 				<input
 					id="password"
 					type="password"
-					placeholder="Your password"
+					placeholder="Sua senha"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					aria-label="Password"
@@ -81,7 +81,7 @@ export function LoginForm() {
 			</div>
 
 			{error && (
-				<p className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-center text-sm text-red-400">
+				<p className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-center text-sm text-red-600">
 					{error}
 				</p>
 			)}
@@ -89,9 +89,9 @@ export function LoginForm() {
 			<button
 				type="submit"
 				disabled={loading}
-				className="w-full rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-950 transition-all hover:bg-white/90 active:scale-[0.98] disabled:opacity-60"
+				className="w-full rounded-xl bg-[#2c2117] px-4 py-3 text-sm font-semibold text-[#fffaf1] transition-all hover:bg-[#3b2a1d] active:scale-[0.98] disabled:opacity-60"
 			>
-				{loading ? "Signing in…" : "Sign In"}
+				{loading ? "Entrando…" : "Entrar"}
 			</button>
 		</form>
 	);

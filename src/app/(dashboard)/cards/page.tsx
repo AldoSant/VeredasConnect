@@ -153,20 +153,20 @@ export default function CardsPage() {
 
 	if (loading) {
 		return (
-			<div className="flex h-[80vh] items-center justify-center bg-zinc-950">
+			<div className="flex h-[80vh] items-center justify-center bg-[#fbf7ef]">
 				<Loader2 className="h-8 w-8 animate-spin text-violet-500" />
 			</div>
 		);
 	}
 
 	return (
-		<div className="min-h-screen bg-zinc-950 p-6 text-white">
+		<div className="min-h-screen bg-[#fbf7ef] p-6 text-[#251b12]">
 			<div className="mx-auto max-w-5xl space-y-8">
 				{/* Header */}
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 					<div>
 						<h1 className="text-3xl font-bold tracking-tight">Gestão de Cartões NFC</h1>
-						<p className="text-white/60">
+						<p className="text-[#6a5845]">
 							Vincule chips físicos aos seus perfis. Altere o destino sem regravar o cartão.
 						</p>
 					</div>
@@ -227,7 +227,7 @@ export default function CardsPage() {
 				{/* Info Banner */}
 				<div className="rounded-xl border border-violet-500/30 bg-violet-500/10 p-4 flex items-start gap-3">
 					<Wifi className="h-5 w-5 shrink-0 text-violet-400 mt-0.5" />
-					<div className="text-sm text-white/80">
+					<div className="text-sm text-[#3b2a1d]">
 						<strong className="text-violet-300">Como funciona:</strong> Cada cartão tem uma URL
 						única (<code className="text-violet-300">/n/[id]</code>) para gravar no chip NFC. Quando
 						alguém aproxima o celular, o sistema redireciona automaticamente para o perfil
@@ -237,11 +237,11 @@ export default function CardsPage() {
 
 				{/* Empty State */}
 				{cards.length === 0 && (
-					<Card className="bg-white/5 border-white/10">
+					<Card className="bg-white/75 border-[#eadcc5]">
 						<CardContent className="flex flex-col items-center justify-center p-16 text-center">
-							<CreditCard className="mb-4 h-16 w-16 text-white/20" />
+							<CreditCard className="mb-4 h-16 w-16 text-[#d4bd9e]" />
 							<h3 className="mb-2 text-xl font-bold">Nenhum Cartão Registrado</h3>
-							<p className="mb-6 text-white/60">
+							<p className="mb-6 text-[#6a5845]">
 								Registre seu primeiro chip NFC para começar a gerenciar.
 							</p>
 						</CardContent>
@@ -253,7 +253,7 @@ export default function CardsPage() {
 					{cards.map((card) => (
 						<Card
 							key={card.id}
-							className={`border-white/10 transition-all ${card.isActive ? "bg-white/5" : "bg-black/40 opacity-60"}`}
+							className={`border-[#eadcc5] transition-all ${card.isActive ? "bg-white/75" : "bg-[#efe2cf] opacity-60"}`}
 						>
 							<CardHeader className="pb-3">
 								<div className="flex items-center justify-between">
@@ -275,27 +275,27 @@ export default function CardsPage() {
 							<CardContent className="space-y-4">
 								{/* Profile link */}
 								<div className="flex items-center gap-2 text-sm">
-									<Link2 className="h-4 w-4 text-white/40" />
+									<Link2 className="h-4 w-4 text-[#9b8268]" />
 									{card.profile ? (
-										<span className="text-white/80">
+										<span className="text-[#3b2a1d]">
 											Redirecionando para{" "}
 											<strong className="text-violet-400">/{card.profile.slug}</strong>
 										</span>
 									) : (
-										<span className="text-white/40 italic">Nenhum perfil vinculado</span>
+										<span className="text-[#9b8268] italic">Nenhum perfil vinculado</span>
 									)}
 								</div>
 
 								{/* Relink profile */}
 								<div className="space-y-1.5">
-									<span className="text-xs font-medium text-white/50 uppercase tracking-wider">
+									<span className="text-xs font-medium text-[#8d7459] uppercase tracking-wider">
 										Alterar Destino
 									</span>
 									<Select
 										value={card.profileId ?? ""}
 										onValueChange={(v) => handleRelink(card.id, v)}
 									>
-										<SelectTrigger className="border-white/10 bg-black/30 text-white text-sm h-8">
+										<SelectTrigger className="border-[#eadcc5] bg-[#f4ead9] text-[#251b12] text-sm h-8">
 											<SelectValue placeholder="Selecione perfil" />
 										</SelectTrigger>
 										<SelectContent>
@@ -310,14 +310,14 @@ export default function CardsPage() {
 
 								{/* NFC URL */}
 								<div className="flex items-center gap-2">
-									<code className="flex-1 truncate rounded bg-black/30 px-2 py-1 text-xs text-violet-300">
+									<code className="flex-1 truncate rounded bg-[#f4ead9] px-2 py-1 text-xs text-violet-300">
 										{window?.location?.origin ?? ""}
 										{appPath(`/n/${card.id}`)}
 									</code>
 									<Button
 										size="sm"
 										variant="ghost"
-										className="h-7 w-7 p-0 text-white/50 hover:text-white"
+										className="h-7 w-7 p-0 text-[#8d7459] hover:text-[#251b12]"
 										onClick={() => copyNfcUrl(card.id)}
 									>
 										{copiedId === card.id ? (
@@ -333,7 +333,7 @@ export default function CardsPage() {
 									<Button
 										size="sm"
 										variant="outline"
-										className="flex-1 gap-1.5 border-white/10 text-white/70 hover:bg-white/10 text-xs"
+										className="flex-1 gap-1.5 border-[#eadcc5] text-[#5d4b3a] hover:bg-[#f6ead8] text-xs"
 										onClick={() => handleToggle(card)}
 									>
 										<Power className="h-3.5 w-3.5" />

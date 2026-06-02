@@ -284,11 +284,11 @@ function EditorContent() {
 
 	if (!profile) {
 		return (
-			<div className="flex min-h-screen items-center justify-center p-6 bg-[#030303]">
+			<div className="flex min-h-screen items-center justify-center bg-[#fbf7ef] p-6">
 				<div className="w-full max-w-md space-y-8 text-center">
 					<div className="space-y-2">
-						<h1 className="text-4xl font-bold tracking-tighter text-white">Quase lá!</h1>
-						<p className="text-white/50 text-lg">
+						<h1 className="text-4xl font-bold tracking-tighter text-[#251b12]">Quase lá!</h1>
+						<p className="text-[#8d7459] text-lg">
 							Escolha o seu nome de usuário para criar sua página.
 						</p>
 					</div>
@@ -321,7 +321,7 @@ function EditorContent() {
 						className="space-y-4"
 					>
 						<div className="relative">
-							<span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-medium text-xs">
+							<span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#b29878] font-medium text-xs">
 								veredasinc.com.br/connect/
 							</span>
 							<input
@@ -329,13 +329,13 @@ function EditorContent() {
 								type="text"
 								placeholder="seu-nome"
 								required
-								className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-[100px] pr-4 text-white font-bold focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+								className="w-full bg-white/75 border border-[#eadcc5] rounded-2xl py-4 pl-[100px] pr-4 text-[#251b12] font-bold focus:ring-2 focus:ring-[#c9a86a] outline-none transition-all"
 							/>
 						</div>
 						<Button
 							type="submit"
 							disabled={isSaving}
-							className="w-full py-6 rounded-2xl text-lg font-bold bg-white text-black hover:bg-white/90"
+							className="w-full rounded-2xl bg-[#2c2117] py-6 text-lg font-bold text-[#fffaf1] hover:bg-[#3b2a1d]"
 						>
 							{isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : "Criar minha página"}
 						</Button>
