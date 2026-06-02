@@ -69,13 +69,11 @@ export function WebhookDeliveryHistory({ profileId, refreshKey = 0 }: WebhookDel
 	}, [loadDeliveries, refreshKey]);
 
 	return (
-		<div className="rounded-lg border bg-background/70 p-3">
+		<div className="rounded-lg border bg-background/60 p-3">
 			<div className="flex items-center justify-between gap-3">
-				<div>
+				<div className="space-y-0.5">
 					<p className="text-sm font-medium">Últimos envios</p>
-					<p className="text-xs text-muted-foreground">
-						Acompanhe se a automação recebeu os testes e eventos recentes.
-					</p>
+					<p className="text-xs text-muted-foreground">Histórico recente da integração.</p>
 				</div>
 				<Button
 					type="button"
@@ -118,7 +116,7 @@ export function WebhookDeliveryHistory({ profileId, refreshKey = 0 }: WebhookDel
 						});
 
 						return (
-							<div key={delivery.id} className="rounded-md border p-3 text-xs">
+							<div key={delivery.id} className="rounded-md border px-3 py-2 text-xs">
 								<div className="flex items-start justify-between gap-3">
 									<div className="min-w-0">
 										<div className="flex items-center gap-2">
@@ -134,7 +132,7 @@ export function WebhookDeliveryHistory({ profileId, refreshKey = 0 }: WebhookDel
 										</p>
 									</div>
 									<span
-										className={`rounded-full px-2 py-0.5 font-medium ${
+										className={`shrink-0 rounded-full px-2 py-0.5 font-medium ${
 											delivery.isSuccess
 												? "bg-emerald-500/10 text-emerald-600"
 												: "bg-destructive/10 text-destructive"
@@ -153,10 +151,7 @@ export function WebhookDeliveryHistory({ profileId, refreshKey = 0 }: WebhookDel
 									</p>
 								)}
 								{recoveryCopy && (
-									<div className="mt-2 rounded-md border border-amber-500/30 bg-amber-500/10 p-2 text-amber-700">
-										<p className="font-medium">{recoveryCopy.label}</p>
-										<p className="mt-1 text-muted-foreground">{recoveryCopy.description}</p>
-									</div>
+									<p className="mt-2 text-muted-foreground">{recoveryCopy.description}</p>
 								)}
 							</div>
 						);

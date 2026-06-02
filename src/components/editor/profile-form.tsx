@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Circle, Loader2, Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { getAutomationSetupSteps } from "@/lib/automation-setup-state";
 import { validateAutomationUrl } from "@/lib/automation-url";
 import { apiPath } from "@/lib/paths";
 import { WebhookDeliveryHistory } from "./webhook-delivery-history";
@@ -66,11 +65,6 @@ export function ProfileForm({
 }: ProfileFormProps) {
 	const [isTestingWebhook, setIsTestingWebhook] = useState(false);
 	const [deliveryHistoryRefreshKey, setDeliveryHistoryRefreshKey] = useState(0);
-	const automationSetupSteps = getAutomationSetupSteps({
-		webhookUrl,
-		hasUnsavedChanges,
-		hasRecentDelivery: deliveryHistoryRefreshKey > 0,
-	});
 
 	const handleTestWebhook = async () => {
 		const urlValidation = validateAutomationUrl(webhookUrl);
@@ -227,39 +221,14 @@ export function ProfileForm({
 			</div>
 
 			{/* Automation Section */}
-			<div className="rounded-xl border bg-muted/30 p-4 space-y-4">
-				<div className="space-y-1">
-					<h4 className="text-base font-semibold">Automação</h4>
-					<p className="text-sm text-muted-foreground">
-						Envie novos contatos e ações importantes para outra ferramenta, sem precisar copiar nada
-						manualmente.
-					</p>
-					<p className="text-xs text-muted-foreground">
-						Se você recebeu um endereço de automação, cole abaixo, salve e envie um teste.
-					</p>
-				</div>
-
-				<div className="grid gap-2 rounded-lg border bg-background/70 p-3 sm:grid-cols-2">
-					{automationSetupSteps.map((step) => {
-						const isDone = step.status === "done";
-						const isCurrent = step.status === "current";
-
-						return (
-							<div
-								key={step.label}
-								className={`flex items-center gap-2 text-xs ${
-									isCurrent ? "font-medium text-foreground" : "text-muted-foreground"
-								}`}
-							>
-								{isDone ? (
-									<CheckCircle2 className="h-4 w-4 text-emerald-500" />
-								) : (
-									<Circle className="h-4 w-4" />
-								)}
-								<span>{step.label}</span>
-							</div>
-						);
-					})}
+			<div className="rounded-xl border bg-muted/20 p-4 space-y-4">
+				<div className="flex items-start justify-between gap-4">
+					<div className="space-y-1">
+						<h4 className="text-base font-semibold">Automação</h4>
+						<p className="text-sm text-muted-foreground">
+							Conecte sua página a uma ferramenta externa e acompanhe se os envios estão ativos.
+						</p>
+					</div>
 				</div>
 
 				<div className="space-y-2">
@@ -275,11 +244,8 @@ export function ProfileForm({
 						ferramenta de automação.
 					</p>
 				</div>
-				<div className="flex flex-col gap-2 rounded-lg border bg-background/70 p-3 sm:flex-row sm:items-center sm:justify-between">
-					<p className="text-xs text-muted-foreground">
-						Depois de salvar, envie um teste para confirmar se a automação está recebendo os dados
-						corretamente.
-					</p>
+				<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+					<p className="text-xs text-muted-foreground">Salve antes de testar.</p>
 					<Button
 						type="button"
 						variant="outline"

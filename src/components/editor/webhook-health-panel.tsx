@@ -95,13 +95,11 @@ export function WebhookHealthPanel({ profileId, refreshKey = 0 }: WebhookHealthP
 	const StatusIcon = config.icon;
 
 	return (
-		<div className="rounded-lg border bg-background/70 p-3">
+		<div className="rounded-lg border bg-background/60 p-3">
 			<div className="flex items-center justify-between gap-3">
-				<div>
+				<div className="space-y-0.5">
 					<p className="text-sm font-medium">Status da automação</p>
-					<p className="text-xs text-muted-foreground">
-						Veja se os envios estão chegando corretamente.
-					</p>
+					<p className="text-xs text-muted-foreground">{copy.description}</p>
 				</div>
 				<Button
 					type="button"
@@ -126,7 +124,7 @@ export function WebhookHealthPanel({ profileId, refreshKey = 0 }: WebhookHealthP
 				</div>
 			)}
 
-			<div className={`mt-3 rounded-md border p-3 ${config.className}`}>
+			<div className={`mt-3 rounded-md border px-3 py-2 ${config.className}`}>
 				<div className="flex items-center justify-between gap-3">
 					<div className="flex items-center gap-2">
 						<StatusIcon className="h-4 w-4" />
@@ -137,26 +135,18 @@ export function WebhookHealthPanel({ profileId, refreshKey = 0 }: WebhookHealthP
 				<p className="mt-2 text-xs">{health?.recommendation ?? copy.description}</p>
 			</div>
 
-			<div className="mt-3 grid gap-2 sm:grid-cols-3">
-				<div className="rounded-md border p-2">
-					<p className="text-[11px] uppercase text-muted-foreground">Funcionaram</p>
-					<p className="text-lg font-semibold">{health?.successRate ?? 0}%</p>
-				</div>
-				<div className="rounded-md border p-2">
-					<p className="text-[11px] uppercase text-muted-foreground">Não entregues</p>
-					<p className="text-lg font-semibold">{health?.failureRate ?? 0}%</p>
-				</div>
-				<div className="rounded-md border p-2">
-					<p className="text-[11px] uppercase text-muted-foreground">Último envio</p>
-					<p className="text-lg font-semibold">
-						{health?.lastDeliveryAt
-							? new Date(health.lastDeliveryAt).toLocaleTimeString("pt-BR", {
-									hour: "2-digit",
-									minute: "2-digit",
-								})
-							: "—"}
-					</p>
-				</div>
+			<div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+				<span>{health?.successRate ?? 0}% funcionaram</span>
+				<span>{health?.failureRate ?? 0}% não entregues</span>
+				<span>
+					Último envio:{" "}
+					{health?.lastDeliveryAt
+						? new Date(health.lastDeliveryAt).toLocaleTimeString("pt-BR", {
+								hour: "2-digit",
+								minute: "2-digit",
+							})
+						: "—"}
+				</span>
 			</div>
 
 			{health?.lastFailure && (
@@ -167,22 +157,6 @@ export function WebhookHealthPanel({ profileId, refreshKey = 0 }: WebhookHealthP
 					<p className="mt-1 text-muted-foreground">
 						Não conseguimos confirmar a entrega. Confira a configuração e envie um novo teste.
 					</p>
-				</div>
-			)}
-
-			{health?.events && health.events.length > 0 && (
-				<div className="mt-3 space-y-1 text-xs">
-					{health.events.map((item) => (
-						<div
-							key={item.event}
-							className="flex items-center justify-between rounded-md bg-muted/40 px-2 py-1"
-						>
-							<span>{item.event}</span>
-							<span className="text-muted-foreground">
-								{item.total} envios · {item.failures} não entregues
-							</span>
-						</div>
-					))}
 				</div>
 			)}
 		</div>
