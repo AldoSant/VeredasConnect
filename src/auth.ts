@@ -10,14 +10,13 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-	basePath: "/api/auth",
+	basePath: "/connect/api/auth",
 	adapter: DrizzleAdapter(db) as unknown as Adapter,
 	providers: [
 		Google({
 			clientId: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackUrl: "https://veredasinc.com.br/connect/api/auth/callback/google",
-		} as any),
+		}),
 		Credentials({
 			name: "Credentials",
 			credentials: {
