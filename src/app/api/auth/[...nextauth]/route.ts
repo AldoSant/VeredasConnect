@@ -1,19 +1,20 @@
 import { handlers } from "@/auth";
+import { NextRequest } from "next/server";
 
-function preservePublicBasePath(request: Request): Request {
+function preservePublicBasePath(request: NextRequest): NextRequest {
 	const url = new URL(request.url);
 
 	if (!url.pathname.startsWith("/connect/api/auth")) {
 		url.pathname = `/connect${url.pathname}`;
 	}
 
-	return new Request(url, request);
+	return new NextRequest(url, request);
 }
 
-export function GET(request: Request) {
-	return handlers.GET(preservePublicBasePath(request) as any);
+export function GET(request: NextRequest) {
+	return handlers.GET(preservePublicBasePath(request));
 }
 
-export function POST(request: Request) {
-	return handlers.POST(preservePublicBasePath(request) as any);
+export function POST(request: NextRequest) {
+	return handlers.POST(preservePublicBasePath(request));
 }
