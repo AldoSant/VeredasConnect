@@ -10,7 +10,7 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-	basePath: "/api/auth",
+	basePath: "/connect/api/auth",
 	adapter: DrizzleAdapter(db) as unknown as Adapter,
 	providers: [
 		Google({
