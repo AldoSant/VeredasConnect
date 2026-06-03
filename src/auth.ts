@@ -16,8 +16,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		Google({
 			clientId: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			redirectProxyUrl: "https://veredasinc.com.br/connect/api/auth",
-		}),
+			callbackUrl: "https://veredasinc.com.br/connect/api/auth/callback/google",
+		} as any),
 		Credentials({
 			name: "Credentials",
 			credentials: {
